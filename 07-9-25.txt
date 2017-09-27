@@ -1,3 +1,8 @@
 1.建立自己的博客
 2.使用响应式
-3.wow.js和....
+3.wow.js和
+
+
+博客首页使用图片不同速度插件
+使用wow与animate动画插件
+栏目有首页 html css javascript 插件等
