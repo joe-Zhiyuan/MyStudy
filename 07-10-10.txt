@@ -9,5 +9,7 @@
 	vertical-align:middle;
 	3.把图片设置为背景图no-repeat
 	background:url() no-repeat center center;
+字体缩写
+	font:blod 24px "微软雅黑";粗细 大小 字体
 博客
 	学习制作一个发布的文章页，能够自己发布文章！
