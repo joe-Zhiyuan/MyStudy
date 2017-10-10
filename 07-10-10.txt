@@ -1,0 +1,13 @@
+图片居中
+	1.给父元素设置
+	display：table-cell;
+	vertical-align:middle;
+	text-align:center;
+	2.给图片元素设置
+	行高
+	line-height:12px;
+	vertical-align:middle;
+	3.把图片设置为背景图no-repeat
+	background:url() no-repeat center center;
+博客
+	学习制作一个发布的文章页，能够自己发布文章！
