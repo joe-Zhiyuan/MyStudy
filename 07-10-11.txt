@@ -1,0 +1,18 @@
+标题的垂直居中
+设置父标签为
+	display:table;
+	p标签为span标签
+	行高为p标签的一半
+	display:table-cell;
+图片居中的方法
+	父元素为
+	position:relative;
+	图片设为
+	position:absolute;
+	left:50%;
+	margin-left:负的图片的宽的一半;
+同标签背景颜色不同
+	p:nth-child(2n+0){//n的倍数和0的偏移数
+		background:red;
+	}
+如果用了float一定要清浮动，不然会错位
