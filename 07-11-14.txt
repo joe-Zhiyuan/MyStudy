@@ -1,0 +1,11 @@
+transition过渡
+	只有两个关键帧
+	transform rotate  scela skew等属性
+	多个属性用transition:background 1s ease,width 1s ease;隔开
+简写 transition：属性名称 过渡时间 运动过程曲线 动画何时开始；
+animation动画可以有多个关键帧
+	@keyframes 关键有
+	start end
+	0% 50% 100%等 
+简写：animation：名称 时间 速度曲线 动画何时开始 播放次数 是否在下一周期倒放 动画是否正在运动或暂停；
+还有一个属性	animation-fill-mode:规定动画时间之外的状态//动画播放开始完成时的状态
