@@ -1,0 +1,8 @@
+怎么初始占满屏幕
+	html,body{
+		width:100%;
+		height:100%;
+	}
+@keyframes 使用
+	里面是 属性名 {}不用加;号
+animation可以在伪类中使用
