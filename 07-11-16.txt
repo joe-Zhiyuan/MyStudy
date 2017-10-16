@@ -6,3 +6,14 @@
 @keyframes 使用
 	里面是 属性名 {}不用加;号
 animation可以在伪类中使用
+使文字居中，兼容ie7
+设置父元素
+	display:inline-block;
+	margin-left:auto;
+	margin-right:auto;
+子元素
+	text-align:center;
+注意：在调试程序时，如果写入的类没反应，可能是因为浏览器缓存问题，换一个浏览器或者清除浏览器缓存！
+一个行内元素没有高宽，要把它设为块状元素才能设置高宽
+	display:inline-block;
+注意：要依赖的js插件一定要写在head中，要不然在文件页中有时找不到依赖的css等！！
