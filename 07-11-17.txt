@@ -1,0 +1,14 @@
+css有适应属性
+	width:calc(100px - 1px);
+	width宽就是99px;
+img是一个包裹src链接图片的壳子，不是图片本身
+div:after{
+	content:"";
+	overflow:hidden;
+}能请浮动，添加在尾部的内容，一个节点
+
+
+js高程
+script有属性 有async 不确定加载时间 defer 等待html加载完在加载文件，只对外部连接有效
+数据类型 object boolean number string undefined null
+			NAN不在数值范围     未定义的 空的
