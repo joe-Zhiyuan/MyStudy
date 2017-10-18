@@ -1,0 +1,26 @@
+替换元素left
+	只要在left:auto;浏览器会计算left
+字母之间设间距
+	letter-spacing:5px;
+++i 
+	是计算之前就加1
+i++
+	是计算之后加1
+	计算中不加1
+两则都会为i加1
++i
+	可以把i转化成数值类型
+var a =first||seacnd;
+	替换备用字符 如果first为null则为seacnd,||只有一个true才为true
+===
+	"1"===1 为false 字符串与数值不一样
+==
+	"1"==1 为true
+^
+	如果两个变量不一样为true，一样为false
+	true flase  true
+	false true true
+	false false false
+	true true false
+所有的方法都为第一个字母大写
+	toString() Number() Boolean()
