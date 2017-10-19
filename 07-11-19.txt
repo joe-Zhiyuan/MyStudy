@@ -1,0 +1,9 @@
+选择li标签具体位置设置属性样式
+	ul li:nth-child(第几个，也可以是公式 2n+1){
+		width:20px;
+	}
+	还可以为其添加伪类
+	ul li:nth-child:hover{}
+事件代理
+	指使用父元素代理绑定函数，使新添加的子元素也有方法
+	$("ul>li").onmouseover()等等
