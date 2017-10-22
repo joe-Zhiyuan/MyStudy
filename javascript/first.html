@@ -5,140 +5,171 @@
 	<title>javascript程序设计阅读笔记</title>
 </head>
 <body>
-<!-- <script type="text/javascript">
-	if(i>25){
-		alert("Greater than 25");
-	}else if(i<0){
-		alert("Less than 0");
-	}else{
-		alert("Between 0 and 25 inclusive");
-	}
-
-	var i=0;
-	do{
-		i += 2;
-	}while(i<10);
-	alert(i);
-	var i=0;
-	while(i<10){
-		i+=3;
-	}
-	alert(i);
-	var i;
-	var count=10;
-	for(var i=0;i<count;i++){
-		console.log(i);
-	}
-	alert(i);
-	var i=0;
-	//可以外部访问
-	while(i<count){
-		console.log(i);
-		i++;
-	}
-	for(var propName in window){
-		document.write(propName);
-	}
-	//显示window所有属性名
-	start:for(var i=0;i<count+1;i++){
-		console.log(i);
-	}
-	var arr =[{a:"1"},{"b":"2"},{"c":"3"}];
-	for(var i in arr){
-		console.log(arr[i]].a);
-	}
-</script>
- -->
 <script type="text/javascript">
-var num=0;
-outermost:
-for(var i=0;i<10;i++){
-	for(var j=0;j<10;j++){
-		if(i==5&&j==5){
-			break outermost;
-		}
-		num++;
+
+// 	// if(i>25){
+// 		alert("Greater than 25");
+// 	}else if(i<0){
+// 		alert("Less than 0");
+// 	}else{
+// 		alert("Between 0 and 25 inclusive");
+// 	}
+
+// 	var i=0;
+// 	do{
+// 		i += 2;
+// 	}while(i<10);
+// 	alert(i);
+// 	var i=0;
+// 	while(i<10){
+// 		i+=3;
+// 	}
+// 	alert(i);
+// 	var i;
+// 	var count=10;
+// 	for(var i=0;i<count;i++){
+// 		console.log(i);
+// 	}
+// 	alert(i);
+// 	var i=0;
+// 	//可以外部访问
+// 	while(i<count){
+// 		console.log(i);
+// 		i++;
+// 	}
+// 	for(var propName in window){
+// 		document.write(propName);
+// 	}
+// 	//显示window所有属性名
+// 	start:for(var i=0;i<count+1;i++){
+// 		console.log(i);
+// 	}
+// 	var arr =[{a:"1"},{"b":"2"},{"c":"3"}];
+// 	for(var i in arr){
+// 		console.log(arr[i]].a);
+// 	}
+
+
+// var num=0;
+// outermost:
+// for(var i=0;i<10;i++){
+// 	for(var j=0;j<10;j++){
+// 		if(i==5&&j==5){
+// 			break outermost;
+// 		}
+// 		num++;
+// 	}
+// }
+// console.log(num);
+// var num=0;
+// outermost:
+// for(var i=0;i<10;i++){
+// 	for(var j=0;j<10;j++){
+// 		if(i==5&&j==5){
+// 			continue outermost;
+// 		}
+// 		num++;
+// 	}
+// }
+// console.log(num);
+// switch("helloworld"){//不能有空格，否则不匹配
+// 	case "hello"+"world":
+// 		console.log("first");
+// 		break;
+// 	case "goodbye":
+// 		console.log("second");
+// 		break;
+// 	default:
+// 		console.log("end");
+// }
+// var num=25;
+// switch(true){
+// 	case num<0:
+// 		console.log("first");
+// 		break;
+// 	case num>0&num<20:
+// 		console.log("second");
+// 		break;
+// 	case num>20:
+// 		console.log("third");
+// 		break;
+// 	default:
+// 		console.log("end");
+// }
+// function h1(name,type){
+// 	console.log("hello"+" "+name+" "+type);
+// }
+// h1("world","joe");
+// //前面已经定义过num不能再用num报错num不是一个函数
+// function sum(num1,num2){
+// 	return num1+num2;
+// 	alert("无法执行");
+// }
+// var result = sum(5,10);
+// console.log(result);
+// function howManyArgs(){
+// 	alert(arguments.length);
+// }
+// howManyArgs(1,2);
+// howManyArgs();
+// howManyArgs("123");
+// function Add(name){
+// 	if(arguments.length==1){
+// 		console.log(arguments[0]+10);
+// 	}else{
+// 		console.log(name+arguments[1]);
+// 	}
+// }//可以混用
+// Add(10);
+// Add(10,20);
+// //引用类型
+// var person = new Object();
+// person.name="a";
+// console.log(person.name);
+// //基本类型
+// var name ="b";
+// name.age="11";
+// console.log(name.age);//undefined
+// //参数按值传递
+// function Name(obj){
+// 	obj.name ="第一";
+// 	obj = new Object();
+// 	obj.name="b";
+// }
+// var person =new Object();
+// Name(person);
+// console.log(person.name);
+ 
+var color = "blue";
+function changeColor(){
+	var another = "red";
+	function swapColor(){
+		var tempColor =  another;
+		another = color;
+		color= tempColor;
+		//这里可以访问全部变量
 	}
+	//这里只能访问color,another
+	swapColor();
 }
-console.log(num);
-var num=0;
-outermost:
-for(var i=0;i<10;i++){
-	for(var j=0;j<10;j++){
-		if(i==5&&j==5){
-			continue outermost;
-		}
-		num++;
-	}
+//这里只能访问color
+changeColor();
+console.log(color);//,another,tempColor不能访问
+if(true){
+	var a="red";
 }
-console.log(num);
-switch("helloworld"){//不能有空格，否则不匹配
-	case "hello"+"world":
-		console.log("first");
-		break;
-	case "goodbye":
-		console.log("second");
-		break;
-	default:
-		console.log("end");
+console.log(a);
+function color(){
+	var b="blue";
 }
-var num=25;
-switch(true){
-	case num<0:
-		console.log("first");
-		break;
-	case num>0&num<20:
-		console.log("second");
-		break;
-	case num>20:
-		console.log("third");
-		break;
-	default:
-		console.log("end");
+//console.log(b);//访问不到
+
+var c ="red";
+function getColor(){
+	var c ="blue";
+	return c;
 }
-function h1(name,type){
-	console.log("hello"+" "+name+" "+type);
-}
-h1("world","joe");
-//前面已经定义过num不能再用num报错num不是一个函数
-function sum(num1,num2){
-	return num1+num2;
-	alert("无法执行");
-}
-var result = sum(5,10);
-console.log(result);
-function howManyArgs(){
-	alert(arguments.length);
-}
-howManyArgs(1,2);
-howManyArgs();
-howManyArgs("123");
-function Add(name){
-	if(arguments.length==1){
-		console.log(arguments[0]+10);
-	}else{
-		console.log(name+arguments[1]);
-	}
-}//可以混用
-Add(10);
-Add(10,20);
-//引用类型
-var person = new Object();
-person.name="a";
-console.log(person.name);
-//基本类型
-var name ="b";
-name.age="11";
-console.log(name.age);//undefined
-//参数按值传递
-function Name(obj){
-	obj.name ="第一";
-	obj = new Object();
-	obj.name="b";
-}
-var person =new Object();
-Name(person);
-console.log(person.name);
+console.log(getColor());
 </script>
 </body>
 </html>
