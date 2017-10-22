@@ -170,6 +170,83 @@ function getColor(){
 	return c;
 }
 console.log(getColor());
+var joe={
+	name:"joe",
+	age:"22",
+	sex:"man"
+};
+console.log(joe.name);
+console.log(joe["name"]);
+var myname = "name";
+console.log(joe[myname]);
+var qiao = new Array(1,2,3,4);
+console.log(qiao[1]);
+var zhi = [1,2,3,4];
+console.log(zhi[1]);
+console.log(zhi.length);
+zhi.length=3;
+console.log(zhi[3]);
+zhi[zhi.length]=4;
+console.log(zhi[3]);
+console.log(zhi.toString());
+console.log(zhi.indexOf(2));
+console.log(zhi.valueOf());
+console.log(zhi.join("和"));
+zhi.push(5);
+console.log(zhi[4]);
+zhi.pop();
+console.log(zhi.length);
+zhi.shift();
+console.log(zhi);
+console.log(zhi.shift());//执行了shift方法
+console.log(zhi);
+console.log(zhi.sort());
+console.log(zhi.reverse());
+function compare(value1,value2){
+	if(value1<value2){
+		return -1;
+	}else if(value1>value2){
+		return 1;
+	}else{
+		return 0;
+	}
+}
+zhi[zhi.length]=0;
+zhi[zhi.length]=5;
+zhi[zhi.length]=10;
+console.log(zhi.sort());
+console.log(zhi.sort(compare));
+console.log(zhi.concat(3,[12,11]));//插入的是新数组，原来数值不变
+console.log(zhi.slice(2,3));//4,返回复制的数组
+console.log(zhi.splice(2,2));//删除4，5  2个从下标2开始
+console.log(zhi.splice(2,0,8,9));
+console.log(zhi);
+console.log(zhi.splice(2,1,12));
+console.log(zhi);
+console.log(zhi.indexOf(12));
+var eventResult=zhi.every(function(item,index,array){
+	return item>2;
+});
+console.log(eventResult);
+var someResult=zhi.some(function(item,index,array){
+	return item>2;
+});
+console.log(someResult);
+var filterRelute=zhi.filter(function(item,index,array){
+	return item>2;
+});
+console.log(filterRelute);
+var mapRelute=zhi.map(function(item,index,array){
+	return item*3;
+});
+console.log(mapRelute);
+zhi.forEach(function(item,index,array){
+	// return item; 没有返回值
+	if(item==3){
+		console.log("helloworld");
+	}
+});
+console.log(zhi);
 </script>
 </body>
 </html>
