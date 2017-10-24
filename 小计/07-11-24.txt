@@ -1,0 +1,7 @@
+文本两行或多行居中
+	父元素 display:table; height line-height
+	子元素 display:table-cell; 行高为父元素一半，vertical-align:middle; 多行为父元素高的倍数
+图片响应
+	设置一个div 图片设置 width||height 90%;display:block;
+				margin:5%;
+	可响应
