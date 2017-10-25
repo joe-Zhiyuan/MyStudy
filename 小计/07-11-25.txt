@@ -1,0 +1,28 @@
+引用类型
+var a = new Object();
+    a={
+	name:joe,
+	age:3
+	}
+	数组
+	new Array();
+	添加concat();
+	push() pop() shift() unshift()LIFO FIFO
+	复制 slice();
+	排序 sort();里面可加函数
+	替换 splice(); 删除
+	过滤器 filter();
+	eveny(),some();
+	forEach();遍历
+	toString(); 是字符串
+	map();返回函数
+	Date日期
+	new Date();
+	UTC方法
+	RegExp
+	正则
+	/gg/ 变量;
+	g 表示全局
+	i 表示不分大小写
+	m 表示连接下一行
+	function()函数
