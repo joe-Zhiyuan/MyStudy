@@ -337,33 +337,62 @@
 // //bind()
 // var objectsayColor = sayColor.bind(o);
 // objectsayColor();//blue  指向o对象
-var s1="some text";
-s1.color="red";
-console.log(s1.color);//失败 undefined
-var obj=new Object("text");
-console.log(typeof obj);
-console.log(obj instanceof String);
-//转型函数
-var value="25";
-var number=Number(value);
-console.log(typeof number);
-//构造函数
-var number= new Number(value);
-console.log(typeof number);
-var num=19.345;//四舍五入 chrome
-console.log(num.toFixed(2));
-var name = new String("乔志远");
-console.log(name.length);//双节字符也是1位
-console.log(name.charAt(2));
-console.log(name.charCodeAt(2));
-console.log(name[2]);
-var myname="qiao zhi yuan";
-console.log(myname.slice(-3));//-3+14  到最后一位
-console.log(myname.substr(-3));
-console.log(myname.substring(-3));// 为0 
-console.log(myname.slice(3,-3));//4到y
-console.log(myname.substr(3,-3));//为空
-console.log(myname.substring(3,-3));//qia  3--0
+// var s1="some text";
+// s1.color="red";
+// console.log(s1.color);//失败 undefined
+// var obj=new Object("text");
+// console.log(typeof obj);
+// console.log(obj instanceof String);
+// //转型函数
+// var value="25";
+// var number=Number(value);
+// console.log(typeof number);
+// //构造函数
+// var number= new Number(value);
+// console.log(typeof number);
+// var num=19.345;//四舍五入 chrome
+// console.log(num.toFixed(2));
+// var name = new String("乔志远");
+// console.log(name.length);//双节字符也是1位
+// console.log(name.charAt(2));
+// console.log(name.charCodeAt(2));
+// console.log(name[2]);
+// var myname="qiao zhi yuan";
+// console.log(myname.slice(-3));//-3+14  到最后一位
+// console.log(myname.substr(-3));
+// console.log(myname.substring(-3));// 为0 
+// console.log(myname.slice(3,-3));//4到y
+// console.log(myname.substr(3,-3));//为空
+// console.log(myname.substring(3,-3));//qia  3--0
+var stringValue=" qiaozhiyuan ";
+console.log(stringValue);
+console.log(stringValue.trim());
+console.log(stringValue.toUpperCase());
+console.log(stringValue.toLocaleUpperCase());
+console.log(stringValue.toLowerCase());
+var text ="ade,cde,fde,rde";
+var patten = /cde/;
+console.log(patten.exec(text));
+console.log(text.match(patten));
+console.log(text.search(/f/));
+console.log(text.replace("de","10"));//只有第一个
+console.log(text.replace(/de/g,"10"));//全部
+console.log(text.localeCompare(stringValue));//比较字符串 之后返回1，之前返回-1
+console.log(String.fromCharCode(104,110,121,118));//转换为字符
+var color="red";
+function sayColor(){
+	console.log(window.color);
+}
+window.sayColor();
+var value=[12,1,14,15,155,13];
+var max=Math.max.apply(Math,value);
+console.log(max);
+//随机函数
+function selectFrom(lowerValue,upperValue){
+	var choice=upperValue-lowerValue+1;
+	return Math.floor(Math.random()*choice+lowerValue);
+}
+console.log(selectFrom(2,10));//字符串0,text.length-1
 </script>
 </body>
 </html>
