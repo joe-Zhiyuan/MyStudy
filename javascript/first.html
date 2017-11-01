@@ -364,36 +364,78 @@
 // console.log(myname.slice(3,-3));//4到y
 // console.log(myname.substr(3,-3));//为空
 // console.log(myname.substring(3,-3));//qia  3--0
-var stringValue=" qiaozhiyuan ";
-console.log(stringValue);
-console.log(stringValue.trim());
-console.log(stringValue.toUpperCase());
-console.log(stringValue.toLocaleUpperCase());
-console.log(stringValue.toLowerCase());
-var text ="ade,cde,fde,rde";
-var patten = /cde/;
-console.log(patten.exec(text));
-console.log(text.match(patten));
-console.log(text.search(/f/));
-console.log(text.replace("de","10"));//只有第一个
-console.log(text.replace(/de/g,"10"));//全部
-console.log(text.localeCompare(stringValue));//比较字符串 之后返回1，之前返回-1
-console.log(String.fromCharCode(104,110,121,118));//转换为字符
-var color="red";
-function sayColor(){
-	console.log(window.color);
-}
-window.sayColor();
-var value=[12,1,14,15,155,13];
-var max=Math.max.apply(Math,value);
-console.log(max);
-//随机函数
-function selectFrom(lowerValue,upperValue){
-	var choice=upperValue-lowerValue+1;
-	return Math.floor(Math.random()*choice+lowerValue);
-}
-console.log(selectFrom(2,10));//字符串0,text.length-1
+// var stringValue=" qiaozhiyuan ";
+// console.log(stringValue);
+// console.log(stringValue.trim());
+// console.log(stringValue.toUpperCase());
+// console.log(stringValue.toLocaleUpperCase());
+// console.log(stringValue.toLowerCase());
+// var text ="ade,cde,fde,rde";
+// var patten = /cde/;
+// console.log(patten.exec(text));
+// console.log(text.match(patten));
+// console.log(text.search(/f/));
+// console.log(text.replace("de","10"));//只有第一个
+// console.log(text.replace(/de/g,"10"));//全部
+// console.log(text.localeCompare(stringValue));//比较字符串 之后返回1，之前返回-1
+// console.log(String.fromCharCode(104,110,121,118));//转换为字符
+// var color="red";
+// function sayColor(){
+// 	console.log(window.color);
+// }
+// window.sayColor();
+// var value=[12,1,14,15,155,13];
+// var max=Math.max.apply(Math,value);
+// console.log(max);
+// //随机函数
+// function selectFrom(lowerValue,upperValue){
+// 	var choice=upperValue-lowerValue+1;
+// 	return Math.floor(Math.random()*choice+lowerValue);
+// }
+// console.log(selectFrom(2,10));//字符串0,text.length-1
+//构造函数 工厂模式
+function Person(name,age,job){
+	this.name = name;
+	this.age = age;
+	this.job = job;
+	this.sayName=sayName;
+}//函数移到外部
+function sayName(){
+		console.log(this.name);
+};
+var person1 =new Person("qiao",14,"wo");
+var person2 =new Person("joe",16,"sf");
+person1.sayName();
+var o = new Object();
+Person.call(o,"qq",11,"11");
+o.sayName();
+//原型模式
+function Type(){
 
+}
+Type.prototype.name="qiao";
+Type.prototype.age="22";
+Type.prototype.job="pc";
+Type.prototype.sayName=function(){
+	console.log(this.name);
+}
+var Type1 = new Type();
+console.log(Type1.name);
+var Type2 = new Type();
+console.log(Type2.name);
+console.log(Object.getPrototypeOf(Type1));
+console.log(Object.getPrototypeOf(Type1).name);
+Type1.name="joe";
+console.log(Type1.name);
+console.log(Type2.name);
+delete Type1.name;
+console.log(Type1.name);
+Type1.name="zhi";
+console.log(Type1.hasOwnProperty("age"));//来自原型
+console.log(Type1.hasOwnProperty("name"));//来自实例 
+console.log("name" in Type1);//无论来自原型还是实例 都返回true
+var keys=Object.keys(Type.prototype);
+console.log(keys);
 </script>
 </body>
 </html>
