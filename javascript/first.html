@@ -395,7 +395,7 @@
 // console.log(selectFrom(2,10));//字符串0,text.length-1
 //构造函数 工厂模式
 function Person(name,age,job){
-	this.name = name;
+	this.name = name;//1
 	this.age = age;
 	this.job = job;
 	this.sayName=sayName;
@@ -405,6 +405,8 @@ function sayName(){
 };
 var person1 =new Person("qiao",14,"wo");
 var person2 =new Person("joe",16,"sf");
+var person3 =new Person();//为空 //为1 下面也为1
+console.log(person3.name);
 person1.sayName();
 var o = new Object();
 Person.call(o,"qq",11,"11");
@@ -436,6 +438,16 @@ console.log(Type1.hasOwnProperty("name"));//来自实例
 console.log("name" in Type1);//无论来自原型还是实例 都返回true
 var keys=Object.keys(Type.prototype);
 console.log(keys);
+var key2 = Object.getOwnPropertyNames(Type.prototype);
+console.log(key2);//包含不可枚举属性
+console.log(typeof Array.prototype.sort);
+console.log(typeof String.prototype.toString);//function
+String.prototype.sayHi=function(text){
+		console.log("h1");
+		return this.indexOf(text);
+}
+var txt ="hello";
+console.log(txt.sayHi("h"));
 </script>
 </body>
 </html>
