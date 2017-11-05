@@ -592,6 +592,50 @@ var factorial=(function f(num){
 	}
 });
 
+function createFunction(){
+	var result=new Array();
+	for(var i=0;i<10;i++){
+		result[i]=function(num){
+			return function(){
+				return num;
+			};
+		}(i);
+	}
+	return result;
+	console.log(result);
+}
+createFunction();
+function f1(){
+	var n=999;
+	function f2(){
+		console.log(n);
+	}
+	return f2;
+}
+var result=f1();
+result();
+
+var name="this window";
+var object={
+	name:"my object",
+	getNameFunc:function(){
+		return function(){
+			return this.name;
+		};
+	}
+};
+console.log(object.getNameFunc()());
+
+var object2={
+	name:"my object",
+	getNameFunc2:function(){
+		var that =this;
+		return function(){
+			return that.name;
+		};
+	}
+};
+console.log(object2.getNameFunc2()());
 </script>
 </body>
 </html>
