@@ -394,60 +394,204 @@
 // }
 // console.log(selectFrom(2,10));//字符串0,text.length-1
 //构造函数 工厂模式
-function Person(name,age,job){
-	this.name = name;//1
-	this.age = age;
-	this.job = job;
-	this.sayName=sayName;
-}//函数移到外部
-function sayName(){
-		console.log(this.name);
-};
-var person1 =new Person("qiao",14,"wo");
-var person2 =new Person("joe",16,"sf");
-var person3 =new Person();//为空 //为1 下面也为1
-console.log(person3.name);
-person1.sayName();
-var o = new Object();
-Person.call(o,"qq",11,"11");
-o.sayName();
-//原型模式
-function Type(){
+// function Person(name,age,job){
+// 	this.name = name;//1
+// 	this.age = age;
+// 	this.job = job;
+// 	this.sayName=sayName;
+// }//函数移到外部
+// function sayName(){
+// 		console.log(this.name);
+// };
+// var person1 =new Person("qiao",14,"wo");
+// var person2 =new Person("joe",16,"sf");
+// var person3 =new Person();//为空 //为1 下面也为1
+// console.log(person3.name);
+// person1.sayName();
+// var o = new Object();
+// Person.call(o,"qq",11,"11");
+// o.sayName();
+// //原型模式
+// function Type(){
 
+// }
+// Type.prototype.name="qiao";
+// Type.prototype.age="22";
+// Type.prototype.job="pc";
+// Type.prototype.sayName=function(){
+// 	console.log(this.name);
+// }
+// var Type1 = new Type();
+// console.log(Type1.name);
+// var Type2 = new Type();
+// console.log(Type2.name);
+// console.log(Object.getPrototypeOf(Type1));
+// console.log(Object.getPrototypeOf(Type1).name);
+// Type1.name="joe";
+// console.log(Type1.name);
+// console.log(Type2.name);
+// delete Type1.name;
+// console.log(Type1.name);
+// Type1.name="zhi";
+// console.log(Type1.hasOwnProperty("age"));//来自原型
+// console.log(Type1.hasOwnProperty("name"));//来自实例 
+// console.log("name" in Type1);//无论来自原型还是实例 都返回true
+// var keys=Object.keys(Type.prototype);
+// console.log(keys);
+// var key2 = Object.getOwnPropertyNames(Type.prototype);
+// console.log(key2);//包含不可枚举属性
+// console.log(typeof Array.prototype.sort);
+// console.log(typeof String.prototype.toString);//function
+// String.prototype.sayHi=function(text){
+// 		console.log("h1");
+// 		return this.indexOf(text);
+// }
+// var txt ="hello";
+// console.log(txt.sayHi("h"));
+
+// function supertype(){
+// 	this.property=true;
+// }
+// supertype.prototype.getsupervalue=function(){
+// 	return this.property;
+// }
+// function subtype(){
+// 	this.subproperty=false;
+// }
+// subtype.prototype=new supertype();
+// subtype.prototype.getsubvalue=function(){
+// 	return this.subproperty;
+// }
+// var instance=new subtype();
+// console.log(instance.getsupervalue());//true  继承
+// console.log(instance instanceof Object);
+// console.log(instance instanceof supertype);
+// console.log(instance instanceof subtype);
+// subtype.prototype.getsupervalue=function(){
+// 	return false;
+// }
+// console.log(instance.getsupervalue());//false 重写了超类（祖类）的方法
+// subtype.prototype={
+// 	getsubvalue:function(){
+// 		return this.subproperty;
+// 	},
+// 	someOtherMethod:function(){
+// 		return false;
+// 	}
+// };
+// var instance= new subtype();
+// // console.log(instance.getsupervalue());//error 错误
+
+// function supercolor(name){
+// 	this.colors=["red","blue","yellow"];
+// 	this.name=name;
+// }
+// supercolor.prototype.sayname=function(){
+// 	console.log(this.name);
+// }
+// // function subcolor(){
+
+// // }
+// function subcolor(name,age){
+// 	supercolor.call(this,name);//借调  构造函数继承属性，原型继承共享属性和方法
+// 	this.age=age;//传递参数
+// }
+// subcolor.prototype=new supercolor();
+// subcolor.prototype.constructor=subcolor;
+// subcolor.prototype.sayage=function(){
+// 	console.log(this.age);
+// }
+// var instance1=new subcolor("qiao",24);
+// instance1.colors.push("green");
+// console.log(instance1.colors);
+// instance1.sayname();
+// instance1.sayage();
+// var instance2=new subcolor("joe",33);
+// console.log(instance2.colors);//共用属性
+// instance2.sayname();
+// instance2.sayage();
+// var person={
+// 	name:"joe",
+// 	friends:["one","two","three"]
+// };
+// var anotherPerson =Object.create(person);//新增object.create()
+// anotherPerson.name="one";
+// anotherPerson.friends.push("four");
+// var yetAnotherPerson=Object.create(person);
+// yetAnotherPerson.name="two";
+// yetAnotherPerson.friends.push("five");
+// console.log(person.friends);
+// var anotherPerson1=Object.create(person,{
+// 	name:{
+// 		value:"joe2"//替换name属性
+// 	}
+// });
+// console.log(anotherPerson1.name);
+// function createAnother(original){//寄生式继承
+// 	var clone=Object(original);
+// 	clone.sayHi=function(){
+// 		console.log("hi");
+// 	}
+// 	return clone;
+// }
+// var anotherPerson3=createAnother(person);
+// anotherPerson3.sayHi();
+// function supertype(name){
+// 	this.name=name;
+// 	this.colors=["red","blue"];
+// }
+// supertype.prototype.sayname=function(){
+// 	console.log(this.name);
+// };
+// function subtype(name,age){
+// 	supertype.call(this,name);
+// 	this.age=age;
+// }
+
+// function inheritPrototype(subtype,supertype){
+// 	var prototype=Object(supertype.prototype);
+// 	prototype.constructor=subtype;
+// 	subtype.prototype=prototype;
+// }
+// inheritPrototype(subtype,supertype);
+// // subtype.prototype=new supertype();
+// // subtype.prototype.constructor=subtype;
+// subtype.prototype.sayage=function(){
+// 	console.log(this.age);
+// };
+// var subtype1 = new subtype("qiao",23);
+// subtype1.sayage();
+// subtype1.sayname();
+// console.log(subtype1.colors);
+
+// sayHi();
+// function sayHi(){
+// 	console.log("hi");
+// }
+// var sayHi=function(){//error 函数还不存在
+// 	console.log("hi");
+// }
+// 递归
+function factorial(num){
+	if(num<=1){
+		return 1;
+	}else{
+		return num*arguments.callee(num-1);//出错可替换factorial
+	}
 }
-Type.prototype.name="qiao";
-Type.prototype.age="22";
-Type.prototype.job="pc";
-Type.prototype.sayName=function(){
-	console.log(this.name);
-}
-var Type1 = new Type();
-console.log(Type1.name);
-var Type2 = new Type();
-console.log(Type2.name);
-console.log(Object.getPrototypeOf(Type1));
-console.log(Object.getPrototypeOf(Type1).name);
-Type1.name="joe";
-console.log(Type1.name);
-console.log(Type2.name);
-delete Type1.name;
-console.log(Type1.name);
-Type1.name="zhi";
-console.log(Type1.hasOwnProperty("age"));//来自原型
-console.log(Type1.hasOwnProperty("name"));//来自实例 
-console.log("name" in Type1);//无论来自原型还是实例 都返回true
-var keys=Object.keys(Type.prototype);
-console.log(keys);
-var key2 = Object.getOwnPropertyNames(Type.prototype);
-console.log(key2);//包含不可枚举属性
-console.log(typeof Array.prototype.sort);
-console.log(typeof String.prototype.toString);//function
-String.prototype.sayHi=function(text){
-		console.log("h1");
-		return this.indexOf(text);
-}
-var txt ="hello";
-console.log(txt.sayHi("h"));
+console.log(factorial(5));
+var factorial1 = factorial;
+factorial=null;
+console.log(factorial1(5));
+// 在严格模式下
+var factorial=(function f(num){
+	if(num<=1){
+		return 1;
+	}else{
+		return num*f(num-1);
+	}
+});
+
 </script>
 </body>
 </html>
