@@ -572,70 +572,72 @@
 // 	console.log("hi");
 // }
 // 递归
-function factorial(num){
-	if(num<=1){
-		return 1;
-	}else{
-		return num*arguments.callee(num-1);//出错可替换factorial
-	}
-}
-console.log(factorial(5));
-var factorial1 = factorial;
-factorial=null;
-console.log(factorial1(5));
-// 在严格模式下
-var factorial=(function f(num){
-	if(num<=1){
-		return 1;
-	}else{
-		return num*f(num-1);
-	}
-});
+// function factorial(num){
+// 	if(num<=1){
+// 		return 1;
+// 	}else{
+// 		return num*arguments.callee(num-1);//出错可替换factorial
+// 	}
+// }
+// console.log(factorial(5));
+// var factorial1 = factorial;
+// factorial=null;
+// console.log(factorial1(5));
+// // 在严格模式下
+// var factorial=(function f(num){
+// 	if(num<=1){
+// 		return 1;
+// 	}else{
+// 		return num*f(num-1);
+// 	}
+// });
 
-function createFunction(){
-	var result=new Array();
-	for(var i=0;i<10;i++){
-		result[i]=function(num){
-			return function(){
-				return num;
-			};
-		}(i);
-	}
-	return result;
-	console.log(result);
-}
-createFunction();
-function f1(){
-	var n=999;
-	function f2(){
-		console.log(n);
-	}
-	return f2;
-}
-var result=f1();
-result();
+// function createFunction(){
+// 	var result=new Array();
+// 	for(var i=0;i<10;i++){
+// 		result[i]=function(num){
+// 			return function(){
+// 				return num;
+// 			};
+// 		}(i);
+// 	}
+// 	return result;
+// 	console.log(result);
+// }
+// createFunction();
+// function f1(){
+// 	var n=999;
+// 	function f2(){
+// 		console.log(n);
+// 	}
+// 	f2();
+// 	return f2;
+// }
+// f1();
+// var result=f1();
+// result();
 
-var name="this window";
-var object={
-	name:"my object",
-	getNameFunc:function(){
-		return function(){
-			return this.name;
-		};
-	}
-};
-console.log(object.getNameFunc()());
+// var name="this window";
+// var object={
+// 	name:"my object",
+// 	getNameFunc:function(){
+// 		return function(){
+// 			return this.name;
+// 		};
+// 	}
+// };
+// console.log(object.getNameFunc()());
 
-var object2={
-	name:"my object",
-	getNameFunc2:function(){
-		var that =this;
-		return function(){
-			return that.name;
-		};
-	}
-};
-console.log(object2.getNameFunc2()());
+// var object2={
+// 	name:"my object",
+// 	getNameFunc2:function(){
+// 		var that =this;
+// 		return function(){
+// 			return that.name;
+// 		};
+// 	}
+// };
+// console.log(object2.getNameFunc2()());
 </script>
 </body>
 </html>
