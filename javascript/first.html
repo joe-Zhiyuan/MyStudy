@@ -640,30 +640,30 @@
 // console.log(object2.getNameFunc2()());
 
 // bom
-var age="22";
-function sayage(){
-	console.log(this.age);
-}
-console.log(window.age);
-sayage();
-window.sayage();
-window.color="red";
-delete window.age;
-delete window.color;
-console.log(window.age);
-console.log(window.color);//undefined  删除了
+// var age="22";
+// function sayage(){
+// 	console.log(this.age);
+// }
+// console.log(window.age);
+// sayage();
+// window.sayage();
+// window.color="red";
+// delete window.age;
+// delete window.color;
+// console.log(window.age);
+// console.log(window.color);//undefined  删除了
 
-var leftPos=(typeof window.screenLeft=="number")?window.screenLeft:window.screenX;
-var topPos=(typeof window.screenTop=="number")?window.screenTop:window.screenY;
+// var leftPos=(typeof window.screenLeft=="number")?window.screenLeft:window.screenX;
+// var topPos=(typeof window.screenTop=="number")?window.screenTop:window.screenY;
 
-var outerWidth=window.outerWidth;
-var outerHeight=window.outerHeight;
-console.log(outerWidth);
-console.log(outerHeight);
-var clientWidth=document.documentElement.clientWidth;
-var clientHeight=document.documentElement.clientHeight;//可视区域 视图
-console.log(clientWidth);
-console.log(clientHeight);
+// var outerWidth=window.outerWidth;
+// var outerHeight=window.outerHeight;
+// console.log(outerWidth);
+// console.log(outerHeight);
+// var clientWidth=document.documentElement.clientWidth;
+// var clientHeight=document.documentElement.clientHeight;//可视区域 视图
+// console.log(clientWidth);
+// console.log(clientHeight);
 
 //window.resize(100,100);//这类函数只有新打开窗口有效，在chrome
 //检测是否是插件屏蔽弹窗
@@ -698,6 +698,8 @@ console.log(clientHeight);
 // }
 // var myprompt=prompt("are you oK?","why");//返回输入文本
 // console.log(myprompt);
+
+
 
 </script>
 </body>
