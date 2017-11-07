@@ -638,6 +638,67 @@
 // 	}
 // };
 // console.log(object2.getNameFunc2()());
+
+// bom
+var age="22";
+function sayage(){
+	console.log(this.age);
+}
+console.log(window.age);
+sayage();
+window.sayage();
+window.color="red";
+delete window.age;
+delete window.color;
+console.log(window.age);
+console.log(window.color);//undefined  删除了
+
+var leftPos=(typeof window.screenLeft=="number")?window.screenLeft:window.screenX;
+var topPos=(typeof window.screenTop=="number")?window.screenTop:window.screenY;
+
+var outerWidth=window.outerWidth;
+var outerHeight=window.outerHeight;
+console.log(outerWidth);
+console.log(outerHeight);
+var clientWidth=document.documentElement.clientWidth;
+var clientHeight=document.documentElement.clientHeight;//可视区域 视图
+console.log(clientWidth);
+console.log(clientHeight);
+
+//window.resize(100,100);//这类函数只有新打开窗口有效，在chrome
+//检测是否是插件屏蔽弹窗
+// var blocked=false;
+// try{
+// 	var newWindow=window.open("http://www.baidu.com","mybaidu","height=200,width=400,resizable=true,top=50");
+// 	newWindow.resizeTo(1000,500);
+// 	newWindow.close();//关闭打开的窗口
+// 	if(newWindow==null){
+// 		console.log("被浏览器内置屏蔽");
+// 		blocked=true;
+// 	}
+// }catch(ex){
+// 	blocked=true;
+// }
+// if(blocked){
+// 	console.log("被浏览器内置屏蔽");
+// }
+
+// setTimeout("console.log('hi')",1000);//里面要单引号
+// var sayHi=setTimeout(function(){
+// 	console.log('hi');
+// },1000);
+// setTimeout(function(){
+// 	clearTimeout(sayHi);
+// },500);//可以取消
+// // confirm("are you Ok?");
+// if(confirm("are you Ok?")){
+// 	alert('ok');
+// }else{
+// 	alert('no');
+// }
+// var myprompt=prompt("are you oK?","why");//返回输入文本
+// console.log(myprompt);
+
 </script>
 </body>
 </html>
