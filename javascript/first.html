@@ -699,7 +699,56 @@
 // var myprompt=prompt("are you oK?","why");//返回输入文本
 // console.log(myprompt);
 
+function getQueryStringArgs(){
+	var qs=(location.search.length>0?location.search.substring(1):""),
+	args={},
+	items=qs.length?qs.split("&"):[],
+	item=null,
+	name=null,value=null,
+	i=0,len=items.length;
+	for(i=0;i<len;i++){
+		item=items[i].split("=");
+		name=decodeURIComponent(item[0]);
+		value=decodeURIComponent(item[i]);
+		if(name.length){
+			args[name]=value;
+		}
+	}
+	return args;
+}
+//查询字符串为?q=javascript&num=11"  ??????
+var args=getQueryStringArgs();
+console.log(args["q"]);
+// location.assign("https://www.baidu.com");
+// location.href="http://www.baidu.com";
+// window.location="http://www.baidu.com";
+location.hash="#1";
+location.search="?num=10";
+location.hostname="http://www.baidu.com";
+location.port=8080;
+//location.replace("http://www.baidu.com");//跳转不会生成历史记录
+// location.reload();//有可能从缓存处加载
+// location.reload(true);//从服务器加载
+//检测插件
+function hasPlugin(name){
+	name=name.toLowerCase();
+	for(var i=0;i<navigator.plugins.length;i++){
+		if(navigator. plugins [i].name.toLowerCase().indexOf(name)>-1){
+			return true;
+		}
+	}
+	return false;
+}
+console.log(hasPlugin("flash"));
+console.log(hasPlugin("Adblock Plus"));
+console.log(hasPlugin("WhatRuns"));
 
+// history.go(-1);
+// history.back();
+// history.forward();
+if(history.length===0){
+	console.log("这是打开的第一个页面");
+}
 
 </script>
 </body>
