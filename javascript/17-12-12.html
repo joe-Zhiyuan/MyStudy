@@ -11,7 +11,37 @@
     <li>item 3</li>
 </ul>
 <script type="text/javascript">
-
+    var thisUl=document.getElementById('thisUl');
+    var newLi=document.createElement('li');
+    var newLiText=document.createTextNode("item new");
+    newLi.appendChild(newLiText);
+//    thisUl.appendChild(newLi);
+    console.log(thisUl.childNodes[1]);
+    console.log(thisUl.childNodes.item(1));
+    thisUl.insertBefore(newLi,thisUl.firstChild);
+    thisUl.removeChild(thisUl.firstChild);
+    thisUl.setAttribute("class","on");
+    thisUl.removeAttribute("class");
+    console.log(document.URL);
+    console.log(document.domain);
+    console.log(document.referrer);
+    console.log(document.documentElement);
+    console.log(thisUl.getAttribute("id"));
+    thisUl.index=2;
+    console.log(thisUl.index);
+    console.log(thisUl.getAttribute("index"));//null
+    console.log(thisUl.id);
+    thisUl.children[0].classList.add("firstLi");
+    var firstLi=document.getElementsByClassName('firstLi')[0];
+    var newText=document.createTextNode("new item");
+    firstLi.firstChild.nodeValue="item ?";
+    console.log(firstLi.firstChild.splitText(3));
+    var newLi1=document.querySelector(".firstLi");
+    console.log(newLi1);
+    newLi1.style.color="red";
+    thisUl.classList.add("on");
+    thisUl.classList.remove("on");
+    thisUl.classList.toggle("on");
 </script>
 </body>
 </html>
