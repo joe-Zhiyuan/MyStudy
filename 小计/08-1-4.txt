@@ -1,0 +1,2 @@
+使用bootstrap插件时，header不要设置height，否则不能出现min-width：768px;的动画
+使用插件时一定要看好插件所有需要的前置文件
