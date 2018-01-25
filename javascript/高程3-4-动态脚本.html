@@ -29,6 +29,19 @@
     <div id="div2" ondrop="drop(event)" ondragover="allowDrop(event)">
 
     </div>
+    <!--视频 poster为显示封面-->
+    <video id="myVideo" poster="images/1.jpg" width="500" height="400" controls>
+        <source src="images/mov_bbb.mp4" type="video/mp4; codecs='vp8, vorbis'">
+        <source src="images/mov_bbb.ogg" type="video/ogg; codexs='theora, vorbis'">
+        <!--后备信息-->
+        请升级浏览器，不支持h5视频
+    </video>
+    <div id="videoTime"></div>
+    <!--音频-->
+    <audio id="myAudio"  src="images/song.mp3" controls>
+        <!--后备信息-->
+        请升级浏览器，不支持h5音频
+    </audio>
 </div>
 </body>
 <script>
@@ -45,6 +58,34 @@
         var data=ev.dataTransfer.getData("Text");
         ev.target.appendChild(document.getElementById(data));
     }
-
+    //自定义视频事件
+    var myVideo=document.getElementById("myVideo");
+    var videoTime=document.getElementById("videoTime");
+    var flag=false;
+    myVideo.onclick=function(){
+        if(!flag) {
+            flag = true;
+            myVideo.play();
+        }else{
+            myVideo.pause();
+            flag=false;
+        }
+    }
+    //播放时间
+    setInterval(
+        function(){
+            videoTime.innerHTML=parseInt(myVideo.currentTime);
+        },200
+    )
+    //添加背景音乐 点击任意地方停止
+    var audio=new Audio("images/song.mp3");
+    audio.play();
+    document.onclick=function(){
+        audio.pause();
+    }
+    //历史状态管理
+    history.pushState({name:"joe"},"joe-zhiyuan","joe-zhiyuan.github.io");
+    //自定义错误，浏览器会显示错误
+    throw new Error("有个错误");
 </script>
 </html>
