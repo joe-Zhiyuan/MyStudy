@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>高程3-3-Canvas绘图</title>
+</head>
+<style>
+    html,body{
+        padding:0;
+        margin:0;
+    }
+    #myCanvas,#myCanvas1{
+        /*不对！要写在行内，不要在style内，是特性没有px*/
+        /*width:800px;*/
+        /*height:400px;*/
+        display:block;
+        margin:20px 0 0 50px;
+        border:1px solid #d9dada;
+    }
+    .thisImg{
+        display:none;
+    }
+</style>
+<body>
+<!--Canvas绘图-->
+<canvas id="myCanvas1" width="675" height="1065">
+    您的浏览器版本过低不支持canvas元素，请升级浏览器，后备信息！
+</canvas>
+<canvas id="myCanvas" width="600" height="400">
+    您的浏览器版本过低不支持canvas元素，请升级浏览器，后备信息！
+</canvas>
+<img src="images/1.jpg" class="thisImg"/>
+</body>
+<script>
+    var myCanvas=document.getElementById("myCanvas");
+    //浏览器是否支持
+    if(myCanvas.getContext){
+        //获取2d上下文
+        var context=myCanvas.getContext("2d");
+        context.strokeStyle="red";//描边
+        context.fillStyle="blue";//填充
+        context.fillRect(10,10,100,50);
+        context.strokeRect(60,10,100,50);//矩形边框没填充颜色
+        context.clearRect(30,30,60,30);//清除一片矩形区域
+        //阴影 只会应用到接下来的canvas中
+        context.shadowOffsetX=5;
+        context.shadowOffsetY=5;
+        context.shadowBlur=3;
+        context.shadowColor="yellow";
+        //绘制时钟
+        context.beginPath();
+        context.arc(200,200,99,0,2*Math.PI,false);
+        context.moveTo(296,200);//138 把绘制点移到轨迹上
+        context.arc(200,200,96,0,2*Math.PI,false);
+        context.moveTo(200,200);
+        context.lineTo(200,115);
+        context.moveTo(200,200);
+        context.lineTo(115,200);
+        //绘制文字
+        context.font="normal 12px Arial";
+        context.textAlign="center";
+        context.textBaseline="middle";
+        context.fillText("12",200,112);
+        context.fillText("Clock",200,200,400);
+        //变换，移动原点
+        context.translate(200,200);
+        //绘制秒，旋转
+        context.rotate(30*Math.PI/180);//度数为 旋转度数*Math.PI/180
+        context.moveTo(0,0);
+        context.lineTo(0,90);
+        context.stroke();//开始绘制
+
+        //生成图片
+        var imgURL=myCanvas.toDataURL("image/png");
+        var image=document.createElement("img");
+        image.src=imgURL;
+        document.body.appendChild(image);
+        //绘制图片context.drawImage();
+        //移回原点
+        context.translate(-200,-200);
+        context.rotate(-30*Math.PI/180);
+        //渐变
+        var gradient=context.createLinearGradient(300,0,300,400);
+        gradient.addColorStop(0,"red");//0开始的颜色 可以中间数
+        gradient.addColorStop(1,"blue");//1结束的颜色
+        context.fillStyle=gradient;//应用到绘制中
+        context.fillRect(300,0,600,400);
+        //解决图片第一次打开不显示问题，因为图片是异步加载所以图片未加载无法完成写入canvas
+        image.onload=function(){
+            context.drawImage(image, 200, 80, 800, 400, 300, 100, 400, 200);
+        }
+    }
+
+    var thisImg = document.getElementsByTagName("img")[0];
+    //解决图片第一次打开不显示问题，因为图片是异步加载所以图片未加载无法完成写入canvas
+    thisImg.onload=function() {
+    //图像变黑白 灰阶过滤器
+    var myCanvas1 = document.getElementById("myCanvas1");
+    if (myCanvas1.getContext) {
+        var myContext = myCanvas1.getContext("2d");
+        //绘制图像
+        myContext.drawImage(thisImg, 0, 0);
+        var imageData, data, i, len, average, red, green, blue, alpha;
+        //取得元素图像数据 图片的宽，高
+        imageData = myContext.getImageData(0, 0, thisImg.width, thisImg.height);
+        console.log(thisImg.width);
+        console.log(thisImg.height);
+        data = imageData.data;
+        console.log(data);
+        for (i = 0, len = data.length; i < len; i += 4) {
+            red = data[i];
+            green = data[i + 1];
+            blue = data[i + 2];
+            alpha = data[i + 3];
+            //求的平均值
+            average = Math.floor((red + green + blue) / 3);
+            //设置颜色值，透明度不变
+            data[i] = average;
+            data[i + 1] = average;
+            data[i + 2] = average;
+        }
+        //回写图像数据，并显示结果
+        imageData.data = data;
+        myContext.putImageData(imageData, 0, 0);
+        console.log(data);
+    }
+}
+</script>
+</html>

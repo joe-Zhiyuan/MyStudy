@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>js高程</title>
+</head>
+<body>
+
+</body>
+<script type="text/javascript">
+    //闭包
+    for(var i=0;i<5;i++){
+
+        setTimeout(function timer() {
+            console.log(i);
+        });
+        console.log(i);
+    }//0,1,2,3,4 55555
+    console.log(i);//5  i是全局变量
+    for(var j=0;j<5;j++){
+        (function(j){
+            setTimeout(function(){
+                console.log(j);
+            })
+        })(j);
+    }
+
+</script>
+</html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>放大镜</title>
+    <script type="text/javascript">
+//        window.onload=function(){
+//            var box=document.getElementById("box");
+//            var nav=document.getElementById("nav");
+//            //onmousemove是只要鼠标没有离开目标区域一直执行事件，onmouseover是鼠标移入只执行一次事件
+//            box.onmousemove=function(e){
+//                //兼容ie
+//                var e=e||window.event;
+//                //方块跟随鼠标事件
+//                var left=left=e.clientX-this.offsetLeft-nav.offsetWidth/2;
+//                var top=e.clientY-this.offsetTop-nav.offsetHeight/2;
+//
+//                if(left<0){
+//                    left=0;
+//                }else if(left>=box.offsetWidth-nav.offsetWidth){
+//                    left=box.offsetWidth-nav.offsetWidth;
+//                }
+//                if(top<0){
+//                    top=0;
+//                }else if(top>=box.offsetHeight-nav.offsetHeight){
+//                    top=box.offsetHeight-nav.offsetHeight;
+//                }
+//
+//                nav.style.left=left+"px";
+//                nav.style.top=top+"px";
+//
+//            }
+//        }
+
+
+//        window.onload=function(){
+//            var box=document.getElementById("box");
+//            var nav=document.getElementById("nav");
+//            nav.onmousedown=function(e) {
+//                //鼠标拖拽方块事件
+//                //兼容ie
+//                var e=e||window.event;
+//                var left = e.clientX - this.offsetLeft;
+//                var top = e.clientY - this.offsetTop;
+//                document.onmousemove = function () {
+//                    var e=e||window.event;
+//                    var lefttwo = e.clientX - left;
+//                    var toptwo = e.clientY - top;
+//                    if (lefttwo < 0) {
+//                        lefttwo = 0;
+//                    } else if (lefttwo >= box.offsetWidth - nav.offsetWidth) {
+//                        lefttwo = box.offsetWidth - nav.offsetWidth;
+//                    }
+//                    if (toptwo < 0) {
+//                        toptwo = 0;
+//                    } else if (toptwo >= box.offsetHeight - nav.offsetHeight) {
+//                        toptwo = box.offsetHeight - nav.offsetHeight;
+//                    }
+//                    nav.style.left = lefttwo + "px";
+//                    nav.style.top = toptwo + "px";
+//                }
+//                document.onmouseup = function () {
+//                    this.onmousemove = null;
+//                    this.onmouseup = null;
+//                }
+//            }
+//        }
+
+//offsetLeft 子元素想当父元素的左位移
+// offsetTop 子元素想当父元素的上位移
+// offsetWidth 盒子本身的宽高 不包括滚动条
+// event.clientX 鼠标的X，Y轴相对与整个页面，而非子元素
+        window.onload=function(){
+           var box=document.getElementById('box');
+           var inner=box.getElementsByTagName('div')[0];
+           var big=document.getElementById('big');
+           var Img=big.getElementsByTagName('img')[0];
+
+           box.onmouseover=function(){
+               inner.style.display="block";
+               big.style.display="block";
+           }
+
+           box.onmousemove=function(e){
+               e=event||window.event;
+
+               var left=e.clientX-box.offsetLeft-inner.offsetWidth/2;
+               var top=e.clientY-box.offsetTop-inner.offsetHeight/2;
+
+               if(left<=0){
+                   left=0;
+               }else if(left>=box.offsetWidth-inner.offsetWidth){
+                   left=box.offsetWidth-inner.offsetWidth;
+               }
+               if(top<=0){
+                   top=0;
+               }else if(top>=box.offsetHeight-inner.offsetHeight){
+                   top=box.offsetHeight-inner.offsetHeight;
+               }
+
+               inner.style.left=left+"px";
+               inner.style.top=top+"px";
+
+               var left2=left/(box.offsetWidth-inner.offsetWidth)*(big.offsetWidth-Img.offsetWidth);
+               var top2=top/(box.offsetHeight-inner.offsetHeight)*(big.offsetHeight-Img.offsetHeight);
+
+               Img.style.left=left2+"px";
+               Img.style.top=top2+"px";
+           }
+
+           box.onmouseout=function(){
+               inner.style.display="none";
+               big.style.display="none";
+           }
+        }
+
+    </script>
+    <style type="text/css">
+        /**{*/
+            /*margin:0;*/
+            /*padding:0;*/
+        /*}*/
+        /*#box{*/
+            /*width:600px;*/
+            /*height:400px;*/
+            /*border:1px solid #ccc;*/
+            /*margin:20px;*/
+            /*position:relative;*/
+        /*}*/
+        /*#nav{*/
+            /*width:100px;*/
+            /*height:100px;*/
+            /*background:blue;*/
+            /*position: absolute;*/
+            /*top:20px;*/
+            /*left:20px;*/
+            /*cursor:move;*/
+        /*}*/
+
+        *{
+            margin:0;
+            padding:0;
+        }
+        .box{
+            width:338px;
+            height:533px;
+            border:1px solid #ccc;
+            position: relative;
+        }
+        .box img{
+            width:100%;
+            height:100%;
+        }
+        .inner{
+            width:100px;
+            height:100px;
+            background:rgba(3,3,3,.1);
+            border:1px solid rgba(0,0,0,.2);
+            position: absolute;
+            left:0;
+            top:0;
+            cursor: move;
+            display:none;
+        }
+        .big{
+            width:500px;
+            height:500px;
+            border:1px solid #ccc;
+            position: absolute;
+            left:450px;
+            top:20px;
+            overflow: hidden;
+            display:none;
+        }
+        .big img{
+            position: absolute;
+            width:300%;
+            height:225%;
+        }
+
+    </style>
+</head>
+<body>
+    <!--<div id="box">-->
+        <!--<div id="nav"></div>-->
+    <!--</div>-->
+    <div class="box" id="box">
+        <img src="images/1.jpg" alt="img"/>
+        <div class="inner"></div>
+    </div>
+    <div class="big" id="big">
+        <img src="images/1.jpg" alt="big"/>
+    </div>
+</body>
+</html>

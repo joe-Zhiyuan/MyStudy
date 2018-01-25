@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DOM操作</title>
+</head>
+<style type="text/css">
+    ul{
+        padding:0;
+        margin:0;
+        list-style: none;
+    }
+    #RightMenu{
+        width:100px;
+        height:200px;
+        border:1px solid #ccc;
+        display:none;
+        box-shadow: 0 0 3px #ff4499;
+        position: absolute;
+    }
+    #RightMenu li{
+        height:40px;
+        line-height:40px;
+        text-align: center;
+        font-size: 18px;
+        color:#333;
+    }
+</style>
+<body>
+<ul id="RightMenu">
+    <li>下载</li>
+    <li>删除</li>
+    <li>复制</li>
+    <li>粘贴</li>
+    <li>搜索</li>
+</ul>
+<script>
+    var newTag=document.createElement('ul');
+    var newLi=document.createElement('li');
+    var liText=document.createTextNode("item 1");
+    document.body.appendChild(newTag);
+    newTag.appendChild(newLi);
+    newLi.appendChild(liText);
+    newTag.id="newTag";
+    newTag.className="newTag";
+    var newsLi=document.getElementsByTagName('li')[0];
+    newsLi.className="liFirst";
+    console.log(liText.nodeType);// 3
+    console.log(liText.nodeValue);// nodeValue大写不大写为undefined
+    console.log(liText.length);// 6 空格也算一个
+    newLi.firstChild.nodeValue="item<first";
+    var newText=newLi.firstChild.splitText(4);
+    console.log(newText);
+    console.log(newLi.firstChild.nodeValue);
+    //添加2个新的列表项 使用fragment一次性添加减少反复渲染
+    var fragment=document.createDocumentFragment();//创建文本区域
+    var li=null;
+    var newLiText=null;
+    for(var i=0;i<2;i++){
+        li=document.createElement('li');
+        newLiText=document.createTextNode("item "+(i+2));
+        fragment.appendChild(li);
+        li.appendChild(newLiText);
+    }
+    newTag.appendChild(fragment);
+    console.log(newTag.id);
+    //动态添加js文件
+    function loadScript(url){
+        var script=document.createElement('script');
+        script.type="text/javascript";
+        script.src=url;
+        document.body.appendChild(script);
+    }
+    loadScript("http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js");
+    //动态样式
+    //同上
+    //选择符 querySelector
+    var firstUl=document.querySelector("ul");
+    var firstUl1=document.querySelector("#newTag");
+    var firstUl2=document.querySelector(".newTag");
+    console.log(firstUl2);
+    var liList=newTag.querySelectorAll("li");
+    console.log(liList);
+    console.log(liList.item(2));
+    //元素遍历
+    console.log(newTag.firstElementChild);
+    console.log(newTag.lastElementChild);
+    console.log(newTag.childElementCount);//返回子元素个数 3
+    //HTML
+    var liClass=document.getElementsByClassName("liFirst");
+    console.log(liClass);
+    newTag.classList.add("on");//只能在一个id上添加
+    newTag.classList.remove("on");
+    newTag.classList.toggle("on");
+    console.log(newTag);
+
+    //数组
+    var fouits=["1","2","3","4","5",1,2,3,4,5];
+    var citrus=fouits.slice(2,4);
+    fouits.splice(2,0,"e","f","g");
+    var liFirst=document.querySelector(".liFirst");
+    liFirst.innerHTML=fouits;
+    liFirst.innerHTML=citrus;
+    console.log(fouits);
+    console.log(citrus);
+    var fouitsString=fouits.toString();
+    console.log(fouitsString);
+    function NumIndexof(i){//查询是否在数组中
+        var a=fouits.indexOf(i);
+        console.log(a);
+        if(a>=0){
+            console.log("yes");
+        }else{
+            console.log("false");
+        }
+    }
+    NumIndexof(4);
+    //修改默认右键菜单
+    var rightMenu=document.getElementById("RightMenu");
+    console.log(rightMenu);
+    document.oncontextmenu=function(ev){//oncontextmenu小写不能大写
+        var ev = ev || event;//兼容ie
+        //阻止默认
+        ev.preventDefault();
+        //记录当前鼠标坐标
+        var x =ev.clientX;
+        var y =ev.clientY;
+
+        rightMenu.style.display="block";
+        rightMenu.style.left=x+"px";
+        rightMenu.style.top=y+"px";
+
+        document.onclick=function(){
+            rightMenu.style.display="none";
+        }
+    }
+
+</script>
+
+</body>
+</html>

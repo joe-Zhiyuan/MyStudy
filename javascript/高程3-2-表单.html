@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>高程3-2-表单</title>
+</head>
+<style>
+    html,body{
+        margin:0;
+        padding:0;
+    }
+    .text{
+        width:500px;
+        height:300px;
+        border:1px solid #d9dada;
+        margin:50px 0 0 50px;
+    }
+    .Btns{
+        display:block;
+        margin:20px 0 0 50px;
+    }
+</style>
+<body>
+<!--文本编辑：改写内容....contenteditable="true"-->
+<div class="text">
+    qwe
+</div>
+<div class="Btns">
+    <button type="button" class="textBtn" data-name="bold">加粗</button>
+    <button type="button" class="textBtn" data-name="createlink" data-value="http://joe-zhiyuan.github.io">加链接</button>
+    <button type="button" class="textBtn" data-name="fontsize" data-value="20">字号</button>
+    <button type="button" class="textBtn" data-name="forecolor" data-value="blue">字色</button>
+    <button type="button" class="textBtn" data-name="italic">斜体</button>
+    <button type="button" class="textBtn" data-name="justifyleft">左对齐</button>
+    <button type="button" class="textBtn" data-name="justifycenter">居中</button>
+    <button type="button" class="textBtn" data-name="justifyright">右对齐</button>
+    <button type="button" class="textBtn" data-name="unlink">取消链接</button>
+    <button type="button" class="textBtn" data-name="selectall">全选</button>
+</div>
+<!--嵌套页面，其他页面-->
+<iframe class="text" src="高程3-1.html" name="myText">
+
+</iframe>
+<!--novalidate表单上有这个属性表示不验证-->
+<!--<form action="http://www.baidu.com" method="post" id="myform" novalidate>-->
+<form action="http://www.baidu.com" method="post" id="myform">
+    <!--autofocus默认获得焦点autofocus 必填required-->
+    <input name="text" type="text" size="10" maxlength="15" value="默认Default" style="width:300px;"
+           required autofocus/>
+    <!--readonly只读字段-->
+    <input name="text" type="text" value="字段" readonly/>
+    <!--邮箱字段-->
+    <input name="email" title="邮箱" type="email" required />
+    <!--网址-->
+    <input name="URL" title="网址" type="URL" required/>
+    <!--数字 最大 最小 改变刻度大小-->
+    <input name="number" title="数字" type="number" min="0" max="20" step="5" required/>
+    <select name="colors" id="colors">
+        <option name="color" value="red">red</option>
+        <option name="color" value="blue">blue</option>
+        <option name="color" value="green">green</option>
+    </select>
+    <!--通用提交 在提交按钮上有这个属性不验证提交formnovalidate-->
+    <input type="submit" name="submit" formnovalidate value="提交"/>
+    <!--按钮提交-->
+    <button type="submit" id="mysubmit">提交</button>
+    <!--图片提交-->
+    <input type="image" id="mysubmit1" src="images/1.jpg" style="width:30px;transform:rotate(-90deg);margin-left:10px;">
+</form>
+</body>
+<script>
+    //封装EventUtilvar
+    var EventUtil={
+        addHandler:function(element,type,handler){ //添加事件
+            if(element.addEventListener){
+                element.addEventListener(type,handler,false);  //使用DOM2级方法添加事件
+            }else if(element.attachEvent){                    //使用IE方法添加事件
+                element.attachEvent("on"+type,handler);
+            }else{
+                element["on"+type]=handler;          //使用DOM0级方法添加事件
+            }
+        },
+        removeHandler:function(element,type,handler){  //取消事件
+            if(element.removeEventListener){
+                element.removeEventListener(type,handler,false);
+            }else if(element.detachEvent){
+                element.detachEvent("on"+type,handler);
+            }else{
+                element["on"+type]=null;
+            }
+        },
+        getEvent:function(event){  //使用这个方法跨浏览器取得event对象
+            return event?event:window.event;
+        },
+        getTarget:function(event){  //返回事件的实际目标
+            return event.target||event.srcElement;
+        },
+        preventDefault:function(event){   //阻止事件的默认行为
+            if (event.preventDefault) {
+                event.preventDefault();
+            } else {
+                event.returnValue = false;
+            }
+        },
+        stopPropagation:function(event){  //立即停止事件在DOM中的传播
+            //避免触发注册在document.body上面的事件处理程序
+            if(event.stopPropagation){
+                event.stopPropagation();
+            }else{
+                event.cancelBubble=true;
+            }
+        },
+        getRelatedTarget:function(event){  //获取mouseover和mouseout相关元素
+            if(event.relatedTarget){
+                return event.relatedTarget;
+            }else if(event.toElement){      //兼容IE8-
+                return event.toElement;
+            }else if(event.formElement){
+                return event.formElement;
+            }else{
+                return null;
+            }
+        },
+        getButton:function(event){    //获取mousedown或mouseup按下或释放的按钮是鼠标中的哪一个
+            if(document.implementation.hasFeature("MouseEvents","2.0")){
+                return event.button;
+            }else{
+                switch(event.button){   //将IE模型下的button属性映射为DOM模型下的button属性
+                    case 0:
+                    case 1:
+                    case 3:
+                    case 5:
+                    case 7:
+                        return 0;  //按下的是鼠标主按钮（一般是左键）
+                    case 2:
+                    case 6:
+                        return 2;  //按下的是中间的鼠标按钮
+                    case 4:
+                        return 1;  //鼠标次按钮（一般是右键）
+                }
+            }
+        },
+        getWheelDelta:function(event){ //获取表示鼠标滚轮滚动方向的数值
+            if(event.wheelDelta){
+                return event.wheelDelta;
+            }else{
+                return -event.detail*40;
+            }
+        },
+        getCharCode:function(event){   //以跨浏览器取得相同的字符编码，需在keypress事件中使用
+            if(typeof event.charCode=="number"){
+                return event.charCode;
+            }else{
+                return event.keyCode;
+            }
+        }
+
+    };
+// 表单事件
+//     阻止提交表单
+    var mysubmit1=document.getElementById('mysubmit1');
+    mysubmit1.onclick=function(e){
+        var e=e||window.event;
+        e.preventDefault();
+    }
+
+    var myform=document.getElementById('myform');
+    //顺序取得
+    console.log(myform.elements[0]);
+    //name取得
+    console.log(myform.elements["text"]);
+    //返回集合
+    console.log(myform.elements["colors"]);
+    //设置不可用
+    myform.elements[1].disabled=true;
+
+    //提交按钮1s点击一次
+    var mysubmit=document.getElementById('mysubmit');
+    var submitTime=null;
+    mysubmit.onclick=function(e){
+        console.log(1);
+        var e=e||window.event;
+        e.preventDefault();
+        mysubmit.disabled=true;
+        submitTime=setTimeout(function(){
+            mysubmit.disabled=false;
+        },1000);
+    }
+    //得到焦点和失去焦点
+    var textone=myform.elements[0];
+    console.log(textone);
+    textone.onfocus=function(){
+        textone.style.backgroundColor="#007c28";
+        //默认选中全部文本
+        textone.select();
+        //取得文本
+        function getSelectedText(input){
+            return input.value.substring(input.selectionStart,input.selectionEnd);
+        }
+        var text1=getSelectedText(textone);
+        console.log(text1);
+        //no
+        console.log(textone.setSelectionRange(0,textone.value.length));
+    }
+    textone.onblur=function(){
+        textone.style.background="#ccc";
+    }
+    //输入数字，其他屏蔽 ctrl可以
+    EventUtil.addHandler(textone,"keypress",function(event){
+        event=EventUtil.getEvent(event);
+        var target=EventUtil.getTarget(event);
+        var charCode=EventUtil.getCharCode(event);
+        if(!/\d/.test(String.fromCharCode(charCode))&&charCode>9&&!event.ctrlKey){
+            EventUtil.preventDefault(event);
+        }
+    });
+    // 默认选中第二项
+    var colors=document.getElementById('colors');
+    colors.options[1].selected=true;
+    var selectOption=colors.options.selectedIndex;
+    console.log(selectOption);//0开始 是下标
+    // 添加新选项 移除选项
+    var newOption=document.createElement('option');
+    newOption.appendChild(document.createTextNode("new yellow"));
+    newOption.setAttribute("value","yellow");
+    colors.appendChild(newOption);
+    colors.remove(0);
+    console.log(colors.options[0]);//blue red--no
+    // 富文本编辑
+    var text=document.getElementsByClassName('text')[0];
+    text.contentEditable="true";
+    var textBtns=document.getElementsByClassName('textBtn');
+    for(var i=0;i<textBtns.length;i++){
+        textBtns[i].onclick=function(){
+            //this.getAttribute("data-name")获得自定义特性
+            document.execCommand(this.getAttribute("data-name"),false,this.getAttribute("data-value"));
+        }
+    }
+    //嵌套页面 富文本编辑
+    window.onload=function() {
+        frames["myText"].document.designMode = "on";
+        frames["myText"].document.execCommand("bold", false, null);
+    }
+</script>
+</html>

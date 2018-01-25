@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>canvas学习</title>
+    <style type="text/css">
+        html,body{
+            padding:0;
+            margin:0;
+            background:#e7e7e7;
+        }
+        #canvas{
+            background: #e7e7e7;
+            position: absolute;
+            left:0;
+            bottom:0;
+        }
+        #line{
+            width:100px;
+            height:200px;
+            z-index:20;
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <canvas id="canvas"></canvas>
+        <canvas id="line"></canvas>
+    </div>
+</body>
+<script type="text/javascript">
+    window.onload=function(){
+        var canvas=document.getElementById('canvas');
+
+        var ctx=canvas.getContext('2d');
+
+        var data={
+            'w': document.documentElement.clientWidth,
+            'h': document.documentElement.clientHeight
+        }
+        //圆心
+        canvas.width=data.w;
+        canvas.height=data.h;
+        //半经
+        var radiu=data.h/3,
+            x=data.w/2,
+            y=data.h/2;
+        //开始的点  0是3点钟开始2为一圈
+        var n=-0.5;
+        //线的宽度
+        ctx.lineWidth='2';
+        //线的颜色
+        ctx.strokeStyle="red";
+
+        clearInterval(timer)
+        var timer=setInterval(function(){
+            n+=0.01;
+            //Math.PI*n圆弧 *1.5 *1.5*n
+            ctx.arc(x,y,radiu,Math.PI*n,n*Math.PI,false);
+
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            ctx.stroke();
+            //1.5修改成5.5
+            if(n>=1.5){
+                clearInterval(timer);
+                ctx.closePath();
+            }
+        },20);
+
+        var line=document.getElementById('line');
+        var oLine=line.getContext('2d');
+        oLine.beginPath();
+        oLine.lineWidth='2';
+        oLine.moveTo(20,20);
+        oLine.lineTo(50,50);
+        oLine.stroke();
+    }
+</script>
+</html>

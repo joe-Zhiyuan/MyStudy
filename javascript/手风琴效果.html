@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>手风琴效果</title>
+    <style type="text/css">
+        *{
+            padding:0;
+            margin:0;
+        }
+        a img{
+            border:none;
+        }
+        a{
+            text-decoration:none;
+        }
+        .switchBox{
+            width:920px;
+            height:280px;
+            margin:150px auto;
+            overflow:hidden;
+            border:1px solid #ddd;
+            border-top:2px solid #728ca4;
+        }
+        .switchBox>ul{
+            width:100%;
+            height:100%;
+            position:relative;
+            margin-top:4px;
+        }
+        .switchBox>ul>li{
+            list-style:none;
+            position:absolute;
+            top:0;
+            background-color:#fff;
+            transition:1s all ease;
+        }
+        .switchBox>ul .item{
+            width:520px;
+            height:280px;
+            box-shadow:-3px 0 5px 0 rgba(0,0,0,.20);
+            -webkit-box-shadow:-3px 0 5px 0 rgba(0,0,0,.20);
+            -o-box-shadow:-3px 0 5px 0 rgba(0,0,0,.20);
+            -moz-box-shadow:-3px 0 5px 0 rgba(0,0,0,.20);
+            -ms-box-shadow:-3px 0 5px 0 rgba(0,0,0,.20);
+            overflow:hidden;
+        }
+        .over:after{
+            content:"";
+            position:absolute;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            background:rgba(0,0,0,.5);
+        }
+    </style>
+</head>
+<body>
+<div class="switchBox">
+    <ul>
+        <li class="item other over">
+            <img src="https://aecpm.alicdn.com/tfscom/TB1eCWYbS_I8KJjy0FoXXaFnVXa.jpg" alt="">
+        </li>
+        <li class="item two">
+            <img src="https://img.alicdn.com/tfs/TB1Pp2IfDnI8KJjy0FfXXcdoVXa-520-280.png_q90_.webp" alt="">
+        </li>
+        <li class="item three">
+            <img src="https://img.alicdn.com/simba/img/TB1gWrUXfTM8KJjSZFDSuultXXa.jpg" alt="">
+        </li>
+        <li class="item four">
+            <img src="https://img.alicdn.com/simba/img/TB10TmIgcnI8KJjSsziSuv8QpXa.jpg" alt="">
+        </li>
+        <li class="item five">
+            <img src="https://img.alicdn.com/simba/img/TB1SYOGggLD8KJjSszeSuuGRpXa.jpg" alt="">
+        </li>
+        <li class="item six">
+            <img src="https://img.alicdn.com/tfs/TB12mCBfPnD8KJjSspbXXbbEXXa-520-280.jpg_q90_.webp" alt="">
+        </li>
+    </ul>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+    window.onload=function(){
+        /*封装计算样式*/
+        function getStyle(element,attr){
+            if(element.currentstyle){
+                return element.currentstyle[attr];
+            }else{
+                return window.getComputedStyle(element,null)[attr];
+            }
+        }
+        /*构造函数*/
+        function Accordion(obj){
+            var _this=this;
+            this.box=document.querySelector(obj.dom);
+            this.li=_this.box.children[0].children;//li
+            console.log(this.li);
+            this.ul_width=Number(getStyle(_this.box.children[0],'width').replace("px",''));
+            console.log(this.ul_width);
+            this.li_width=Number(getStyle(_this.box.children[0].children[0],'width').replace("px",''));
+            console.log(this.li_width);
+            this.spacing=(_this.ul_width-_this.li_width)/(_this.li.length-1);
+            console.log(this.spacing);
+            this.init=function(){
+                for(var i=0;i<_this.li.length;i++){
+                    if(i==0){
+                        _this.li[0].style.left=0;
+                        _this.li[0].classList.remove('over');
+                    }else{
+                        _this.li[i].style.left=_this.li_width+_this.spacing*(i-1)+"px";//少了一个+"px";
+                        console.log(_this.li[i].style.left);
+                        _this.li[i].classList.add('over');
+                    }
+                }
+            };
+
+            this.move=function(){
+                var places=new Array();
+                for(var i=0;i<_this.li.length;i++){
+                    (function(i){
+                        _this.li[i].onmouseover=function(e){
+                            var e=e||window.event;
+                            if(e.cancelBubble){
+                                e.cancelBubble=true;
+                            }else{
+                                e.stopPropagation();
+                            }
+                            switch(i){
+                                case 0:
+                                for(var index=0;index<_this.li.length;index++){
+                                   if(index==0){
+                                       places[0]=0;
+                                   } else{
+                                       places[index]=_this.li_width+(index-1)*_this.spacing;
+                                       console.log(places[index]);
+                                   }
+                                }
+                                break;
+                                default:
+                                    for(var index=0;index<_this.li.length;index++){
+                                        if(index==0){
+                                            places[0]=0;
+                                        }else if(index<=i){
+                                            places[index]=_this.spacing*index;
+                                            console.log(places[index]);
+                                        }else{
+                                            places[index]=_this.li_width+(index-1)*_this.spacing;
+                                            console.log(places[index]);
+                                        }
+                                    }
+                                    break;
+                            }
+                            for(var index=0;index<_this.li.length;index++){
+                                _this.li[index].style.left=places[index]+"px";
+                                _this.li[index].classList.add('over');
+                            }
+                            _this.li[i].classList.remove('over');
+                        }
+                    }(i));
+
+                }
+            }
+            this.init();
+
+        }
+        var accordion=new Accordion({dom:".switchBox"});
+        accordion.move();
+    }
+</script>

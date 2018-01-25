@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>高程3-1</title>
+    <!--新页面打开-->
+    <base target="_blank"/>
+    <style>
+        html,body{
+            padding:0;
+            margin:0;
+        }
+        #myMenu{
+            width:100px;
+            height:150px;
+            border:1px solid #ccc;
+            position:absolute;
+            visibility:hidden;
+        }
+        #myMenu li{
+            height:50px;
+            list-style: none;
+            text-decoration: none;
+        }
+        #myMenu li a{
+            color:#333;
+            font-size:16px;
+            line-height:50px;
+            text-decoration: none;
+            list-style: none;
+        }
+        #myClick{
+            width:100px;
+            height:150px;
+            border:1px solid #ccc;
+        }
+        #myClick li{
+            height:50px;
+            list-style: none;
+            text-decoration: none;
+        }
+        #myClick li a{
+            color:#333;
+            font-size:16px;
+            line-height:50px;
+            text-decoration: none;
+            list-style: none;
+            text-align:center;
+        }
+    </style>
+</head>
+<body>
+<!--右键默认菜单-->
+<div id="myDiv">右键点击或者ctrl+鼠标点击显示上下文菜单</div>
+<ul id="myMenu">
+    <li><a href="http://www.baidu.com">百度</a></li>
+    <li><a href="http://www.bilibili.com">BILIBILI</a> </li>
+    <li><a href="http://www.github.com">Github</a> </li>
+</ul>
+<ul id="myClick">
+    <li id="myClick1">百度</a></li>
+    <li id="myClick2">BILIBILI</a> </li>
+    <li id="myClick3">Github</a> </li>
+</ul>
+<div id="output"></div>
+<a id="thisHref" href="http://www.baidu.com"></a>
+</body>
+<script>
+    // 右键默认菜单
+    var menu=document.getElementById('myMenu');
+    document.oncontextmenu=function(ev){
+        var ev=ev||window.event;
+        ev.preventDefault();
+        menu.style.left=ev.clientX+'px';
+        menu.style.top=ev.clientY+'px';
+        menu.style.visibility="visible";
+
+        document.onclick=function(){
+            menu.style.visibility="hidden";
+        }
+    }
+    // 显示询问是否关闭页面前的选项  || 在谷歌浏览器只有刷新有弹出是否重新加载，在firefox中无反应
+    // window.onbeforeunload=function(e){
+    //     var e=e||window.event;
+    //     var message="代码写完了吗？今天你学会了什么？";
+    //     event.returnValue=message;//ie,firefox需要
+    //     return message;//chrome,safari需要
+    // }
+    // 链接变化事件
+    window.onhashchange=function(e){
+        var e=e||window.event;
+        console.log("old URL:"+e.oldURL+"/n"+"new URL:"+e.newURL);
+    }
+    //触摸事件
+    function handleTouchEvent(event){
+        var e=e||window.event;
+        //只跟着一次触摸
+        if(event.touches.length == 1){
+            var output=document.getElementById('output');
+            switch(event.type){
+                case "touchstart":
+                    output.innerHTML="Touch started("+event.touches[0].clientX+","+event.touches[0].clientY+")";
+                    break;
+                case "touchend":
+                    output.innerHTML="<br>Touch ended("+event.changedTouches[0].clientX+","+event.changedTouches[0]
+                        .clientY+")";
+                    break;
+                case "touchmove":
+                    e.preventDefault();//阻止滚动
+                    output.innerHTML="<br>Touch Move("+event.changedTouches[0].clientX+","+event.changedTouches[0]
+                        .clientY+")";
+                    output
+                default:
+                    console.log("2");
+                    break;
+            }
+        }
+
+    }
+    document.addEventListener('touchstart',handleTouchEvent, false);
+    document.addEventListener('touchmove',handleTouchEvent, false);
+    document.addEventListener('touchend',handleTouchEvent, false);
+    //事件代理
+
+    //封装EventUtilvar
+    EventUtil = {
+    addHandler: function (element, type, handler) {
+        if (element.addEventListener) {
+            element.addEventListener(type, handler, false);
+        } else if (element.attachEvent) {
+            element.attachEvent("on" + type, handler);
+        } else {
+            element["on" + type] = handler;
+        }
+    },
+    removeHandler: function (element, type, handler) {
+        if (element.removeEventListener) {
+            element.removeEventListener(type, handler, false);
+        } else if (element.detachEvent) {
+            element.detachEvent("on" + type, handler);
+        } else {
+            element["on" + type] = null;
+        }
+    },
+
+    getEvent: function (event) {
+        return event ? event : window.event;
+    },
+    getTarget: function (event) {
+        return event.target || event.srcElement;
+    },
+    preventDefault: function (event) {
+        if (event.preventDefault) {
+            event.preventDefault();
+        } else {
+            event.returnValue = false;
+        }
+    },
+    stopPropagation: function (event) {
+        if (event.stopPropagation) {
+            event.stopPropagation();
+        } else {
+            event.cancelBubbles = true;
+        }
+    },
+    getRelatedTarget: function (event) {
+        if (event.relatedTarger) {
+            return event.relatedTarget;
+        } else if (event.toElement) {
+            return event.toElement;
+        } else if (event.fromElement) {
+            return event.fromElement;
+        } else { return null; }
+
+    }
+    }
+
+    var myClick=document.getElementById('myClick');
+    EventUtil.addHandler(myClick,"click",function(event){
+        event=EventUtil.getEvent(event);
+        var target=EventUtil.getTarget(event);
+        switch(target.id){
+            case "myClick1":
+                console.log("myClick1");
+                break;
+            case "myClick2":
+                console.log("myClick2");
+                break;
+            case "myClick3":
+                console.log("myClick3");
+                break;
+            default:
+                break;
+        }
+    });
+    //模拟事件  模拟点击一次  直接点击，不需用户操作
+    var thisHref=document.getElementById('myClick1');//绑定点击的元素-按钮...
+    var event=document.createEvent('MouseEvents');//事件类型
+    event.initMouseEvent("click",true,true,document.defaultView,0,0,0,0,0,false,false,false,false,0,null);
+    thisHref.dispatchEvent(event);//点击绑定
+
+
+</script>
+</html>

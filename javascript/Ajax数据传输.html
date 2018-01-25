@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ajax数据传输</title>
+</head>
+<script type="text/javascript">
+    //在控制台输出圣诞树
+    (n=>{
+        [...Array(n-2)].map((_, i)=>3+i).forEach(j=>{
+            [...Array(j)].map((_, k)=>1+k).forEach(x=>{
+               let sc=2*x-1,spc=(2*n-1-sc)/2;
+               console.log(" ".repeat(spc)+"*".repeat(sc));
+        });
+        });
+        console.log(" ".repeat(n-1)+"*");
+        console.log("~".repeat(n-1)+"***##$%^^&*");
+    })(5);
+    //有异常抛到stackoverflow(程序问题问答网站)搜索
+    // try{
+    //     something();
+    // }catch(e){
+    //     window.location.href="http://stackoverflow.com/search?q=[js]+"+e.message;
+    // }
+    //单行写一个评级组件："★★★★★☆☆☆☆☆".slice(5 - rate, 10 - rate);
+    //rate是一个1-5的变量
+
+    //get提交数据
+    window.onload=function(){
+        var oBtn=document.getElementById('btn');
+        oBtn.onclick=function(){
+            var xhr=null;
+            try{
+                xhr=new XMLHttpRequest();
+            }catch(e){
+                xhr=new ActiveXObject('Microsoft.XMLHTTP');
+            }
+
+            xhr.open('get','2.get.php?username='+encodeURI('joe')+'&age=30&'+new Date().getTime(),true);
+            xhr.send();
+
+            xhr.onreadystatechange=function(){
+                if(xhr.readyState==4){
+                    if(xhr.status==200){
+                        alert(xhr.responseText );
+                    }else{
+                        alert('出错，err:'+xhr.status);
+                    }
+                }
+            }
+        }
+    }
+    //出错
+</script>
+<body>
+    <input type="button" value="btn" id="btn"/>
+</body>
+</html>

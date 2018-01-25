@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>节点</title>
+</head>
+<body>
+<ul>
+    <li>item 1</li>
+    <li>item 2</li>
+    <li><a href=""> item 3</a></li>
+</ul>
+<script>
+    var thisnode=document.getElementsByTagName('ul')[0];
+    console.log(thisnode.childNodes[1]);
+    console.log(thisnode.childNodes.item(1));
+    console.log(thisnode.nodeName);//ul
+    console.log(thisnode.lastNode);
+    var newNode=document.createElement('li');
+    var node2=document.createTextNode('item 4');
+    newNode.appendChild(node2);
+    thisnode.appendChild(newNode);
+    // thisnode.insertBefore(newNode,thisnode.firstChild);
+    // thisnode.replaceChild(newNode,thisnode.childNodes[1]);
+    // thisnode.replaceChild(newNode,thisnode.childNodes[2]);
+    console.log(thisnode.children[2]);
+    thisnode.removeChild(thisnode.children[1]);
+    var html=document.documentElement;
+    console.log(html);
+    console.log(document.firstChild);
+    console.log(html===document.firstChild);
+    console.log(html===document.childNodes[1]);//<!DOCTYPE html> 有注释
+    console.log(document.title);
+    document.title="DOM文档对象模型";
+    console.log(document.URL);//获取URL 全部
+    console.log(document.domain);//获取域名
+    console.log(document.referrer);//来源页面的URL  主网址URL
+    var threeA=document.links;//获取带有href的所有a标签
+    console.log(threeA);
+    document.writeln("12");
+    document.write("item");
+    //动态加载js
+    document.write("<script type=\"text/javascript\" src=\"http://apps.bdimg.com/libs/echarts/2.1.9/dist/echarts.js\">"+"<\/script>");
+    thisnode.id="thisUl";//给元素设置id  className title id标签内新特性
+    console.log(thisnode.id);
+    thisnode.index=2;
+    console.log(thisnode.index);// 2
+    console.log(thisnode.getAttribute("id"));//获取特性
+    thisnode.setAttribute("index","2");//赋予特性
+    console.log(thisnode.getAttribute("index"));//获取特性
+    thisnode.removeAttribute("index");
+    console.log(thisnode.getAttribute("index"));//null 移除
+    var div=document.createElement('div');
+    div.style.width="100px";
+    div.style.height="50px";
+    div.style.background="red";
+    document.body.appendChild(div);//添加一个新的div红色的
+    console.log(thisnode.length);
+</script>
+</body>
+</html>
