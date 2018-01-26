@@ -74,22 +74,28 @@
             myVideo.pause();
             flag=false;
         }
-    }
+    };
     //播放时间
     setInterval(
         function(){
             videoTime.innerHTML=parseInt(myVideo.currentTime);
         },200
-    )
+    );
     //添加背景音乐 点击任意地方停止
     var audio=new Audio("images/song.mp3");
     audio.play();
     document.onclick=function(){
         audio.pause();
         console.log(1);
-    }
+    };
     //历史状态管理
     history.pushState({name:"joe"},"joe-zhiyuan",document.location.pathname);
+
+    console.log(window.sessionStorage);
+    console.log(window.localStorage);
+    window.onerror=function(message,url,line){
+        console.log(message);
+    };
     //自定义错误，浏览器会显示错误
     throw new Error("有个错误");
 
