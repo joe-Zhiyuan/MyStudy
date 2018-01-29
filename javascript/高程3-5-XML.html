@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>高程3-5-XML</title>
+    <style>
+
+    </style>
+</head>
+<body>
+
+</body>
+<script>
+    //创建空白文档
+    var xmldom=document.implementation.createDocument("","root",null);
+    console.log(xmldom.documentElement.tagName);
+    var child=xmldom.createElement("child");
+    xmldom.documentElement.appendChild(child);
+    //解析xml为dom  中国天气接口http://flash.weather.com.cn/wmaps/xml/china.xml
+    var parser = new DOMParser();
+    var xmldom=parser.parseFromString("<root><child/></root>","text/xml");
+    console.log(xmldom.documentElement.tagName);
+    console.log(xmldom.documentElement.firstChild.tagName);
+    var anotherChild=xmldom.createElement("child");
+    xmldom.documentElement.appendChild(anotherChild);
+    var children=xmldom.getElementsByTagName("child");
+    console.log(children.length);
+    //dom转化为
+    var serializer=new XMLSerializer();
+    var xml=serializer.serializeToString(xmldom);
+    console.log(xml);
+    // //ie8下的XML
+    // var xmldom1= createDocument();
+    // xmldom1.loadXML("<root><child/></root>");
+    // console.log(xmldom1.documentELement.tagName);
+    //是否支持XPath
+    var supportsXPath=document.implementation.hasFeature("XPath","3.0");
+
+    //E4X
+    var x=new XML(xmldom);
+</script>
+</html>

@@ -33,22 +33,24 @@
     <div id="div2" ondrop="drop(event)" ondragover="allowDrop(event)">
 
     </div>
-    <!--视频 poster为显示封面-->
-    <video id="myVideo" poster="images/1.jpg" controls>
-        <source src="images/mov_bbb.mp4" type="video/mp4; codecs='vp8, vorbis'">
-        <source src="images/mov_bbb.ogg" type="video/ogg; codexs='theora, vorbis'">
-        <!--后备信息-->
-        请升级浏览器，不支持h5视频
-    </video>
-    <div id="videoTime"></div>
-    <!--音频-->
-    <audio id="myAudio"  src="images/song.mp3" controls>
-        <!--后备信息-->
-        请升级浏览器，不支持h5音频
-    </audio>
 </div>
+<!--视频 poster为显示封面-->
+<video id="myVideo" poster="images/1.jpg" controls>
+    <source src="images/mov_bbb.mp4" type="video/mp4; codecs='vp8, vorbis'">
+    <source src="images/mov_bbb.ogg" type="video/ogg; codexs='theora, vorbis'">
+    <!--后备信息-->
+    请升级浏览器，不支持h5视频
+</video>
+<div id="videoTime"></div>
+<!--音频-->
+<audio id="myAudio"  src="http://music.163.com/song/media/outer/url?id=476592630.mp3" controls>
+    <!--后备信息-->
+    请升级浏览器，不支持h5音频
+</audio>
 </body>
+<script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
 <script>
+    $(".div div").not("#div2").css("border","2px solid red");
     // 拖拽元素
     var ev=event||window.event;
     function allowDrop(ev){
@@ -66,28 +68,37 @@
     var myVideo=document.getElementById("myVideo");
     var videoTime=document.getElementById("videoTime");
     var flag=false;
+    var thisTime;
     myVideo.onclick=function(){
         if(!flag) {
             flag = true;
             myVideo.play();
+            //播放时间
+            thisTime=setInterval(
+                function(){
+                    videoTime.innerHTML=parseInt(myVideo.currentTime);
+                },200
+            );
         }else{
             myVideo.pause();
             flag=false;
+            clearInterval(thisTime);
         }
     };
-    //播放时间
-    setInterval(
-        function(){
-            videoTime.innerHTML=parseInt(myVideo.currentTime);
-        },200
-    );
+
     //添加背景音乐 点击任意地方停止
-    var audio=new Audio("images/song.mp3");
-    audio.play();
-    document.onclick=function(){
-        audio.pause();
+    var myaudio=document.getElementById("myAudio");
+    myaudio.play();
+    //任意点击停止播放，再点击播放
+    document.onclick = function () {
+        if(myaudio.paused){
+            myaudio.play();
+        }else {
+            myaudio.pause();
+        }
         console.log(1);
     };
+
     //历史状态管理
     history.pushState({name:"joe"},"joe-zhiyuan",document.location.pathname);
 
