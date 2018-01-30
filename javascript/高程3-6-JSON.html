@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>高程3-6-JSON</title>
+    <style>
+
+    </style>
+</head>
+<body>
+
+</body>
+<script>
+//序列化
+    var book={
+        title:"book1",
+        authors:[
+            "joe",
+            "qiao"
+        ],
+        edition:3,
+        year:2018
+    };
+    var jsonText = JSON.stringify(book);
+    console.log(jsonText);
+    console.log(book.title);
+    //过滤
+    var jsonText1 = JSON.stringify(book,["title","year"]);
+    console.log(jsonText1);
+    //函数过滤
+    var jsonText2 = JSON.stringify(book,function(key,value){
+        switch(key){
+            case "authors":
+                return value.join(",");
+            case "year":
+                return 2000;
+            case "edition":
+                return undefined;
+            default:
+                return value;
+        }
+    });
+    console.log(jsonText2);
+    //缩进
+    // var jsonText3 = JSON.stringify(book,null,4);//4个空格 10为最大，大于10则为10 只要传入有效的数值就会换行 1也换行
+    var jsonText3 = JSON.stringify(book,null,"--");//为--
+    console.log(jsonText3);
+    //解析
+    var bookCopy = JSON.parse(jsonText);
+    console.log(bookCopy);
+</script>
+</html>

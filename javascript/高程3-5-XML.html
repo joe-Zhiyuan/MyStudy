@@ -8,7 +8,7 @@
     </style>
 </head>
 <body>
-
+<p>无法理解</p>
 </body>
 <script>
     //创建空白文档
@@ -36,7 +36,13 @@
     //是否支持XPath
     var supportsXPath=document.implementation.hasFeature("XPath","3.0");
 
+    var xmldom2=parser.parseFromString("http://flash.weather.com.cn/wmaps/xml/china.xml","text/xml");
+    console.log(xmldom2.documentElement.tagName);
+    console.log(xmldom2);
+
+
     //E4X
-    var x=new XML(xmldom);
+    // var x=new XML(xmldom);
+    // console.log(x);
 </script>
 </html>
