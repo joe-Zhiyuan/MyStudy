@@ -19,7 +19,12 @@
             "qiao"
         ],
         edition:3,
-        year:2018
+        year:2018,
+        releaseDate:new Date(2017,10,21)
+        //自定义返回json格式 console.log(jsonText);序列化之后返回3
+        // ,toJSON:function(){
+        //     return this.edition;
+        // }
     };
     var jsonText = JSON.stringify(book);
     console.log(jsonText);
@@ -48,5 +53,15 @@
     //解析
     var bookCopy = JSON.parse(jsonText);
     console.log(bookCopy);
+    console.log(bookCopy.title);
+    //第二个参数为还原函数
+    var bookCopy1 = JSON.parse(jsonText,function(key,value){
+        if(key==="releaseDate"){//是则返回日期对象，不是返回对象本身
+            return new Date(value);
+        }else{
+            return value;
+        }
+    });
+    console.log(bookCopy1.releaseDate.getMonth());//转化为date对象，才可以获取月 getFullYear()年
 </script>
 </html>

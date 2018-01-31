@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>高程3-7-Ajax与Comet</title>
+</head>
+<style>
+
+</style>
+<body>
+
+</body>
+<script>
+//XMLHttpRequest 原生XMLHttpRequest
+    var xhr = new XMLHttpRequest();
+    console.log(xhr);
+    //在异步请求下，检测xhr的请求/响应过程的活动
+    xhr.onreadystatechange=function(){
+        if(xhr.readyState === 4){
+            if((xhr.status>=200&&xhr.status<300)||xhr.status===304){
+                console.log(xhr.responseText);
+            }else{
+                console.log("Request was unsuccessful:"+xhr.status);
+            }
+        }
+    };
+    //构建，准备请求  同步被弃用 false
+    xhr.open("get","http://localhost:63342/javascript/data/json.json",true);
+    //get请求 后面查询必须编码 用encodeURLComponent(name) 编码 键值对 必须用 & 号连接
+    // xhr.open("get","index.php?name=value&name1=value1",true);
+    // //post请求 提交表单
+    // xhr.open("post","index.php",true);
+    // //提交表单头部
+    // xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+    // var form = document.getElementById("user-info");
+    // //提交表单内容  serizlize是自定义表单序列化处理函数
+    // xhr.send(serialize(form));
+    //HTTP头部信息  自定义
+    // xhr.setRequestHeader("myHeader","myValue");
+    //获取HTTP头部信息
+    // var myHeader = xhr.getResponseHeader("myHeader");//取得头部信息
+    // var allHeader = xhr.getAllResponseHeaders();//取得所有
+    // console.log(allHeader);
+    //发送请求
+    xhr.send(null);
+    //取消异步请求 还可以解引用
+    // xhr.abort();
+    var thisJson;
+    if((xhr.status>=200&&xhr.status<300)||xhr.status===304){
+        thisJson = xhr.responseText;
+    }else{
+        console.log("Request was unsuccessful:"+xhr.status);
+    }
+    console.log(thisJson);
+
+    //FormData 序列化表单 以下必须在xhr.send()之前
+    // var data = new FormData();
+    // data.append("name","joe");
+    //传入表单 可以直接传给send()方法
+    // var data = new FormData(document.forms[0]);
+    // xhr.send(data);
+    //超时设定 设为1秒 只在ie8+ 先设置status方法在try{}catch{}中
+    // xhr.timeout = 1000;
+    // xhr.ontimeout = function(){
+    //     console.log("请求超时");
+    // }
+    //overrideMimeType() 重写响应的MIME类型
+    // xhr.overrideMimeType("text/xml");
+    //进度事件
+    // xhr.onload = function(){
+    //     if((xhr.status>=200&&xhr.status<300)|| xhr.status === 304){
+    //         console.log(xhr.responseText);
+    //     }else{
+    //         console.log("请求出错"+ xhr.status);
+    //     }
+    // };
+</script>
+</html>
