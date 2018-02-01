@@ -8,24 +8,27 @@
 
 </style>
 <body>
-
+    <p id="jsonText"></p>
 </body>
 <script>
 //XMLHttpRequest 原生XMLHttpRequest
-    var xhr = new XMLHttpRequest();
-    console.log(xhr);
-    //在异步请求下，检测xhr的请求/响应过程的活动
-    xhr.onreadystatechange=function(){
-        if(xhr.readyState === 4){
-            if((xhr.status>=200&&xhr.status<300)||xhr.status===304){
-                console.log(xhr.responseText);
+    var xhr2 = new XMLHttpRequest();
+    console.log(xhr2);
+    var thisJson,jsonText=document.getElementById("jsonText");
+    //在异步请求下，检测xhr的请求/响应过程的活动 响应操作
+    xhr2.onreadystatechange=function(){
+        if(xhr2.readyState === 4){
+            if((xhr2.status>=200&&xhr2.status<300)||xhr2.status===304){
+                var thisJson = JSON.parse(xhr2.responseText);
+                console.log(thisJson.title);
+                jsonText.innerHTML = thisJson.title+" "+thisJson.authors;
             }else{
-                console.log("Request was unsuccessful:"+xhr.status);
+                console.log("Request was unsuccessful:"+xhr2.status);
             }
         }
     };
-    //构建，准备请求  同步被弃用 false
-    xhr.open("get","http://localhost:63342/javascript/data/json.json",true);
+    //构建，准备请求  同步被弃用 false http://localhost:63342/javascript/data/json.json 绝对地址  本地使用相对的就可以
+    xhr2.open("get","data/json.json",true);
     //get请求 后面查询必须编码 用encodeURLComponent(name) 编码 键值对 必须用 & 号连接
     // xhr.open("get","index.php?name=value&name1=value1",true);
     // //post请求 提交表单
@@ -42,16 +45,10 @@
     // var allHeader = xhr.getAllResponseHeaders();//取得所有
     // console.log(allHeader);
     //发送请求
-    xhr.send(null);
+    xhr2.send(null);
     //取消异步请求 还可以解引用
     // xhr.abort();
-    var thisJson;
-    if((xhr.status>=200&&xhr.status<300)||xhr.status===304){
-        thisJson = xhr.responseText;
-    }else{
-        console.log("Request was unsuccessful:"+xhr.status);
-    }
-    console.log(thisJson);
+
 
     //FormData 序列化表单 以下必须在xhr.send()之前
     // var data = new FormData();
@@ -74,5 +71,62 @@
     //         console.log("请求出错"+ xhr.status);
     //     }
     // };
+
+    //跨域请求 ie8-9
+    // var xdr = new XDomainRequest();
+    // xdr.onload = function(){
+    //     console.log(xdr.responseText);
+    // };
+    // xdr.open("get","http://localhost:63342/javascript/data/json.json");
+    // xdr.send(null);
+
+    //跨域 其他浏览器ie10+
+    var xhr1 = new XMLHttpRequest();
+    xhr1.onreadystatechange = function(){
+        if(xhr1.readyState === 4){
+            if((xhr1.status >= 200 && xhr1.status < 300) || xhr.status === 304){
+                var hefei = JSON.parse(xhr1.responseText);
+                if(hefei.msg === "ok"){
+                    console.log("City:"+hefei.result.city+"--"+"最高温度："+hefei.result.temphigh+"度"+"--"
+                    +"最低温度："+hefei.result.templow+"度");
+                }
+            }else{
+                console.log("出错" + xhr1.status);
+            }
+        }
+    };
+    //天气接口 https://bird.ioliu.cn/weather?city= 自动处理了跨域s
+    xhr1.open("get","https://bird.ioliu.cn/weather?city=合肥",true);
+    xhr1.send(null);
+
+    //浏览器通用跨域方法  有错误
+    function createCORSRequest(method,url){
+        var xhr = new XMLHttpRequest();
+        if("withCredentials" in xhr){
+            xhr.open(method,url,true);
+        }else if(typeof XDomainRequest != "undefined"){
+            xhr = new XDomainRequest();
+            xhr.open(method,url);
+        }else{
+            xhr = null;
+        }
+        return xhr;
+    }
+    var request = createCORSRequest("get","http://www.freegeoip.net/json/");
+    if(request){
+        request.onload = function(){
+            //对request.responseText进行处理
+
+            console.log(request.responseText);
+        };
+        request.send();
+    }
+    //JSONP
+    function handleResponse(response){
+        console.log(response.city);
+    }
+    var script = document.createElement("script");
+    script.src = "http://www.sojson.com/open/api/weather/json.shtml?city=北京/?callback=handleResponse";
+    document.body.insertBefore(script,document.body.firstChild);
 </script>
 </html>
