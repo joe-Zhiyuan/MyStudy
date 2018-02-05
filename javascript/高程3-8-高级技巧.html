@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>高程3-8-高级技巧</title>
+</head>
+<style>
+
+</style>
+<body>
+
+</body>
+<script>
+    //测试构造函数名
+    var type1 = new Array();
+    console.log(Object.prototype.toString.call(type1));
+    //是否原生函数
+    function isFunction(value){
+        return Object.prototype.toString.call(value) === "[Object function]";
+    }
+    //是否正则表达式
+    function isRegExp(value){
+        return Object.prototype.toString.call(value) === "[Object RegExp]";
+    }
+    //创建一个作用域安全的构造函数 防止不写new
+    function Person(name,job,age){
+        if(this instanceof Person){
+            this.name = name;
+            this.job = job;
+            this.age = age;
+        }else{
+            return new Person(name,job,age);
+        }
+    }
+    var person1 = Person("joe","internet",22);
+    console.log(window.name);// ""
+    console.log(person1.name);// joe
+    var person2 = new Person("qiao","it","21");
+    console.log(person2.name);
+</script>
+</html>

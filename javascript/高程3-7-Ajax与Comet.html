@@ -84,7 +84,7 @@
     var xhr1 = new XMLHttpRequest();
     xhr1.onreadystatechange = function(){
         if(xhr1.readyState === 4){
-            if((xhr1.status >= 200 && xhr1.status < 300) || xhr.status === 304){
+            if((xhr1.status >= 200 && xhr1.status < 300) || xhr1.status === 304){
                 var hefei = JSON.parse(xhr1.responseText);
                 if(hefei.msg === "ok"){
                     console.log("City:"+hefei.result.city+"--"+"最高温度："+hefei.result.temphigh+"度"+"--"
@@ -112,21 +112,40 @@
         }
         return xhr;
     }
-    var request = createCORSRequest("get","http://www.freegeoip.net/json/");
+    var request = createCORSRequest("get","http://www.freegeoip.net/json/");//http://www.freegeoip.net/json/ ip接口
     if(request){
         request.onload = function(){
             //对request.responseText进行处理
-
-            console.log(request.responseText);
+            var thisRequest = JSON.parse(request.responseText);
+            console.log(thisRequest.ip);
         };
         request.send();
     }
-    //JSONP
+    //JSONP callback不一致出现错误  tianqi:http://www.sojson.com/open/api/weather/json.shtml?city=合肥
     function handleResponse(response){
         console.log(response.city);
+        console.log(response.region_code);
     }
     var script = document.createElement("script");
-    script.src = "http://www.sojson.com/open/api/weather/json.shtml?city=北京/?callback=handleResponse";
+    script.src = "http://freegeoip.net/json/?callback=handleResponse";
     document.body.insertBefore(script,document.body.firstChild);
+
+
+    //跨域
+    var xhr3 = new XMLHttpRequest();
+    xhr3.onreadystatechange=function(){
+        if(xhr3.readyState === 4){
+            if(xhr3.status === 200){
+                console.log(xhr3.responseText);
+            }else{
+                console.log(xhr3.status);
+            }
+        }else{
+            console.log("出错"+xhr3.readyState);
+        }
+    };
+    xhr3.open("get","http://www.sojson.com/open/api/weather/json.shtml?city=合肥",true);
+    // xhr3.setRequestHeader("name","value");
+    xhr3.send(null);
 </script>
 </html>
