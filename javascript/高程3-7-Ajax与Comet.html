@@ -147,5 +147,21 @@
     xhr3.open("get","http://www.sojson.com/open/api/weather/json.shtml?city=合肥",true);
     // xhr3.setRequestHeader("name","value");
     xhr3.send(null);
+    //豆瓣API
+    var str4 = new XMLHttpRequest();
+    str4.onreadystatechange = function(){
+        if(str4.readyState === 4){
+            if(str4.status === 200) {
+                var str4Text = JSON.parse(str4.responseText);
+                console.log(str4Text);
+            }else{
+                console.log("出错 str4 1");
+            }
+        }else{
+            console.log("出错 str4 2");
+        }
+    }
+    str4.open("get","https://api.douban.com/v2/book/1220562",true);
+    str4.send(null);
 </script>
 </html>
