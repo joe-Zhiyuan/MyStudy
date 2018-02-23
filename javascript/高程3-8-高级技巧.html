@@ -8,7 +8,7 @@
 
 </style>
 <body>
-
+    <p title="123145"> 123</p>
 </body>
 <script>
     //测试构造函数名
@@ -37,5 +37,70 @@
     console.log(person1.name);// joe
     var person2 = new Person("qiao","it","21");
     console.log(person2.name);
+
+    //a的值不变
+    var a = 10;
+    function foo(b){
+        b = b+20;
+        return b;
+    }
+    foo(a);
+    console.log(a);
+    console.log(foo(a));//30
+    //闭包
+    function Fun(){
+        var c = "joe";
+        function sayName(){
+            console.log(c);
+        }
+        return sayName;
+    }
+    var Fun1 = Fun();
+    Fun1();//能访问  c
+
+    function makeAdder(x){
+        return function(y){
+            return x + y;
+        }
+    }
+    var add5 = makeAdder(5);
+    var add10 = makeAdder(10);
+
+    console.log(add5(2));
+    console.log(add10(2));
+
+    //数据绑定
+    var d = 10;
+    var module = {
+      d : 99,
+      getD: function(){
+          return this.d;
+      }
+    };
+    console.log(module.getD());//99
+    var getD2 = module.getD;
+    console.log(getD2());//10  指向全局对象
+    var getD3 = getD2.bind(module);
+    console.log(getD3());//99 绑定了作用域
+
+    //不可扩展对象
+    var person = {
+        name : "joe"
+    };
+    Object.preventExtensions(person);
+    person.age = 23;//undefined 无效
+    console.log(person.age);
+    person.name = "qiao";
+    console.log(person.name);//可修改
+    //密封对象
+    Object.seal(person);
+    delete person.name;//被忽略  删除person.name
+    console.log(person.name);
+    //冻结对象
+    Object.freeze(person);
+    person.age = 23;//undefined 无效
+    console.log(person.age);
+    person.name = "joe--";
+    console.log(person.name);//qiao 无法修改
 </script>
 </html>
