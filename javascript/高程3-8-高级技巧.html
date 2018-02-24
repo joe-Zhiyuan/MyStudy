@@ -9,6 +9,7 @@
 </style>
 <body>
     <p title="123145"> 123</p>
+    <div id="myDiv"></div>
 </body>
 <script>
     //测试构造函数名
@@ -102,5 +103,77 @@
     console.log(person.age);
     person.name = "joe--";
     console.log(person.name);//qiao 无法修改
+
+    //数组分块  可以为分页应用
+    function chunk(array,process,num,context){
+        setTimeout(function() {
+            //num是表示截取多少为一组
+            var item = array.splice(0,num);
+            process.call(context,item);
+
+            if(array.length > 0){
+                setTimeout(arguments.callee,100);
+            }
+        },100);
+    }
+    var data = [12,123,14123131,14,1,5,13,1,12,35,1,51,6,4,8,19,1,3,13,35,6,51,2];
+    function printValue(item){
+        var div = document.getElementById("myDiv");
+        div.innerHTML = item + "<br>";
+    }
+    chunk(data.concat(),printValue,3);
+
+    //自定义事件
+    function EventTarget(){
+        this.handlers = {};
+    }
+    EventTarget.prototype = {
+        constructor:EventTarget,
+        addHandler: function(type,handler){
+            if(typeof this.handlers[type] === "undefined"){
+                this.handlers[type] = [];
+            }
+            this.handlers[type].push(handler);
+        },
+
+        fire: function(event){
+            if(!event.target){
+                event.target = this;
+            }
+            if(this.handlers[event.type] instanceof Array){
+                var handlers = this.handlers[event.type];
+                for(var i=0, len=handlers.length; i<len; i++){
+                    handlers[i](event);
+                }
+            }
+        },
+
+        removeHandler: function(type, handler){
+            if(this.handlers[type] instanceof Array){
+                var handlers = this.handlers[type];
+                for(var i=0, len=handlers.length; i<len; i++){
+                    if(handlers[i] === handler){
+                        break;
+                    }
+                }
+                handlers.splice(i,1);
+            }
+        }
+    };
+
+    //定义事件
+    function handleMessage(event){
+        console.log("Message received:" + event.message);
+    }
+    //创建新对象
+    var target = new EventTarget();
+    //添加事件处理程序
+    target.addHandler("message",handleMessage);
+    //触发事件
+    target.fire({type:"message",message:"hello"});
+    //删除事件
+    target.removeHandler("message",handleMessage);
+    //再次应没有程序
+    target.fire({type:"message",message:"hello"});
 </script>
 </html>
