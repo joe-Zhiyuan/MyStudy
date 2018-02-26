@@ -20,8 +20,8 @@
         if(xhr2.readyState === 4){
             if((xhr2.status>=200&&xhr2.status<300)||xhr2.status===304){
                 var thisJson = JSON.parse(xhr2.responseText);
-                console.log(thisJson.title);
-                jsonText.innerHTML = thisJson.title+" "+thisJson.authors;
+                console.log(thisJson.result[0].title);
+                jsonText.innerHTML = thisJson.result[1].title+" "+thisJson.result[1].authors;
             }else{
                 console.log("Request was unsuccessful:"+xhr2.status);
             }
