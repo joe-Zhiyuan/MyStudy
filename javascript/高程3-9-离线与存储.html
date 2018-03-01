@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<!--离线加载离线文件-->
+<!--<html lang="en" manifest="demo.appcache">-->
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>高程3-9-离线与存储</title>
+    <style>
+        body{
+            padding:0;
+            margin:0;
+        }
+        p{
+            margin:0;
+        }
+    </style>
+</head>
+<body>
+    <p>可视化编程css</p>
+</body>
+<script>
+    //在线||离线
+    if(navigator.onLine){
+        console.log("在线");
+    }else{
+        console.log("离线");
+    }
+    var thisDate = new Date();
+    console.log(thisDate);
+    //添加cookie name是 = 前的字段 value ,其他 expires 过期时间 时间必须为时间格式 new Date()
+    document.cookie="第一条cookie=存储;expires="+thisDate;
+    console.log(document.cookie);
+</script>
+</html>

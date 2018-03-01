@@ -1,0 +1,9 @@
+    /*针对最小字体12px解决方法*/
+    .banner-wechat p{
+        font-size:10px;
+        -webkit-transform-origin-x: 0;
+        -webkit-transform: scale(0.70);
+    }
+    .banner-wechat p{
+     font-size:8px;
+    }
