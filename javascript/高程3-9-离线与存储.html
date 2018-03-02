@@ -27,8 +27,56 @@
     }
     var thisDate = new Date();
     console.log(thisDate);
-    //添加cookie name是 = 前的字段 value ,其他 expires 过期时间 时间必须为时间格式 new Date()
+    //添加cookie name是 = 前的字段 value ,其他 expires 过期时间 时间必须为时间格式 new Date() 只有name=value是必须的
     document.cookie="第一条cookie=存储;expires="+thisDate;
+    //没有编码 所以最好要以下设置
+    document.cookie = encodeURIComponent("name") + "=" + encodeURIComponent("qiao");
+    //cookie函数
+    var CookieUtil = {
+        get: function(name) {
+            var cookieName = encodeURIComponent(name) + "=",
+                cookieStart = document.cookie.indexOf(cookieName),
+                cookieValue = null;
+
+            if(cookieStart > -1){
+                var cookieEnd = document.cookie.indexOf(";",cookieStart);
+                if(cookieEnd === -1){
+                    cookieEnd = document.cookie.length;
+                }
+                cookieValue = decodeURIComponent(document.cookie.substring(cookieStart +
+                cookieName.length, cookieEnd));
+            }
+            return cookieValue;
+        },
+
+        set: function(name, value, expires, path, domain, secure){
+            var cookieText = encodeURIComponent(name) + "=" + encodeURIComponent(value);
+
+            if(expires instanceof Date){
+                cookieText += "; expires=" + expires.toUTCString();
+            }
+            if(path){
+                cookieText += "; path" + path;
+            }
+            if(domain){
+                cookieText += "; domain" + domain;
+            }
+            if(secure){
+                cookieText += "; secure" + secure;
+            }
+            document.cookie = cookieText;
+        },
+        //删除
+        unset: function(name, path, domain, secure){
+            this.set(name,"",new Date(0),path,domain,secure);
+        }
+    };
+    CookieUtil.set("four","cookie4",new Date("April 1,2018"),"/path/","localhost:63342",true);
+    //第一条cookie 不行 get不到 名称不能有中文
+    console.log(CookieUtil.get("four"));
+    CookieUtil.unset("name");
+    CookieUtil.unset("one");
+    CookieUtil.unset("two");
     console.log(document.cookie);
 </script>
 </html>
