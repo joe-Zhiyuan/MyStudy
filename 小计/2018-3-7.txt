@@ -1,3 +1,4 @@
 设置导航下边框   可以设置为内边框
 
 box-sizing:border-box;
+-moz-box-sizing:border-box;

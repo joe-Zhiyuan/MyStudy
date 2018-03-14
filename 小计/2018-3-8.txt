@@ -1,0 +1,12 @@
+// »Øµ½¶¥²¿
+$(function() {
+    $(window).scroll(function() {
+        if ($(window).scrollTop() > 200)
+            $('#backTop').show();
+        else
+            $('#backTop').hide();
+    });
+    $('#backTop').click(function() {
+        $('html,body').animate({scrollTop:0}, 500);
+    });
+});
