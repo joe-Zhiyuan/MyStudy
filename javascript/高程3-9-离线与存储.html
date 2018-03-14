@@ -138,6 +138,7 @@
         var value = sessionStorage.getItem(key);
         console.log(key + "=" + value);
     }
+    var book = sessionStorage.getItem("book1");
     //删除sessionStorage中的数据
     //属性 在webkie中无效
     delete sessionStorage.name;
@@ -163,6 +164,30 @@
             throw  new Error("local storage not available");
         }
     }
+    //第一次需调用函数才能使用 兼容
     var storage = getLocalStorage();
+    //修改storage会触发storage事件
+
+    //IndexedDB
+    //调整webkit兼容性
+    window.indexedDB=window.indexedDB||window.webkitIndexedDB;
+    var request,database;
+    //打开||创建一个新的数据库  新版在创建时加版本号
+    request = indexedDB.open("admin",2);
+    request.onerror = function(){
+        console.log("数据库打开失败！");
+    };
+    //指定一个版本号
+    request.onupgradeneeded = function(event){
+       database = event.target.result;
+       var fa = database.createObjectStore(
+           "myDb",{keyPath:"title"}
+        );
+    };
+    request.onsuccess = function(){
+        console.log("数据库打开成功!");
+    }
+
+
 </script>
 </html>
