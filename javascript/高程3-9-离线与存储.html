@@ -173,20 +173,86 @@
     window.indexedDB=window.indexedDB||window.webkitIndexedDB;
     var request,database;
     //打开||创建一个新的数据库  新版在创建时加版本号
-    request = indexedDB.open("admin",2);
-    request.onerror = function(){
-        console.log("数据库打开失败！");
+    request = indexedDB.open("myDB",1);
+    request.onerror = function(event){
+        console.log(event.target.errorCode);
     };
     //指定一个版本号
     request.onupgradeneeded = function(event){
+        //创建对象仓库 object store  autoIncrement是否自增
        database = event.target.result;
-       var fa = database.createObjectStore(
-           "myDb",{keyPath:"title"}
-        );
+       var myDB = database.createObjectStore(
+           "myDB",{keyPath:"userId",autoIncrement:false});
+        //创建索引  unique索引值是否能相同
+        var idx = myDB.createIndex("userIndex","userName",{unique:false});
+       console.log("创建对象仓库成功");
     };
-    request.onsuccess = function(){
+    request.onsuccess = function(event){
         console.log("数据库打开成功!");
+        database = event.target.result;
+        //开启读写事务 readonly只读 readwrite读写
+        var tx = database.transaction("myDB","readwrite");
+        var store = tx.objectStore("myDB");
+        var value = {
+            'userId':1,
+            'userName':'joe',
+            'age':23
+        };
+        var value2 = {
+            'userId':2,
+            'userName':'qiao',
+            'age':22
+        };
+        //保存数据
+        var req1 = store.put(value);
+        var req4 = store.put(value2);
+        var req2 = store.get(1);
+        req2.onsuccess = function(){
+            console.log(this.result.username);
+        };
+        //删除数据
+        var req3 = store.delete(1);
+        req3.onsuccess = function(){
+            console.log();
+        }
+        //openCursor 两个参数 1：IDBKeyRange对象 创建方法如下：
+        //检索数据 1：开始键值 10：结束键值 false：包含1 false：包含10 为true则不包含
+        var range = IDBKeyRange.bound(1,10,false,false);
+        //一个主键值的集合 参数为主键值 整数类型
+        //var onlyRange = IDBKeyRange.only(1);
+        //表示大于等于1的集合 false包含1 true不包含
+        //var lowerRange = IDBKeyRange.lowerBound(1,false);
+        //表示小于等于10的主键值集合 同上
+        //var upperRange = IDBKeyRange.upperBound(10,false);
+        //第二个参数
+        // next : 游标中的数据按主键值升序排列，主键值相等的数据都被读取
+        // nextunique : 游标中的数据按主键值升序排列，主键值相等只读取第一条数据
+        // prev : 游标中的数据按主键值降序排列，主键值相等的数据都被读取
+        // prevunique : 游标中的数据按主键值降序排列，主键值相等只读取第一条数据
+        var req = store.openCursor(range,'next');
+        req.onsuccess = function(e){
+            var cursor = this.result;
+            if(cursor){
+                console.log(cursor.value.userName);
+                //读取下一条数据
+                cursor.continue();
+            }else{
+                console.log("检索结束");
+            }
+            cursor.update({
+                'userId':3,
+                'userName':'qiao',
+                'age':22
+            });
+        }
     }
+    //有错误  例：https://github.com/lin-xin/blog/tree/master/indexedDB-demo 一个表格使用indexedDB
+    //A mutation operation was attempted on a database that did not allow mutations.
+
+
+
+
+
 
 
 </script>
