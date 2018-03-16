@@ -196,7 +196,7 @@
         var value = {
             'userId':1,
             'userName':'joe',
-            'age':23
+            'age':22
         };
         var value2 = {
             'userId':2,
@@ -206,9 +206,9 @@
         //保存数据
         var req1 = store.put(value);
         var req4 = store.put(value2);
-        var req2 = store.get(1);
+        var req2 = store.get("joe");
         req2.onsuccess = function(){
-            console.log(this.result.username);
+            console.log(this.result.userName);
         };
         //删除数据
         var req3 = store.delete(1);
@@ -232,6 +232,11 @@
         var req = store.openCursor(range,'next');
         req.onsuccess = function(e){
             var cursor = this.result;
+            cursor.update({
+                'userId':3,
+                'userName':'qiao',
+                'age':22
+            });
             if(cursor){
                 console.log(cursor.value.userName);
                 //读取下一条数据
@@ -239,11 +244,6 @@
             }else{
                 console.log("检索结束");
             }
-            cursor.update({
-                'userId':3,
-                'userName':'qiao',
-                'age':22
-            });
         }
     }
     //有错误  例：https://github.com/lin-xin/blog/tree/master/indexedDB-demo 一个表格使用indexedDB
