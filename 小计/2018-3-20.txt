@@ -1,0 +1,13 @@
+使用select/option做友情链接
+<select id="" onchange="window.location=this.value">
+    
+	<option>choose one</option>
+    
+	<option value="https://www.baidu.com">百度</option>
+   
+	<option value="https://www.qq.com">腾讯</option>
+ 
+	<option value="https://www.360.com">360</option>
+
+</select>
+

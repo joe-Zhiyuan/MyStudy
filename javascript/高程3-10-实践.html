@@ -4,13 +4,63 @@
     <meta charset="UTF-8">
     <title>高程3-10-实践</title>
     <style>
-
+        #msg{
+            height:30px;
+        }
     </style>
 </head>
 <body>
-
+<img src="images/2.jpg" alt="美女" id="thisImg" onerror="bgImg()"/>
+<div id="msg"></div>
 </body>
 <script>
-    
+    //onerror 加载文档或图片出错 加载方法
+    function bgImg() {
+        var thisImg = document.getElementById("thisImg");
+        thisImg.setAttribute("src", "images/1.jpg");
+    }
+    //避免全局查找
+    function updateUI() {
+        var doc = document;
+        var imgs = doc.getElementsByTagName("img");
+        console
+        for (var i = 0, len = imgs.length; i < len; i++) {
+            imgs[i].title = doc.title + "image" + i;
+        }
+        var msg = document.getElementById("msg");
+        console.log(msg);
+        msg.innerHTML = "update complete"
+    }
+    updateUI();
+    //避免使用with() 创建自己的作用域替代参数的作用域
+    //不要使用
+    // function updateBody(){
+    //     with(document.body){
+    //        console.log(tagName);
+    //        innerHTML = "hello world";
+    //     }
+    // }
+    function updateBody(){
+        var body = document.body;
+        console.log(body.tagName);
+        body.innerHTML = "hello world";
+    }
+    window.onload = function(){
+        updateBody();
+    };
+    //避免双重解释
+    eval('console.log("hello world")');
+    var sayHi = new Function("console.log('hi')");
+    sayHi();
+    setTimeout("console.log('hello')",500);
+    //更简单的创建数组，创建函数
+    var value = [123,456,789];
+    var person = {
+      name:"qiao",
+      age:22,
+      sayName:function(){
+          console.log(this.name);
+      }
+    };
 </script>
 </html>
