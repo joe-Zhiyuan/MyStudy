@@ -4,14 +4,24 @@
     <meta charset="UTF-8">
     <title>高程3-10-实践</title>
     <style>
+        img{
+            width:5%;
+        }
         #msg{
-            height:30px;
+            height:30px!important;
+        }
+        #status{
+            width:600px;
+            height:200px;
+            background: #cccccc;
+            position: relative;
         }
     </style>
 </head>
 <body>
 <img src="images/2.jpg" alt="美女" id="thisImg" onerror="bgImg()"/>
 <div id="msg"></div>
+<div id="status"></div>
 </body>
 <script>
     //onerror 加载文档或图片出错 加载方法
@@ -23,7 +33,6 @@
     function updateUI() {
         var doc = document;
         var imgs = doc.getElementsByTagName("img");
-        console
         for (var i = 0, len = imgs.length; i < len; i++) {
             imgs[i].title = doc.title + "image" + i;
         }
@@ -43,7 +52,7 @@
     function updateBody(){
         var body = document.body;
         console.log(body.tagName);
-        body.innerHTML = "hello world";
+        // body.innerHTML = "hello world";
     }
     window.onload = function(){
         updateBody();
@@ -62,5 +71,36 @@
           console.log(this.name);
       }
     };
+    //题目
+    var name = "qiao";
+    (()=>{
+        console.log(name);//为 undefined 由于内部var name变量提升 所以执行 goodbye Joe
+        if(typeof name === 'undefined'){
+            var name = 'joe';
+            console.log('goodbye'+name);
+        }else{
+            console.log("hello"+name);
+        }
+    })();
+    //动画API requestAnimationFrame
+    var start = null;
+    var div = document.getElementById("status");
+    //time:时间码，表示下一次重绘的时间
+    function updataProgress(time){
+        if(!start){
+            start = time;
+        }
+        //计算两次重绘的时间间隔
+        var progress = time - start;
+        console.log(progress);
+        //计算偏移量 间隔/10
+        div.style.left = Math.min(progress/10, 200) + "px";
+        //控制偏移量 2000/10 200px
+        if(progress<2000) {
+            window.requestAnimationFrame(updataProgress);
+        }
+    }
+    window.requestAnimationFrame(updataProgress);
+
 </script>
 </html>
