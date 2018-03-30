@@ -1,0 +1,3 @@
+一个没有设置height属性的div的高度就是由一个一个line boxes的高度堆积而成的，line-height有line boxes。
+注意：
+line-height:如果div块级元素不设置高度的话，会影响div的高度。
