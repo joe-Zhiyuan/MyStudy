@@ -24,8 +24,8 @@
 <div id="status"></div>
 <div  id="output"></div>
 <div  id="output1"></div>
-//选择文件框
-<input type="file" id="input"/>
+<!--选择文件框   name,multiple支持选取多个文件，没有则只能选取一个文件-->
+<input type="file" name="files[]" multiple="multiple" id="files-list"/>
 </body>
 <script>
     //封装EventUtilvar
@@ -241,6 +241,15 @@
         console.log("浏览器不支持！");
     }
     //FileAPI
-
+    var fileList = document.getElementById("files-list");
+    EventUtil.addHandler(fileList,"change",function(event){
+        var files = EventUtil.getTarget(event).files,
+            i = 0,
+            len = files.length;
+        while(i < len){
+            console.log(files[i].name + "(" + files[i].type + "," + files[i].size + "bytes) ");
+            i++;
+        }
+    });
 </script>
 </html>
