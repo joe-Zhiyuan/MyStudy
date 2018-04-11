@@ -22,10 +22,14 @@
 <img src="images/2.jpg" alt="美女" id="thisImg" onerror="bgImg()"/>
 <div id="msg"></div>
 <div id="status"></div>
-<div  id="output"></div>
-<div  id="output1"></div>
+<div id="output"></div>
+<div id="progress"></div>
+<!--经纬度-->
+<div id="output1"></div>
 <!--选择文件框   name,multiple支持选取多个文件，没有则只能选取一个文件-->
 <input type="file" name="files[]" multiple="multiple" id="files-list"/>
+//output2 显示部分文件
+<div id="output2"></div>
 </body>
 <script>
     //封装EventUtilvar
@@ -251,6 +255,80 @@
             i++;
         }
     });
-    //明天学习
+    //异步读取文件
+    //读取部分内容
+    //兼容浏览器
+    function blobSlice(blob, startByte, length){
+        if(blob.slice){
+            return blob.slice(startByte, length);
+        }else if(blob.webkitSlice){
+            return blob.webkitSlice(startByte, length);
+        }else if(blob.mozSlice){
+            return blob.mozSlice(startByte, length);
+        }else{
+            return null;
+        }
+    }
+    //异步读取文件
+    var filesList = document.getElementById("files-list");
+    EventUtil.addHandler(filesList,"change",function(event){
+        var info = "",
+        output = document.getElementById("output"),
+        progress = document.getElementById("progress"),
+        files = EventUtil.getTarget(event).files,
+        type = "default",
+        reader = new FileReader();
+        // //读取部分文件
+        // var info = "",
+        //     output = document.getElementById("output"),
+        //     progress = document.getElementById("progress"),
+        //     files = EventUtil.getTarget(event).files,
+        //     reader = new FileReader();
+        // var blob = blobSlice(files[0],0,32),
+        //     output2 = document.getElementById("output2");
+        // if(blob){
+        //     reader.readAsText(blob);
+        //     reader.onerror = function(){
+        //         output2.innerHTML = "could not read file, error code is "+ reader.error.code;
+        //     };
+        //     reader.onload = function(){
+        //         output2.innerHTML = reader.result;
+        //     }
+        // }else{
+        //     console.log("your browser doesn't support slice()");
+        // }
+
+        if(/image/.test(files[0].type)){
+            reader.readAsDataURL(files[0]);
+            type = "image";
+        }else{
+            reader.readAsText(files[0]);
+            type = "text";
+        }
+
+        reader.onerror = function(){
+            output.innerHTML = "could not read file, error code is "+ reader.error.code;
+        };
+
+        reader.onprogress = function(event){
+            if(event.lengthComputable){
+                progress.innerHTML = event.loaded + "/" + event.total;
+            }
+        };
+
+        reader.onload = function(){
+          var html = "";
+          switch(type){
+              case "image":
+                  html = "<img src=\"" + reader.result+"\">";
+                  break;
+              case "text":
+                  html = reader.result;
+                  break;
+          }
+          output.innerHTML = html;
+        };
+    });
+
 </script>
 </html>
