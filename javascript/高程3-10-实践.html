@@ -22,8 +22,103 @@
 <img src="images/2.jpg" alt="美女" id="thisImg" onerror="bgImg()"/>
 <div id="msg"></div>
 <div id="status"></div>
+<div id="output"></div>
+<div id="progress"></div>
+<!--经纬度-->
+<div id="output1"></div>
+<!--选择文件框   name,multiple支持选取多个文件，没有则只能选取一个文件-->
+<input type="file" name="files[]" multiple="multiple" id="files-list"/>
+//output2 显示部分文件
+<div id="output2"></div>
 </body>
 <script>
+    //封装EventUtilvar
+    var EventUtil={
+        addHandler:function(element,type,handler){ //添加事件
+            if(element.addEventListener){
+                element.addEventListener(type,handler,false);  //使用DOM2级方法添加事件
+            }else if(element.attachEvent){                    //使用IE方法添加事件
+                element.attachEvent("on"+type,handler);
+            }else{
+                element["on"+type]=handler;          //使用DOM0级方法添加事件
+            }
+        },
+        removeHandler:function(element,type,handler){  //取消事件
+            if(element.removeEventListener){
+                element.removeEventListener(type,handler,false);
+            }else if(element.detachEvent){
+                element.detachEvent("on"+type,handler);
+            }else{
+                element["on"+type]=null;
+            }
+        },
+        getEvent:function(event){  //使用这个方法跨浏览器取得event对象
+            return event?event:window.event;
+        },
+        getTarget:function(event){  //返回事件的实际目标
+            return event.target||event.srcElement;
+        },
+        preventDefault:function(event){   //阻止事件的默认行为
+            if (event.preventDefault) {
+                event.preventDefault();
+            } else {
+                event.returnValue = false;
+            }
+        },
+        stopPropagation:function(event){  //立即停止事件在DOM中的传播
+            //避免触发注册在document.body上面的事件处理程序
+            if(event.stopPropagation){
+                event.stopPropagation();
+            }else{
+                event.cancelBubble=true;
+            }
+        },
+        getRelatedTarget:function(event){  //获取mouseover和mouseout相关元素
+            if(event.relatedTarget){
+                return event.relatedTarget;
+            }else if(event.toElement){      //兼容IE8-
+                return event.toElement;
+            }else if(event.formElement){
+                return event.formElement;
+            }else{
+                return null;
+            }
+        },
+        getButton:function(event){    //获取mousedown或mouseup按下或释放的按钮是鼠标中的哪一个
+            if(document.implementation.hasFeature("MouseEvents","2.0")){
+                return event.button;
+            }else{
+                switch(event.button){   //将IE模型下的button属性映射为DOM模型下的button属性
+                    case 0:
+                    case 1:
+                    case 3:
+                    case 5:
+                    case 7:
+                        return 0;  //按下的是鼠标主按钮（一般是左键）
+                    case 2:
+                    case 6:
+                        return 2;  //按下的是中间的鼠标按钮
+                    case 4:
+                        return 1;  //鼠标次按钮（一般是右键）
+                }
+            }
+        },
+        getWheelDelta:function(event){ //获取表示鼠标滚轮滚动方向的数值
+            if(event.wheelDelta){
+                return event.wheelDelta;
+            }else{
+                return -event.detail*40;
+            }
+        },
+        getCharCode:function(event){   //以跨浏览器取得相同的字符编码，需在keypress事件中使用
+            if(typeof event.charCode=="number"){
+                return event.charCode;
+            }else{
+                return event.keyCode;
+            }
+        }
+
+    };
     //onerror 加载文档或图片出错 加载方法
     function bgImg() {
         var thisImg = document.getElementById("thisImg");
@@ -92,7 +187,6 @@
         }
         //计算两次重绘的时间间隔
         var progress = time - start;
-        console.log(progress);
         //计算偏移量 间隔/10
         div.style.left = Math.min(progress/10, 200) + "px";
         //控制偏移量 2000/10 200px
@@ -101,6 +195,140 @@
         }
     }
     window.requestAnimationFrame(updataProgress);
-    //
+    //页面可见性API  表示是否为当前页面
+    if(document.hidden || document.msHidden || document.webkitHidden){
+        //页面未隐藏
+        console.log("页面未隐藏");
+    }else{
+        //页面隐藏了
+        console.log("页面隐藏了");
+    }
+    function handleVisibilityChange(){
+        var output = document.getElementById("output"),msg;
+        if(document.hidden || document.msHidden || document.webkitHidden || document.oHidden || document.mozHidden){
+            msg = "page is now hidden" + (new Date()) + "<br>";
+        }else{
+            msg = "page is now visible" + (new Date()) + "<br>";
+        }
+        output.innerHTML += msg;
+    }
+    EventUtil.addHandler(document,"msvisibilitychange",handleVisibilityChange);
+    EventUtil.addHandler(document,"webkitvisibilitychange",handleVisibilityChange);
+    //Geolocation API地理定位
+    navigator.geolocation.getCurrentPosition(function(position){
+        drawMapCenteredAt(position.coords.latitude,position.coords.longitude);
+    },function(error){
+        console.log("Error code:" + error.code);//1 禁止
+        console.log("Error message:" + error.message);//User denied Geolocation
+    },{
+        enableHighAccuracy:true,
+        timeout:5000,
+        maximumAge:25000
+    });
+    var watchId = navigator.geolocation.watchPosition(function(position){
+        drawMapCenteredAt(position.coords.latitude,position.coords.longitude);
+    },function(error){
+        console.log("Error code:" + error.code);//1 禁止
+        console.log("Error message:" + error.message);//User denied Geolocation
+    });
+    navigator.geolocation.clearWatch(watchId);
+    if(navigator.geolocation){
+        navigator.geolocation.getCurrentPosition(function(position){
+            var latitude = position.coords.latitude;
+            var longitude = position.coords.longitude;
+            document.getElementById("output1").innerHTML("纬度是："+latitude+"<br>经度是："+longitude);
+        },function(error){
+            console.log("Error code:" + error.code);//1 禁止
+            console.log("Error message:" + error.message);//User denied Geolocation
+        });
+    }else{
+        console.log("浏览器不支持！");
+    }
+    //FileAPI
+    var fileList = document.getElementById("files-list");
+    EventUtil.addHandler(fileList,"change",function(event){
+        var files = EventUtil.getTarget(event).files,
+            i = 0,
+            len = files.length;
+        while(i < len){
+            console.log(files[i].name + "(" + files[i].type + "," + files[i].size + "bytes) ");
+            i++;
+        }
+    });
+    //异步读取文件
+    //读取部分内容
+    //兼容浏览器
+    function blobSlice(blob, startByte, length){
+        if(blob.slice){
+            return blob.slice(startByte, length);
+        }else if(blob.webkitSlice){
+            return blob.webkitSlice(startByte, length);
+        }else if(blob.mozSlice){
+            return blob.mozSlice(startByte, length);
+        }else{
+            return null;
+        }
+    }
+    //异步读取文件
+    var filesList = document.getElementById("files-list");
+    EventUtil.addHandler(filesList,"change",function(event){
+        var info = "",
+        output = document.getElementById("output"),
+        progress = document.getElementById("progress"),
+        files = EventUtil.getTarget(event).files,
+        type = "default",
+        reader = new FileReader();
+        // //读取部分文件
+        // var info = "",
+        //     output = document.getElementById("output"),
+        //     progress = document.getElementById("progress"),
+        //     files = EventUtil.getTarget(event).files,
+        //     reader = new FileReader();
+        // var blob = blobSlice(files[0],0,32),
+        //     output2 = document.getElementById("output2");
+        // if(blob){
+        //     reader.readAsText(blob);
+        //     reader.onerror = function(){
+        //         output2.innerHTML = "could not read file, error code is "+ reader.error.code;
+        //     };
+        //     reader.onload = function(){
+        //         output2.innerHTML = reader.result;
+        //     }
+        // }else{
+        //     console.log("your browser doesn't support slice()");
+        // }
+
+        if(/image/.test(files[0].type)){
+            reader.readAsDataURL(files[0]);
+            type = "image";
+        }else{
+            reader.readAsText(files[0]);
+            type = "text";
+        }
+
+        reader.onerror = function(){
+            output.innerHTML = "could not read file, error code is "+ reader.error.code;
+        };
+
+        reader.onprogress = function(event){
+            if(event.lengthComputable){
+                progress.innerHTML = event.loaded + "/" + event.total;
+            }
+        };
+
+        reader.onload = function(){
+          var html = "";
+          switch(type){
+              case "image":
+                  html = "<img src=\"" + reader.result+"\">";
+                  break;
+              case "text":
+                  html = reader.result;
+                  break;
+          }
+          output.innerHTML = html;
+        };
+    });
+
 </script>
 </html>
