@@ -1,0 +1,7 @@
+多行文字垂直居中 css
+父元素：
+	设置和高度相对的行高 line-height
+子元素：
+	设置为行内块元素 display:inline-block;
+	设置行高：line-height
+	设置对准基线 vertical-align:middle;
