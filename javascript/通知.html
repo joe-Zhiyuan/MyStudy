@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>通知</title>
+</head>
+<body>
+<pre>
+        //获得权限
+        Notification.requestPermission();
+        //点击按钮
+        document.querySelector("#button").addEventListener("click",function(){
+            new Notification("HI,您好：",{
+               body:"这是一个通知！",
+               icon:"images/1.jpg"
+            });
+        });
+</pre>
+<p>
+    <button id="button">点击出现通知</button>
+</p>
+<p id="result"></p>
+<script>
+    if(window.Notification){
+        //获得权限
+        Notification.requestPermission();
+        //点击按钮
+        document.querySelector("#button").addEventListener("click",function(){
+            new Notification("HI,您好：",{
+               body:"这是一个通知！",
+               icon:"images/1.jpg"
+            });
+        });
+    }else{
+        document.getElementById("result").innerHTML = "浏览器不支持web Notification";
+    }
+</script>
+</body>
+</html>

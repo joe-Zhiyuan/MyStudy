@@ -16,20 +16,31 @@
             background: #cccccc;
             position: relative;
         }
+        #droptarget{
+            width:500px;
+            height:300px;
+            border:1px solid #ccc;
+        }
     </style>
 </head>
 <body>
-<img src="images/2.jpg" alt="美女" id="thisImg" onerror="bgImg()"/>
-<div id="msg"></div>
-<div id="status"></div>
-<div id="output"></div>
-<div id="progress"></div>
+<img src="images/2.jpg" alt="美女" id="thisImg" onerror="bgImg()"/><br/>
+<div id="msg"></div><br/>
+<div id="status"></div><br/>
+<div id="output"></div><br/>
+<div id="progress"></div><br/>
 <!--经纬度-->
-<div id="output1"></div>
+<div id="output1"></div><br/>
 <!--选择文件框   name,multiple支持选取多个文件，没有则只能选取一个文件-->
-<input type="file" name="files[]" multiple="multiple" id="files-list"/>
-//output2 显示部分文件
-<div id="output2"></div>
+<input type="file" name="files[]" multiple="multiple" id="files-list"/><br/>
+<p>output2 显示部分文件</p>
+<div id="output2"></div><br/>
+<!--读取拖拽的文件-->
+<p>读取拖拽的文件</p>
+<div id="outputImg">
+</div>
+<div id="droptarget">
+</div>
 </body>
 <script>
     //封装EventUtilvar
@@ -111,7 +122,7 @@
             }
         },
         getCharCode:function(event){   //以跨浏览器取得相同的字符编码，需在keypress事件中使用
-            if(typeof event.charCode=="number"){
+            if(typeof event.charCode==="number"){
                 return event.charCode;
             }else{
                 return event.keyCode;
@@ -329,6 +340,38 @@
           output.innerHTML = html;
         };
     });
+var droptarget = document.getElementById("droptarget");
+function handleEvent(event){
+    var info = "",
+        outputImg = document.getElementById("outputImg"),
+        files,i,len;
+    EventUtil.preventDefault(event);
+    if(event.type === "drop"){
+        files = event.dataTransfer.files;
+        i = 0;
+        len = files.length;
 
+        while(i < len){
+            info += files[i].name + " (" + files[i].type + "," + files[i].size + "bytes)<br/>";
+            i++;
+        }
+        outputImg.innerHTML = info;
+    }
+}
+EventUtil.addHandler(droptarget,"dragenter",handleEvent);
+EventUtil.addHandler(droptarget,"dragover",handleEvent);
+EventUtil.addHandler(droptarget,"drop",handleEvent);
+
+// web计时 获取对象 web Timing API
+    var performance =  window.performance;
+    console.log(performance);
+    console.log(performance.navigation.redirectCount);//重定向次数
+    console.log(performance.navigation.type);//发生的导航类型 0 第一次加载 1 页面重载过 2 通过前进后退打开的
+    console.log(performance.timing); //对象 属性都是时间戳（从软件纪元的毫秒数）
+    console.log(performance.timing.responseStart);//浏览器接收页面第一个字节的时间  毫秒数
+    console.log(performance.timing.responseEnd);//浏览器接收页面所有内容的时间
+//WEB Workers
+    var worker = new Worker("js/alert1.js");
+    worker.postMessage(alert1);
 </script>
 </html>
