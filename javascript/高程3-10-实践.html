@@ -21,6 +21,7 @@
             height:300px;
             border:1px solid #ccc;
         }
+        @media screen a
     </style>
 </head>
 <body>
@@ -40,6 +41,9 @@
 <div id="outputImg">
 </div>
 <div id="droptarget">
+</div><br/>
+<div id="worker">
+
 </div>
 </body>
 <script>
@@ -352,7 +356,7 @@ function handleEvent(event){
         len = files.length;
 
         while(i < len){
-            info += files[i].name + " (" + files[i].type + "," + files[i].size + "bytes)<br/>";
+            info += files[i].name + " (" + files[i].type + "," + files[i].size +"bytes)<br/>";
             i++;
         }
         outputImg.innerHTML = info;
@@ -371,7 +375,14 @@ EventUtil.addHandler(droptarget,"drop",handleEvent);
     console.log(performance.timing.responseStart);//浏览器接收页面第一个字节的时间  毫秒数
     console.log(performance.timing.responseEnd);//浏览器接收页面所有内容的时间
 //WEB Workers
-    var worker = new Worker("js/alert1.js");
-    worker.postMessage(alert1);
+    function init() {
+        var worker = new Worker("js/alert1.js");
+        worker.postMessage("joe");
+        worker.onmessage = function(event){
+            document.getElementById("worker").innerHTML += event.data + "<br/>";
+        }
+    }
+    init();
+
 </script>
 </html>

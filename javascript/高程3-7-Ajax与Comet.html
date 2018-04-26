@@ -163,5 +163,18 @@
     }
     str4.open("get","https://api.douban.com/v2/book/1220562",true);
     str4.send(null);
+
+var xhr8 = new XMLHttpRequest();
+xhr8.onreadystatechange = callback;
+xhr8.open("get","data/json.json",true);
+xhr8.send();
+function callback() {
+    if(xhr8.readyState === 4){
+        if((xhr8.status >= 200&&xhr8.status <= 300)|| xhr8.status === 304){
+            var thisJson = JSON.parse(xhr.responseText);
+            console.log(thisJson);
+        }
+    }
+}
 </script>
 </html>
