@@ -1,0 +1,13 @@
+当鼠标快速选择按钮时会将按钮上的文字选中，变成蓝色，体验不好
+
+可以使用 onselectstart 来控制元素文字是否允许被选中
+
+	onselect  会在文本被选中时发生  已经被选择了
+
+	onselectstart  在文本被选中前发生
+
+	onselectstart="return false"; 在元素上
+	
+	在firefox中不支持，可以使用css样式
+
+	div{-moz-user-select:none;}实现一样效果
