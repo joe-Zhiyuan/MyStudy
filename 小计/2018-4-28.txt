@@ -10,4 +10,10 @@
 	
 	在firefox中不支持，可以使用css样式
 
-	div{-moz-user-select:none;}实现一样效果
+	div{
+		-webkit-user-select: none;
+    		-moz-user-select: none;
+    		-ms-user-select: none;
+    		user-select: none;
+	
+	}实现一样效果
