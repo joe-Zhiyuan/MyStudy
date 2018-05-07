@@ -374,14 +374,21 @@ EventUtil.addHandler(droptarget,"drop",handleEvent);
     console.log(performance.timing.responseStart);//浏览器接收页面第一个字节的时间  毫秒数
     console.log(performance.timing.responseEnd);//浏览器接收页面所有内容的时间
 //WEB Workers
-    function init() {
-        var worker = new Worker("js/alert1.js");
-        worker.postMessage("joe");
-        worker.onmessage = function(event){
-            document.getElementById("worker").innerHTML += event.data + "<br/>";
-        }
-    }
-    init();
-
+//     function init() {
+//         var worker = new Worker("js/alert1.js");
+//         worker.postMessage("joe");
+//         worker.onmessage = function(event){
+//             document.getElementById("worker").innerHTML += event.data + "<br/>";
+//         }
+//     }
+//     init();
+    //排序  Workers
+    var data = [23,12,134,15,1,776,12],
+        worker = new Worker("js/alert1.js");
+    worker.onmessage = function(event){
+        var data = event.data;
+        console.log(data);
+    };
+    worker.postMessage(data);
 </script>
 </html>
