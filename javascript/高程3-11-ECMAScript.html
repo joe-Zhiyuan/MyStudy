@@ -48,6 +48,105 @@
     }
     tab(1);//3  b=2
     //生成器
+    // function myNumbers(){
+    //     for(var i=0;i<10;i++){
+    //         yield i * 2;
+    //     }
+    // }
+    // var generator = myNumbers();
+    // try{
+    //     while(true){
+    //         document.writeln(generator.next());
+    //     }
+    // } catch (ex){
+    //
+    // }finally {
+    //
+    // }
+    function* gen(x){
+        var y = yield x + 2;
+        return y;
+    }
+    var g = gen(3);
+    console.log(g.next());//返回 对象 {value : 3, done : false }
+    console.log(g.next());//返回 对象 {value : undefined, done : false }
+    //数组
+    //迭代器 iterator 未实现
+    // var person = {
+    //     name: "joe",
+    //     age: 22
+    // };
+    // console.log(person);
+    // var iterator =Iterator(person);
+    // try{
+    //     while (true){
+    //         let value = iterator.next();
+    //         document.write(value.join(":"));
+    //     }
+    // } catch (ex){
+    //     console.log("错误！");
+    // }
+    //数组选择
+    //原始数组
+    // var numbers = [1,23,14,15,152,11,51,26,2,41];
+    // //把所有元素复制到新数组
+    // var duplicate = [i for each (i in numbers)];
+    // console.log(duplicate);
+
+    //解构赋值
+    var [name, age] = ["qiao", 22];
+    console.log(name);//qiao
+    var [,age] = ["qiao", 22];
+    console.log(age);//22 只有age
+    //交换变量
+    [name, age] = [age, name];
+    console.log(name);//22 交换了值
+    //也可以应用于对象
+    var person = {
+        name : "joe",
+        age : 23
+    };
+    var { name: personName, age:personAge} = person;
+    console.log(personName);//joe person赋值
+    var { age:personAge} = person;
+    console.log(personAge);//23 只选取age
+
+    //新对象类型
+    //代理对象
+    let handler = {
+        get:function(target, name){
+            return name in target ? target[name]:37;
+        }
+    };
+    let p = new Proxy({},handler);
+    p.a = 1;
+    p.b = undefined;
+    console.log(p.a,p.b);//1,undefined
+    console.log('c' in p,p.c)//false 37  没有找到，所以为37
+
+    //映射与集合
+    //映射Map
+    var map = new Map();
+    map.set("name","qiao");
+    map.set("book","javascript3");
+    console.log(map.has("name"));//true
+    console.log(map.get("name"));//qiao
+    map.delete("name");
+    console.log(map.get("name"));//undefined
+    //集合Set
+    var set = new Set();
+    set.add("qiao");
+    console.log(set.has("qiao"));//true
+    set.delete("qiao");
+    console.log(set.has("qiao"));//false
+    //WealMap
+    var key = {},map1 = new WeakMap();
+    map1.set(key,"hello");
+    console.log(map1.get(key));//hello
+    key = null;//解除对key 键的引用 删除了hello
+    console.log(map1.get(key));//undefined
+
+    //Javascript中的类
 
 </script>
 </html>
