@@ -70,6 +70,8 @@
 // offsetTop 子元素想当父元素的上位移
 // offsetWidth 盒子本身的宽高 不包括滚动条
 // event.clientX 鼠标的X，Y轴相对与整个页面，而非子元素
+
+//有问题，图片滑轮遮挡时不准
         window.onload=function(){
            var box=document.getElementById('box');
            var inner=box.getElementsByTagName('div')[0];
@@ -81,11 +83,11 @@
                big.style.display="block";
            }
 
-           box.onmousemove=function(e){
-               e=event||window.event;
+           box.onmousemove=function(event){
+               event = event|| window.event;
 
-               var left=e.clientX-box.offsetLeft-inner.offsetWidth/2;
-               var top=e.clientY-box.offsetTop-inner.offsetHeight/2;
+               var left=event.clientX-box.offsetLeft-inner.offsetWidth/2;
+               var top=event.clientY-box.offsetTop-inner.offsetHeight/2;
 
                if(left<=0){
                    left=0;
@@ -97,7 +99,7 @@
                }else if(top>=box.offsetHeight-inner.offsetHeight){
                    top=box.offsetHeight-inner.offsetHeight;
                }
-
+               console.log(box.offsetTop-document.body.scrollTop);
                inner.style.left=left+"px";
                inner.style.top=top+"px";
 
@@ -174,8 +176,8 @@
         }
         .big img{
             position: absolute;
-            width:300%;
-            height:225%;
+            width:1690px;
+            height:2665px;
         }
 
     </style>

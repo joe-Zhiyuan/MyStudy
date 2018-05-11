@@ -3,6 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>高程3-11-ECMAScript</title>
+    <style>
+        img{
+            width:100!
+        }
+    </style>
 </head>
 <body>
 
@@ -142,7 +147,7 @@
     //WealMap
     var key = {},map1 = new WeakMap();
     map1.set(key,"hello");
-    console.log(map1.get(key));//hello
+    console.log(map1.get(key));//hello　
     key = null;//解除对key 键的引用 删除了hello
     console.log(map1.get(key));//undefined
 
