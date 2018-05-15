@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <title>高程3-11-ECMAScript</title>
     <style>
-        img{
-            width:100!
-        }
+
     </style>
 </head>
 <body>
 
 </body>
 <script>
+    // "use strict";  严格模式
+    // a =2; //报错
     //常量 const
     const SEX = "man";
     // var AGE = 1;//错误
@@ -152,6 +152,18 @@
     console.log(map1.get(key));//undefined
 
     //Javascript中的类
-
+    class Person{
+        //constructor 为构造函数 在原型上
+        constructor(name, age){
+             name = name;
+              age = age;
+        }
+        sayName(){
+            console.log(this.name);
+        }
+        getOlder(years){
+            this.age += years;
+        }
+    }
 </script>
 </html>
