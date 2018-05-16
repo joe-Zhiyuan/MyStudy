@@ -9,6 +9,41 @@
 </body>
 <script>
     "use strict";//开启严格模式
+    var color = "red";
+    // delete color;//Delete of an unqualified identifier in strict mode.
+    var person = {
+        name: "qiao",
+        name: "joe"
+    };
+    console.log(person.name);
+    // function sum (num, num){//Duplicate parameter name not allowed in this context  不能重复
+    //
+    // }
+    function showValue(value){
+        value = "foo";
+        console.log(value);//foo
+        console.log(arguments[0]);//不严格 foo 严格 hi
+    }
+    showValue("hi");
+    if(true){
+        function doSomething(){
 
+        }
+    }
+    // function doSomething(){
+    //     eval("var x=10");
+    //     console.log(x);//x is not defined  不严格x=10
+    // }
+    // doSomething();
+    // function displayColor(){
+    //     console.log(this.color);
+    // }
+    // displayColor.call(null);//Cannot read property 'color' of null 严格 this=null 抛出错误
+    // with(location){
+    //     console.log(href);//Strict mode code may not include a with statement 无法解析
+    // }
+    // var value = 010;//Octal literals are not allowed in strict mode. 严格不能使用8进制
+    var value = parseInt("010");//  严格10 不严格8
+    console.log(value);
 </script>
 </html>
