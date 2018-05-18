@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ES6-1-let&const</title>
+</head>
+<body>
+
+</body>
+<script>
+    //LET
+
+    {
+        let a = 10;
+        var b =1;
+    }
+    // console.log(a);  //error
+    console.log(b);
+    for(let i = 0;i < 10; i++){
+
+    }
+    // console.log(i); //error
+    for(let i = 0;i < 3; i++){
+        let i = 2;
+        console.log(i);
+    }
+    //2*3 不在同一个作用域
+    console.log(c);//undefined
+    var c = 12;
+    // console.log(d);//error 不存在变量提升 抛出错误
+    let d = 12;
+    //暂时性死区 TDZ
+    var tmp = 123;
+    if(true){
+        // tmp = "abc";//referenceError  TDZ开始
+        let tmp; //TDZ结束
+        tmp = 123;
+        console.log(tmp);
+    }
+    //不允许重复声明
+    function thisA(){
+        let a = 10;
+        // let a = 1 error  不能重新声明函数;
+    }
+
+    //块级作用域
+        //内部变量覆盖外部变量
+    function f(){
+        console.log(tmp);
+        if(false){
+            var tmp = "hello world";
+        }
+    }
+    f();//undefined  提升内部变量覆盖外部变量
+    var s = "hello";
+    for(var i =0 ;i<s.length;i++){
+        console.log(s[i]);
+    }
+    console.log(i);//5  没有消失
+    //函数块 let  没有大括号报错
+    {
+        let a = "secret";
+        let f = function(){
+            return a;
+        };
+        f();
+        console.log(a);//secret
+    }
+    //do表达式  提案 没加入es6
+    // let x = do{
+    //     let t = f ();
+    //     t * t + 1;
+    // };
+
+    //const  常量
+
+
+</script>
+</html>
