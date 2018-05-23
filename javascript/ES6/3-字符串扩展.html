@@ -5,8 +5,9 @@
     <title>ES6-3-字符串扩展</title>
 </head>
 <body>
-
+<div id="result"></div>
 </body>
+<script src="../js/jquery-3.3.1.min.js"></script>
 <script>
     //字符的Unicode表示
     console.log("\u0061");//a
@@ -16,5 +17,89 @@
     console.log("\u{20BB7}");//𠮷
     let hello = 123;
     console.log(hell\u{6F});//123
+    //codePointAt()
+    var s = "𠮷";
+    console.log(s.length);//2
+    console.log(s.charAt(0));//"�"
+    console.log(s.charAt(1));//"�"
+    console.log(s.charCodeAt(0));//55362
+    console.log(s.charCodeAt(1));//57271
+    var t = "𠮷a";
+    console.log(t.codePointAt(0));//134071
+    console.log(t.codePointAt(1));//57271
+    console.log(t.codePointAt(2));//97
+    console.log(t.codePointAt(0).toString(16));//20bb7  16进制转换
+    console.log(t.codePointAt(2).toString(16));//61
+    for(let ch of t){ //没有 a的正确位置是1但是要codePointAt(2)才得到 循环解决
+        console.log(ch.codePointAt(0).toString(16));
+    }
+    //20bb7
+    //16
+    //测试一个字符是2字节还是4字节
+    function is32Bit(c){
+        return c.codePointAt(0) > 0xFFFF;
+    }
+    console.log(is32Bit("𠮷"));//true  是 4 字节    1字符 = 2字节 = 32位
+    console.log(is32Bit("a"));//false  是 2 字节
+    //String.fromCodePoint()
+    console.log(String.fromCodePoint(0x20BB7));//𠮷  在string上  而codePointAt()在字符的实例对象上
+
+    //字符串遍历接口
+    for(let i of "hello"){
+        console.log(i);// h e l l o
+    }
+    var text = String.fromCodePoint(0x20BB7);//𠮷
+    for(let i = 0;i < text.length; i++){
+        console.log(text[i]);
+    }
+    //" "
+    //" "
+    for(let i of text){
+        console.log(i);//𠮷
+    }
+
+    //at()  返回给定位置的字符
+    console.log("abc".charAt(0));//a    es5
+    console.log('𠮷'.charAt(0));//" "
+    // console.log('𠮷'.at(0));//𠮷  提案
+
+    //normalize()
+
+    //includes()    startsWith()    endsWith() 判断是否在字符串中，是否在头部，是否在尾部  第二个参数表示开始搜索位置
+    var s2 = 'hello world';
+    console.log(s2.includes("llo"));//true
+    console.log(s2.startsWith("llo"));//false
+    console.log(s2.endsWith("rld"));//true
+    console.log(s2.startsWith("llo",2));//true  从下标2开始搜索
+    console.log(s2.endsWith("hello",5));//true  表示前5个字符 与其他2个不同
+
+    //repeat()  返回一个新字符串，表示将原字符串重复几次
+    console.log('x'.repeat(3));//xxx
+    console.log('hello'.repeat(3));//hellohellohello   小数取整  大于等于-1报错 nan = 0  0的话为" "空
+    console.log('x'.repeat('3'));//xxx 字符串 先转换为数字
+
+    //padStart()    padEnd()    es2017 字符串补全长度功能
+    console.log('x'.padStart(5,'ab'));//ababx   第一个参数为字符串最小长度，第二个参数为补全的字符串 大于指定长度
+    // 返回原字符串   超出位数截断补全的字符串  省略第二个参数用空格补全
+    console.log('x'.padEnd(5,'ab'));//xabab
+    console.log('x'.padEnd(5,'0123456789'));//x0123
+    console.log('x'.padStart(5));//    x
+    console.log('12'.padStart(10,'yyyy-mm-dd'));//yyyy-mm-12    日期补全提示
+    console.log('12'.padStart(10,'0'));//0000000012    位数自动补全
+
+    //模板字符串
+    var man = {
+        name:"Joe",
+        age:22
+    };
+
+    $('#result').append(`
+        This is <b>${man.name}</b>;<br/>
+        his age is <strong>${man.age}</strong>; line 1
+        <!--//多行字符串-->
+        \`his age
+         is\` 2
+    `);
+
 </script>
 </html>
