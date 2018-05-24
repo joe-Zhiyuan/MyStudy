@@ -6,6 +6,8 @@
 </head>
 <body>
 <div id="result"></div>
+<div id="list"></div>
+<div id="div"></div>
 </body>
 <script src="../js/jquery-3.3.1.min.js"></script>
 <script>
@@ -95,11 +97,116 @@
 
     $('#result').append(`
         This is <b>${man.name}</b>;<br/>
-        his age is <strong>${man.age}</strong>; line 1
-        <!--//多行字符串-->
-        \`his age
-         is\` 2
+        his age is <strong>${man.age}</strong>;
+        <!--//多行字符串    标签自动换行-->
+        <h3>string text line 1</h3>
+        <p>\`string text line 2\`</p>
     `);
+    $("#list").html(
+        `<ul>
+            <li>first</li>
+            <li>second</li>
+        </ul>
+        `.trim()//消除换行
+    );
+    //可以插入javascript表达式
+    var x = 1,
+        y = 2;
+    $("#list").append(`
+        ${x} + ${y} = ${x + y}
+    `);
+    //调用函数
+    function fn(){
+        return "hello world!";
+    }
+    console.log(`foo ${fn()} bar`);//foo hello world! bar
+    // let msg = `hello,${place}`;//error place没有声明
+    console.log(`hello ${'world'}`);//hello world   如果是字符串，原样输出
 
+    //模板字符串嵌套
+    const tmpl = addrs =>`
+        <table>
+            ${addrs.map(addr => `
+                <tr><td>${addr.first}</td></tr>
+                <tr><td>${addr.last}</td></tr>
+            `).join(" ")}
+        </table>
+    `;
+    const data = [
+        {first:'<Jane>',last:'Bond'},
+        {first:'Lars',last:'<Croft>'},
+    ];
+    console.log(tmpl(data));
+    //引用字符串本身
+    //方法1
+    let str = 'return' + '`hello ${name}`';
+    let func = new Function('name',str);
+    console.log(func('jack'));//hello jack
+    //方法2
+    let str2 = '(name) => `hello ${name}`';
+    let func2 = eval.call(null,str2);
+    console.log(func2('joe'));//hello joe
+
+    //模板编译  实例
+    // var template = `
+    //     <ul>
+    //         <% for(var i = 0;i<data.supplies.length;i++){ %>
+    //             <li><%= data.supplies[i] %></li>
+    //         <% } %>
+    //     </ul>
+    // `;
+    var template = `
+        echo('<ul>');
+        for(var i = 0;i>data.supplies.length;i++){
+            echo('<li>');
+            echo(data.supplies[i]);
+            echo('</li>')'
+        };
+        echo('</ul>');
+    `;
+    function compile(template){
+        var evalExpr = /<%=(.+.?)%>/g;
+        var expr = /<%([\s\S]+?)%>/g;
+
+        template = template.replace(evalExpr,'`); \n echo($1); \n echo(`').replace('`); \n $1 \n echo(`');
+        template = 'echo(`'+template+'`);';
+        var script = `(function parse(data){
+            var output = "";
+            function echo(html){
+            output +=html;
+            }
+            ${template}
+            return output;
+        })`;
+        return script;
+    }
+    var parse = eval(compile(template));
+    $("#div").innerHTML = parse({supplies:["broom","mop","ckeaner"]});
+
+    //标签模板
+    console.log`123`;//123  函数
+    let a = 1,
+        b = 2;
+    function tag(stringArr,...values){
+        console.log(stringArr);// hello world " "
+        console.log(values);//3 2
+    }
+    tag`hello ${a + b} world ${a * b}`;//等价于 tag(['hello','world',''],3,2);
+    //防止用户输出恶意内容
+    var message = SaferHTML`<p>${sender} has send you a message.</p>`;
+    function SaferHTML(templateData){
+        var s = templateData[0];
+        for(var i = 1;i<arguments.length;i++){
+            var arg = String(arguments[i]);
+            s += arg.replace(/&/g,"&amp").replace(/</g,"&lt").replace(/>/g,"&gt;");
+            s += templateData[i];
+        }
+        return s;
+    }
+    var sender = `<script>alert("abc")<\/script>`;
+    var message = SaferHTML`<p>${sender} has sent you a message.</p>`;
+    console.log(message);
+    //String.raw()
+    console.log(String.raw`HI\n$(2+3)!`);//HI\n$(2+3)!
 </script>
 </html>

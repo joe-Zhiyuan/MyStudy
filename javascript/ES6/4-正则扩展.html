@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ES6-4-正则扩展</title>
+</head>
+<body>
+
+</body>
+<script>
+//正则
+    let regex = new RegExp('xyz','i');
+    //等价于
+    // let regex = /xyz/i;  ES6 忽略原有的规则，使用新的修饰符
+    let regex1 = new RegExp(/abc/ig,'i');
+    console.log(regex1.flags);//    i
+    //字符串正则方法
+
+</script>
+</html>
