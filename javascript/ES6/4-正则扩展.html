@@ -15,6 +15,60 @@
     let regex1 = new RegExp(/abc/ig,'i');
     console.log(regex1.flags);//    i
     //字符串正则方法
-
+    //U修饰符  添加了u修饰符能够识别4个字节的UTF-16编码
+    console.log(/^\uD83D/u.test('\uD83D\uDC2A'));//false   .test()检测是否含有 RegExpObject匹配文本  识别为一个字
+    console.log(/^\uD83D/.test('\uD83D\uDC2A'));//true      识别为两个字符
+    //点(.)字符    表示除换行符之外的任意单个字符 如大于0xFFFF不能识别，加上u修饰符
+    var s = "𠮷";
+    console.log(/^.$/.test(s));//true
+    console.log(/^.$/u.test(s));//true
+    //Unicode字符表示法  正则式必须加u才能识别当中的｛｝否则解读为量词
+    console.log(/\u{61}/.test('a'));//false
+    console.log(/\u{61}/u.test('a'));//true
+    //量词    加u后所有量词都会识别大于0xFFFF的字符
+    console.log(/a{2}/.test("aa"));//true
+    console.log(/a{2}/u.test("aa"));//true
+    console.log(/𠮷{2}/.test("𠮷𠮷"));//false  不加u修饰符不能识别
+    console.log(/𠮷{2}/u.test("𠮷𠮷"));//true
+    //预定义模式 \s预定义模式 匹配所有不是空格的字符
+    console.log(/^\S$/.test('𠮷'));//false
+    console.log(/^\S$/u.test('𠮷'));//true   加u修饰符才能匹配大于0xFFFF的字符
+        //返回字符串长度函数
+    function codePointLength(text){
+        var result = text.match(/[\s\S]/gu);
+        return result?result.length:0;
+    }
+    console.log(s.length);//2   2个字符
+    console.log(codePointLength(s));//1     1个字符
+    //i修饰符
+    console.log("\u004B","\u212A");//这样输出Unicode  k  k  后一个不是正规的K
+    console.log(/[a-z]/i.test("\u212A"));//false    无法识别
+    console.log(/[a-z]/iu.test("\u212A"));//true    可以识别
+    //y修饰符  粘连(sticky)修饰符   必需从头匹配，如不是就返回null
+    var y = "aaa_aa_a";
+    var r1 = /a+/g;
+    var r2 = /a+/y;
+    console.log(r1.exec(y));//0  下标
+    console.log(r2.exec(y));//0
+    console.log(r1.exec(y));//4
+    console.log(r2.exec(y));//null
+    //sticky属性  表示是否设置了y修饰符
+    var q = /hello\d/y;
+    console.log(q.sticky);//true
+    //flags属性   返回正则表达式的修饰符
+        //ES5的source属性  返回正则表达式的正文
+    console.log(/abc/ig.source);//abc
+    //flags
+    console.log(/abc/ig.flags);//gi
+    //s修饰符  dotAll模式
+    console.log(/foo.bar/.test("foo\nbar"));//false     (.)不能匹配(\n)行中止符
+    console.log(/foo[^]bar/.test("foo\nbar"));//true    解决方法
+    //exec()    返回一个匹配的数组
+    const RE_DATE = /(\d{4})-(\d{2})-(\d{2})/;
+    const matchObj = RE_DATE.exec("1996-06-19");//matchObj[0] 返回本身字符串
+    let year = matchObj[1];
+    let month = matchObj[2];
+    let day = matchObj[3];
+    console.log(`${year}年${month}月${day}日`);
 </script>
 </html>
