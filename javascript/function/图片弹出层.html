@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>图片弹出层</title>
+    <style>
+        .layer-photos-demo{
+            width:100%;
+        }
+        .layer-photos-demo>img{
+            width:32%;
+            margin-right:1%;
+        }
+    </style>
+</head>
+<body>
+<button id="test1">弹出1</button>
+<div id="layer-photos-demo" class="layer-photos-demo">
+    <img layer-src="../images/1.jpg" src="../images/1.jpg" alt="图片1">
+    <img layer-src="../images/1.jpg" src="../images/1.jpg" alt="图片2">
+    <img layer-src="../images/1.jpg" src="../images/1.jpg" alt="图片3">
+</div>
+</body>
+<script src="../js/jquery-3.3.1.min.js"></script>
+<script src="../js/layer/layer.js"></script>
+<script>
+    $('#test1').on('click',function(){
+        layer.msg('hello');
+    });
+    layer.photos({
+        photos: '#layer-photos-demo'
+        ,anim: 0 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+    });
+</script>
+</html>

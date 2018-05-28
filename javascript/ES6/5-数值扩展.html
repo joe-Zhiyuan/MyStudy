@@ -16,6 +16,161 @@
     console.log(Number(0o10));//8
     //Number.isFinite() Number.isNaN()
     //Number.isFinite() 检测数字是否为有限
-    console.log(Number.isFinite(15));
+    console.log(Number.isFinite(15));//true
+    //Number.isNaN()    检测数字是否为无限
+    console.log(Number.isNaN(15));//false
+    // ES5通过以下方法实现
+    //Number.isFinite()
+    (function(global){
+        var global_isFinite = global.isFinite;
+        Object.defineProperty(Number,'isFinite',{
+           value :function isFinite(value){
+               return typeof  value === 'number'&&global_isFinite(value);
+           } ,
+            configurable:true,
+            enumerable:false,
+            writable:true
+        });
+    })(this);
+    //ES5通过以下方法实现
+    //Number.isNaN()
+    (function (global) {
+        var global_isNaN = global.isNaN;
+        Object.defineProperty(Number,'isNaN',{
+            value:function isNaN(value) {
+                return typeof  value === 'number'&&global_isNaN(value);
+            },
+            configurable:true,
+            enumerable:false,
+            writable:true
+        });
+    })(this);
+    //新旧方法区别在于，传统方法先调用Number()方法把非数值转化为数值，再进行判断，而新方法只对数值有效，非数值一律返回false
+
+    //Number.parseInt() Number.parseFloat() 只是把parseInt(),parseFloat()移到Number上
+    console.log(Number.parseInt('12.5'));//12
+    console.log(Number.parseFloat("123.45##"));//123.45
+    //Number.isInteger()    判断一个值是否为整数 3和3.0为一个数
+    console.log(Number.isInteger(3));//true
+    console.log(Number.isInteger(3.0));//true
+    console.log(Number.isInteger(3.2));//false
+    //ES5
+    (function(global){
+        var floor = Math.floor,
+            isFinite = global.isFinite;
+        Object.defineProperty(Number,'isInteger',{
+            value:function isInteger(value){
+                return typeof  value === 'number'&&isFinite(value)&&floor(value) === value;
+            },
+            configurable:true,
+            enumerable:false,
+            writable:true
+        });
+    })(this);
+
+    //Number.EPSILON    新增一个极小的常量   为浮点计算设置一个误差范围，小于认为得到正确的结果
+    console.log(Number.EPSILON);//2.220446049250313e-16
+    console.log(Number.EPSILON.toFixed(20));//0.00000000000000022204
+    //误差检查函数
+    function withinErrorMargin(left,right){
+        return Math.abs(left - right) < Number.EPSILON;
+    }
+    console.log(withinErrorMargin(0.1+0.2,0.3));//true 0<Number.EPSILON 为true
+    console.log(withinErrorMargin(0.2+0.2,0.3));//false 0.1>Number.EPSILON 为false
+
+    //安全整数和Number.isSafeInteger()   判断一个整数是否在这个范围
+    //引入NumberMAX_SAFE_INTEGER NumberMIN_SAFE_INTEGER   最大数和最小数
+    console.log(Number.MAX_SAFE_INTEGER === Math.pow(2,53)-1);//true  9007199254740991
+    console.log(Number.MIN_SAFE_INTEGER === -Number.MAX_SAFE_INTEGER);//true  -9007199254740991
+    console.log(Number.isSafeInteger('a'));//false
+    console.log(Number.isSafeInteger(12));//true
+    console.log(Number.isSafeInteger(9007199254740992));//false 大了1
+
+    //Math对象的扩展
+    // Math.trunc() 去除一个数的小数部分，返回整数部分
+    console.log(Math.trunc(4.1));//4
+    console.log(Math.trunc(4.1));//4
+    console.log(Math.trunc(-4.8));//-4
+    console.log(Math.trunc(-0.546));//-0
+    console.log(Math.trunc('foo'));//NaN
+    //ES5
+    Math.trunc = Math.trunc||function(x){
+        return x < 0?Math.ceil(x):Math.floor(x);
+    }
+
+    //Math.sign()   判断一个数是一个正数，负数，还是零 返回 +1，-1，0，-0，NaN其他值
+    console.log(Math.sign(5));//1
+    console.log(Math.sign(-5));//-1
+    console.log(Math.sign(0));//0
+    console.log(Math.sign(-0));//-0
+    console.log(Math.sign("foo"));//NaN
+    //ES5
+    Math.sign = Math.sign || function(x){
+        x = +x;
+        if(x === 0 || isNaN(x)){
+            return x;
+        }
+        return x > 0?1:-1;
+    };
+
+    //Math.cbrt()   计算一个数的立方根
+    console.log(Math.cbrt(-1));//-1
+    console.log(Math.cbrt(0));//0
+    console.log(Math.cbrt(2));//1.2599210498948732
+    console.log(Math.cbrt("hello"));//NaN
+    //ES5
+    Math.cbrt = Math.cbrt || function(x){
+        var y = Math.pow(Math.abs(x),1/3);
+        return x < 0? -y:y;
+    };
+
+    //Math.clz32()  使用32位二进制
+    console.log(Math.clz32(0));//32
+    console.log(Math.clz32(1));//31
+    console.log(Math.clz32(1000));//22
+    console.log(Math.clz32('foo'));//32
+    console.log(Math.clz32([]));//32
+    //Math.imul() 返回32位相乘结果 Math.fround()返回一个数单精度浮点数形式
+    console.log(Math.imul(2,4));//8
+    console.log(Math.imul(2,-4));//-8
+    console.log(Math.imul(-2,-4));//8
+    //Math.hypot() 返回所有参数的平方和的平方根
+    console.log(Math.hypot(3,4));//5
+    console.log(Math.hypot(3,"foo"));//NaN
+    console.log(Math.hypot(3,"foo"));//NaN
+    console.log(Math.hypot(3,"4"));//5
+
+    //对数  x = a的平方对数  100（指数） = 10 （底数） 2（对数） 10的2次 10*10
+    //Math.expm1()  返回Math.exp(x)-1  底数为e  无理数2.71828
+    console.log(Math.exp(10));//22026.465794806718
+    //Math.log1p()  返回ln(1+x) Math.log(1+x) 如果x小于1，返回NaN     底数为e
+    console.log(Math.log1p(10));//2.3978952727983707
+    console.log( Math.log(100));//4.605170185988092
+    //Math.log10()  返回10为底的x的对数
+    console.log(Math.log10(100));//2
+    //ES5
+    Math.log10 = Math.log10||function(x){
+        return Math.log(x)/Math.LN10;
+    };
+    //Math.log2()   返回以2为底数的x的对数 如果x小于0，返回NaN
+    console.log(Math.log2(8));//3
+    //ES5
+    Math.log2 = Math.log2||function(x){
+        return Math.log(x)/Math.LN2;
+    };
+
+    //双曲数方法
+    //Math.signbit() 判断一个值的正负
+    // console.log(Math.signbit(-1)); 无function
+
+    //指数运算符  **  2（底数） 4（对数）
+    console.log(2**4);//16
+    console.log(2**3);//16
+    let a = 1.5;
+    a **= 2;//a = a*a;
+    console.log(a);//2.25
+
+    //Integer数据类型  提案
+    // console.log(typeof 123n);//integer
 </script>
 </html>
