@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>分屏滑动焦点图</title>
+    <style>
+        body,section,div,p,h1,h2,h3,h4,h5,h6 {
+            margin:0;
+            padding:0;
+        }
+        body{
+            font-size: 100%;
+            line-height: 1.6;
+            font-family: Arial, Helvetica, sans-serif;
+            /*文字抗锯齿*/
+            font-smoothing:antialiased;
+            -webkit-font-smoothing: antialiased;
+            color:#333;
+        }
+        #wrapper{
+            position: relative;
+            width:100vm;
+            min-height:700px;
+            overflow: hidden;
+        }
+        .layer{
+            position: absolute;
+            width:100vw;
+            min-height: 700px;
+            overflow: hidden;
+        }
+        .layer .content_wrapper{
+            width:100vw;
+            min-height: 700px;
+            position: absolute;
+        }
+        .layer .content_body{
+            width:25%;
+            position: absolute;
+            top:50%;
+            transform: translateY(-50%);
+            text-align: center;
+        }
+        .layer .content_body p{
+            text-indent: 2rem;
+            text-align: left;
+        }
+        .layer img{
+            position: absolute;
+            top:50%;
+            left:50%;
+            transform: translate(-50%,-50%);
+        }
+        .bottom{
+            background: #222;
+            z-index: 1;
+        }
+        .bottom .content_body{
+            right:10%;
+        }
+        .bottom h2{
+            color:#f62368;
+        }
+        .bottom p{
+            color:#eee;
+        }
+        .top{
+            background: #eee;
+            color:#222;
+            width:50vw;
+            z-index: 2;
+        }
+        .top .content_body{
+            left:10%;
+        }
+        .handle{
+            position: absolute;
+            left:50%;
+            width:5px;
+            top:0;
+            background: #f62368;
+            height:100%;
+            z-index:3;
+        }
+        .skewed .handle{
+            top:50%;
+            transform: rotate(30deg) translateY(-50%);
+            height:200%;
+            transform-origin: top;
+        }
+        .skewed .top{
+            transform: skew(-30deg);
+            margin-left: -1000px;
+            width: calc(50vw + 1000px);
+        }
+        .skewed .top .content_wrapper{
+            transform: skew(30deg);
+            margin-left: 1000px;
+        }
+    </style>
+</head>
+<body>
+    <section id="wrapper" class="skewed">
+        <div class="layer bottom">
+            <div class="content_wrapper">
+                <div class="content_body">
+                    <h2>第一页</h2>
+                    <p>第一页内容</p>
+                </div>
+                <img src="../images/front.png" alt="phone"/>
+            </div>
+        </div>
+        <div class="layer top">
+            <div class="content_wrapper">
+                <div class="content_body">
+                    <h2>第二页</h2>
+                    <p>第二页内容</p>
+                </div>
+                <img src="../images/back.png" alt="phone"/>
+            </div>
+        </div>
+        <div class="handle"></div>
+    </section>
+</body>
+<script>
+function addEvent(ele,type,callback){
+    // 添加事件兼容ie
+    if(ele.addEventListener){
+        ele.addEventListener(type,callback,false);
+    }else if(ele.attachEvent){
+        ele.attachEvent("on"+type,callback);
+    }
+}
+function getEle(name){
+    // 如果参数的第一个字符是"."的化,就获取class,不是就是id
+    var method = name.charAt(0)==='.'?'getElementsByClassName':'getElementById';
+    return document[method](name.substr(1));
+}
+function func(){
+    var wrapper = getEle("#wrapper");
+    var topWrapper = getEle(".top")[0];
+    var handle = getEle(".handle")[0];
+    var skew = 1000;
+    var delta = 0;
+    addEvent(wrapper,"mousemove",function(ev){
+        var e = ev||window.event;
+        // 在中间线的左边，还是右边  +  -   加上距中间线的50%的额外宽度  左边或右边
+        delta=(e.clientX-window.innerWidth/2)*0.5;
+        handle.style.left=e.clientX+delta+"px";
+        topWrapper.style.width=e.clientX+skew+delta+"px";
+    })
+}
+addEvent(document,"DOMContentLoaded",func);
+</script>
+</html>
