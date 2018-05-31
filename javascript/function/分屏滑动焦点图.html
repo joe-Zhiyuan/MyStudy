@@ -91,11 +91,48 @@
         .skewed .top{
             transform: skew(-30deg);
             margin-left: -1000px;
-            width: calc(50vw + 1000px);
+            width: calc(50vw + 995px);
+            width: -webkit-calc(50vw + 1000px);
         }
         .skewed .top .content_wrapper{
             transform: skew(30deg);
             margin-left: 1000px;
+        }
+        .bottom1{
+            position: absolute;
+            top:50%;
+            left:50%;
+            transform: translate(-50%,-50%);
+            z-index: 10;
+        }
+        .bottom1>img{
+            -webkit-filter: grayscale(100%);
+            -moz-filter: grayscale(100%);
+            -ms-filter: grayscale(100%);
+            -o-filter: grayscale(100%);
+            filter: grayscale(100%);
+            filter: gray;
+        }
+        .top1{
+            position: absolute;
+            top:50%;
+            left:50%;
+            transform: translate(-50%,-50%);
+            z-index: 11;
+        }
+        .top2{
+            width:0;
+            overflow: hidden;
+            animation: myAn 3s infinite;
+            -webkit-animation: myAn 3s infinite;
+        }
+        @keyframes myAn{
+            from{width:0;}
+            to{width:100%;}
+        }
+        @-webkit-keyframes myAn{
+            from{width:0;}
+            to{width:100%;}
         }
     </style>
 </head>
@@ -121,6 +158,15 @@
         </div>
         <div class="handle"></div>
     </section>
+    <!--logo变色 loading效果-->
+    <div class="bottom1">
+        <img src="../images/logo.png" alt="logo"/>
+    </div>
+    <div class="top1" id="top1">
+        <div class="top2">
+            <img src="../images/logo.png" alt="logo"/>
+        </div>
+    </div>
 </body>
 <script>
 function addEvent(ele,type,callback){

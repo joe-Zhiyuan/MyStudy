@@ -5,9 +5,126 @@
     <title>ES6-7-数组扩展</title>
 </head>
 <body>
-
+    <div></div>
+    <div></div>
+    <div></div>
 </body>
 <script>
-    
+//数组扩展
+    //扩展运算符  （...） 同rest参数的逆运算  将一个数组转为用逗号分隔的参数序列
+    console.log(...[1,2,3]);//1 2 3
+    console.log(1,...[1,2,3],4);//1 1 2 3 4
+    // 主要用于函数调用
+    function push1(array,...items){
+        array.push(...items);
+    }
+    function add(x, y){
+        return x + y;
+    }
+    var numbers = [4, 38];
+    console.log(add(...numbers));//42
+    // const arr = [
+    //     ...(x > 0 ? ['a']:[]),
+    //     'b',
+    // ];
+    //替代apply方法 可以将数组转化为函数的参数
+    //ES5
+    function f(x,y,z){
+
+    }
+    var args = [1,2,3];
+    f.apply(null, args);
+    //ES6
+    function f1(x,y,z){
+
+    }
+    f(...args);
+    //Math.max简化求数组最大值
+    //ES5
+    Math.max.apply(null, [14,14,1,24]);
+    //ES6
+    console.log(Math.max(...[14,14,1,24]));//24
+    //通过push函数将一个数组添加到另一个数组的尾部
+    //ES5
+    var arr1 = [1,2];
+    var arr2 = [4,3];
+    Array.prototype.push.apply(arr1,arr2);//4
+    console.log(arr1);//[1,2,4,3]
+    //ES6
+    arr1.push(...arr2);//6   个数
+    console.log(arr1);//[1,2,4,3,4,3]
+    //合并数组
+    //ES5
+    var more = [1,1];
+    var arr3 = [1,2].concat(more);
+    //ES6
+    var arr4 = [1,5,...more];
+    console.log(arr3);//[1,2,1,1]
+    console.log(arr4);//[1,5,1,1]
+    //与解构赋值结合，生成数组
+    const [first,...rest] = [1,2,3,4,5];
+    const [first1,...rest1] = ["foo"];
+    console.log(first);//1
+    console.log(rest);//[2,3,4,5]
+    console.log(first1);//foo
+    console.log(rest1);//[]
+    //扩展运算符用于数组赋值，只能放在参数的最后一位，否则报错
+    //函数的返回值    解决了返回多个值只能返回数组和对象
+    //字符串       将字符串转化为真正的数组    能够识别32位Unicode字符
+    var arr5 = [..."hello"];
+    console.log(arr5);//["h","e","l","l","o"]
+        //正确返回字符串长度的函数
+    function length(str){
+        return [...str].length;
+    }
+    console.log(length('x\uD83D\uDE80y'));//3
+    //实现了iterator接口的对象  没有部署iterator的接口对象无法使用扩展运算符 可以使用Array.from
+    // Map和Set结构，Generator函数    都可以使用扩展运算符   没有iterator接口就会报错
+    var nodeList = document.querySelectorAll("div");
+    var array = [...nodeList];
+    console.log(array);
+    var go = function* (){
+        yield  1;
+        yield  2;
+        yield  3;
+    };
+    console.log(...go());//[1,2,3]
+
+    // Array.from()     将对象转化为数组  类似数组的对象和可遍历的对象   要部署iterator接口的数据结构   如果参数是一个
+    // 数组，返回一个一模一样的新数组
+    let arrayLike = {
+        "0" : "1",
+        "1" : "2",
+        "2" : "3",
+        length:3
+    };
+    //ES5
+    var arr7 = [].slice.call(arrayLike);
+    console.log(arr7);//[a,b,c]
+    //ES6
+    var arr8 = Array.from(arrayLike);
+    console.log(arr8);//[a,b,c]     常见为nodeList和arguments对象
+
+    var arr10 = Array.from({length:3});
+    console.log(arr10);//[undefined,undefined,undefined]    扩展运算符转换不了这个对象
+    //ES5   实现
+    const toArray = (() =>
+        Array.from ? Array.from : obj => [].slice.call(obj)
+    )();
+    //第二个参数 对每个元素进行处理，将处理后的数组返回数组
+    var arr11 = Array.from(arr8,x => x * x);//相等于
+    var arr12 = Array.from(arr7).map(x => x * x);
+    console.log(arr12);//[1,4,9]
+    //  返回数据类型
+    function typesOf(){
+        return Array.from(arguments,value => typeof value)
+    }
+    console.log(typesOf(null,[],NaN));//[object,object,number]
+
+    //Array.of()    将一组值转化为数组   没有参数就返回空一个数组
+    console.log(Array.of(3,11,8));//[3,11,8]
+    console.log(Array.of(3));//[3]
+
+    //数组实例 copyWithin()
 </script>
 </html>
