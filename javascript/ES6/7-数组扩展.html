@@ -125,6 +125,39 @@
     console.log(Array.of(3,11,8));//[3,11,8]
     console.log(Array.of(3));//[3]
 
-    //数组实例 copyWithin()
+    //数组实例 copyWithin() target:从该位置开始替换数据  start:从该位置读取数据 end:到该位置停止读取数据
+    // Array.prototype.copyWithin(target,start = 0,end = this.length);
+    console.log([1,2,3,4].copyWithin(0,3));//[4,2,3,4]
+
+    //数组实例find()和findIndex()    找出第一个符合条件的数组成员  返回第一个成员的位置（下标）  可以发现NaN
+    console.log([1,2,3,4].find((n) => n >= 4));//4
+    console.log([1,2,3,4].findIndex((n) => n >= 4));//3 下标
+
+    //fill()    给定值填充一个数值  替换原本内容      第二，三个参数指定替换开始位置和结束位置
+    console.log(["a","b","x"].fill(7));//[7,7,7]
+
+    //entries()和keys()和values() 遍历数组    keys()对键名遍历，values()对键值遍历，entries()对键值对遍历
+    //如果不适用for...of...,可以手动调用遍历对象的next()方法进行遍历
+    for(let [index,value] of ["a","b"].entries()){
+        console.log(index,value);//0 "a"    1  "b"
+    }
+
+    //includes()    返回一个布尔值，表示数组是否包含给定的值    第二个参数表示开始位置
+    console.log([1,2,3].includes(2));//true
+    console.log([1,2,3].includes(4));//false
+    console.log([NaN].includes(NaN));//true 可以识别
+    //ES5
+    const contains = (() =>
+        Array.prototype.includes
+            ? (arr, value) => arr.includes(value)
+            : (arr, value) => arr.some(el => el === value)
+    )();
+
+    //数组的空位 数组的某一个位置没有任何值
+    console.log(Array(3));//[empty*3]
+    //ES5   跳过空位
+    console.log([,"a"].forEach((x,i) => console.log(i)));//1
+    //ES6   转化为undefined
+    console.log(Array.from(["a","","b"]));//["a","","b"]
 </script>
 </html>
