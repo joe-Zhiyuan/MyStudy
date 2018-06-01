@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ES6-8-对象扩展</title>
+</head>
+<body>
+
+</body>
+<script>
+//对象的扩展
+    //属性的简洁表示   属性名是字符串，所以不能是关键字(class,var),如果值是一个Generator函数，前面必须加上星号
+    var foo = 'bar';
+    var baz = {foo};
+    console.log(baz.foo);//bar
+    function f(x,y){
+        return {x,y};
+    }
+    console.log(1,2);//1 2{x=1,y=2}
+    var o = {
+        method(){
+            return "hello!";
+        }
+    };
+    // var o = {
+    //     method:function(){
+    //         return "hello!";
+    //     }
+    // };
+    console.log(o.method());//hello!
+    var birth = "2000/01/01";
+    var Person = {
+        name : "Joe",
+        birth,
+        hello(){
+            return this.name;
+        }
+    };
+    console.log(Person.birth,Person.hello());//2010/01/01   Joe
+
+    //属性名表达式    1.直接用标识符作为属性名 2.表达式作为属性名，这时将表达式放在方括号内
+    var obj = {};
+    obj.foo = true;
+    obj["a"+"bc"] = 123;
+    console.log(obj);
+    let propKey = 'foo';
+    let obj1 = {
+        [propKey]:true,
+        ["a"+"bc"]:123
+    };
+    console.log(obj1.foo);//true
+    //表达式还可以用于定义方法名 属性名表达式与简洁表达式不能同时使用，否则报错   属性名如果是对象，默认会自动将
+    // 对象转化为字符串[object,object]
+    let obj2 = {
+        ["h"+"ello"](){
+            return "hi";
+        }
+    };
+    console.log(obj2.hello());//hi
+    const keyA = {a:1};
+    const keyB = {b:2};
+    const myObject = {
+        [keyA]:"valueA",
+        [keyB]:"valueB"
+    };
+    console.log(myObject);//[object Object]"valueB" 只会转化为object  把前一个覆盖掉了
+
+    //方法的name属性
+    
+
+</script>
+</html>
