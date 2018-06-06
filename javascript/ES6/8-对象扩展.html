@@ -66,7 +66,92 @@
     console.log(myObject);//[object Object]"valueB" 只会转化为object  把前一个覆盖掉了
 
     //方法的name属性 方法也是函数，也有name属性
-    
+    const person = {
+        sayName(){
+            console.log("hello");
+        },
+    };
+    console.log(person.sayName.name);//sayName
+    // 如果使用了get,set在描述对象的get,set属性上面
+    const obj3 = {
+        get foo(){},
+        set foo(x){}
+    };
+    // console.log(obj.foo.name); error
+    const descriptor = Object.getOwnPropertyDescriptor(obj3,"foo");
+    console.log(descriptor.get.name);//get foo
+    // bind方法创造的函数返回bound+原函数名，function构造函数，返回anonymous
+    console.log((new Function()).name);//anonymous
+    var doSomething = function(){};
+    console.log(doSomething.bind().name);//bound doSomething
+    // 对象方法是一个Symbol值，返回Symnol的描述
+    // const [key1] = Symbol("joe");
+    // const [key2] = Symbol();
+    // let obj4 = {
+    //     [key1](){},
+    //     [ket2](){}
+    // };
+    // console.log(obj4[key1].name); //"[joe]"
+    // console.log(obj4[key2].name);//""
+
+    // Object.is() 比较两个值是否严格相等 与"==="一致 不同之处NaN等于自身 +0不等于-0
+    console.log(Object.is("foo","foo"));//true
+    console.log(Object.is({},{}));//false
+    console.log(Object.is(+0,-0));//false
+    console.log(Object.is(NaN,NaN));//true
+
+    // Object.assign()用于将原对象(source)所有可枚举对象复制到目标对象(target) 第一个参数是目标对象，其他是原对象
+    // 同名对象后面覆盖前面的属性 null和undefined在首参数就会报错，参数不是对象就会转化伪为对象，无法转化为对象
+    // 会跳过
+    var v1 = "abc";//可枚举  字符串数组
+    var v2 = true;
+    var v3 = 10;
+    var v4 = undefined;
+    var obj5 = Object.assign({},v1,v2,v3,v4);
+    console.log(obj5);//{0:"a",1:"b",2:"c"}
+    //Object.assign是浅复制 复制的是对象的引用对象属性改变也会反应到目标对象上  对于嵌套的同名应用处理是替换
+    // 而不是添加
+    var obj6 = {a:{b:1}};
+    var obj7 = Object.assign({},obj6);
+    obj6.a.b = 2;
+    console.log(obj7.a.b);//2
+    // 常见用途
+    //为对象添加属性
+    class Point{
+        constructor(x,y){
+            Object.assign(this,{x,y});
+        }
+    }
+    //为对象添加方法
+    Object.assign(Point.prototype,{
+       someMethod(arg1,arg2){}
+    });
+    //克隆对象
+    function clone(){
+        return Object.assign({},origin);
+    }
+    //合并多个对象 返回一个新对象
+    const merge = (...sources) => Object.assign({},...sources);
+    //为属性指定默认值
+    const DEFAULTS = {
+      logLevel:0,
+      outputFormat:'html'
+    };
+    function processContent(options){
+        options = Object.assign({},DEFAULTS,options);
+        console.log(options);
+    }
+
+    // 属性的可枚举性
+    //属性的遍历
+    //1. for...in
+    //2. Object.hey(obj)
+    //3. Object.getOwnPropertyNames(obj)
+    //4. Object.getOwnPropertySymbols(obj)
+    //5. Reflect.ownKeys(obj)
+    console.log(Reflect.ownKeys({[Symbol()]:0,nb:0,10:0,2:0,a:0}));
+    //["2","10","b","a",Symbol()"]  先数值大小排序 再字符串生成时间排序 最后Symbol值的属性，生成时间排序
+
 
 </script>
 </html>
