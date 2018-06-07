@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ES6-9-Symbol</title>
+</head>
+<body>
+
+</body>
+<script type="text/javascript">
+    //7种原始数据类型  undefined null string Number boolean Object Symbol
+    //Symbol        一种新的原始数据类型
+    let s = Symbol();//前面不能使用new命令
+    console.log(typeof s);//symbol
+    //Symbol() 有一个参数，用于实例的描述、在控制台显示、转为字符串时比较容易区分
+    var s1 = Symbol("foo");
+    var s2 = Symbol("bar");
+    console.log(s1);//Symbol(foo)
+    console.log(s2);//Symbol(bar)
+    //如果Symbol参数是一个对象，就会调用参数的toString方法转为字符串
+    const obj = {
+        toString(){
+            return "abc";
+        }
+    };
+    const sym = Symbol(obj);
+    console.log(sym);//Symbol(abc)
+    //参数只用于区分，描述，相同参数的symbol的返回值不相等的
+    var s3 = Symbol();
+    var s4 = Symbol();
+    console.log(s3 === s4);//false
+    //symbol值不能进行运算，报错，可以显示转为字符串
+    // console.log(sym+"a");//error
+    console.log(String(sym));//Symbol(abc)  转为字符串  也可以转为布尔值 Boolean(sym)
+
+    // 作为属性名的Symbol  保证不会被覆盖或改写
+
+    function F(name,age,sex){
+        this.name = name;
+        this.age = age;
+        this.sex = sex;
+        sayHi = function(){
+            console.log("hello");
+        }
+    }
+    let f1 = new F("qiao","12",0);
+    let f2 = new F("joe","22",1);
+    console.log(f1);
+    console.log(f2);
+    F.prototype.sayHi = function(){
+        console.log("hello1");
+    };
+    console.log(f1.sayHi());
+</script>
+</html>
