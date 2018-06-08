@@ -33,23 +33,184 @@
     // console.log(sym+"a");//error
     console.log(String(sym));//Symbol(abc)  转为字符串  也可以转为布尔值 Boolean(sym)
 
-    // 作为属性名的Symbol  保证不会被覆盖或改写
+    // 作为属性名的Symbol  保证不会被覆盖或改写  Symbol值作为对象时不能使用点运算符  a.Symbol   必须放在方括号中
+    var mySymbol = Symbol();
+    //第一种写法
+    var a = {};
+    a[mySymbol] = "hello";
+    //第二种写法
+    var a1 = {
+        [mySymbol]:"hello"
+    };
+    //第三种写法
+    var a2 = {};
+    Object.defineProperty(a2, mySymbol,{value:"hello"});
+    console.log(a[mySymbol]);//hello
+    console.log(a1[mySymbol]);//hello
+    console.log(a2[mySymbol]);//hello
 
-    function F(name,age,sex){
-        this.name = name;
-        this.age = age;
-        this.sex = sex;
-        sayHi = function(){
-            console.log("hello");
+    //消除魔术字符串  代码中多出出现，与代码强力耦合的字符串或数值，应有含义清晰的变量代替
+    var shapeType = {
+        triangle:Symbol()
+    };
+    function getArea(shape, options){
+        var area = 0;
+        switch (shape){
+            case shapeType.triangle:
+                area = .5*options.width*options.height;
+                break;
+        }
+        return area;
+    }
+    console.log(getArea(shapeType.triangle, {width:100, height:100}));//5000 将triangle设置为一个变量，消除了强耦合 使用Symbol消除冲突
+
+    //属性名的遍历
+    // Object.getOwnPropertySymbols()返回一个数组，当前对象的所有用作属性名的Symbol的值
+    var obj2 = {};
+    var a4 = Symbol('a');
+    var b4 = Symbol('b');
+    obj2[a4] = "hello";
+    obj2[b4] = "world";
+    var objectSymbols = Object.getOwnPropertySymbols(obj2);
+    console.log(objectSymbols);//[Symbol(a),Symbol(b)]
+
+    //Reflect.ownKeys 返回所有的键名，包括Symbol键名
+
+    // Symbol.for()重新使用同一个Symbol值，一个参数，返回Symbol值   会被登记在全局环境中供搜索 Symbol()不会
+    var s1 = Symbol.for("foo");
+    var s2 = Symbol.for("foo");
+    console.log(s1 === s2);//true   用Symbol.for()创建的是同一个值，先检查参数有没有，没有才会创建一个新值
+
+    // Symbol.keyFor()返回一个已登记的Symbol类型值的key
+    console.log(Symbol.keyFor(s1));// foo
+    var s3 = Symbol("s3");
+    console.log(Symbol.keyFor(s3));// undefined  没有登记 返回undefined
+
+    //模块的Singleton模式  调用一个类并且在任何时候都返回同一个实例
+    //mod.js
+    // function A(){
+    //     this.foo = "hello";
+    // }
+    // if(!global._foo){
+    //     global._foo = new A();
+    // }
+    // module.exports = global._foo;
+    // var a = require("./mod.js");
+    // console.log(a.foo);
+    // const FOO_KEY = Symbol.for('foo');
+    // function A(){
+    //     this.foo = "hello";
+    // }
+    // if(!global[FOO_KEY]){
+    //     global[FOO_KEY] = new A();
+    // }
+    // module.exports = global[FOO_KEY];
+
+    //内置的Symbol值
+    // Symbol.hasInstance属性指向一个内部方法，判断该对象是否为某个构造函数的实例
+    class MyClass{
+        [Symbol.hasInstance](foo){
+            return foo instanceof Array;
         }
     }
-    let f1 = new F("qiao","12",0);
-    let f2 = new F("joe","22",1);
-    console.log(f1);
-    console.log(f2);
-    F.prototype.sayHi = function(){
-        console.log("hello1");
+    console.log([1,2,3] instanceof new MyClass());//true
+    // Sumbol.isConcatSpreadable属性等于一个布尔值，表示该对象使用Array.prototype.concat()时是否展开  数组合并
+    //[1,2,3,[4,5],6]  展开 [1,2,3,4,5,6]
+    let arr1 = ['c','d'];
+    let arr2 = ['a','b'].concat(arr1,'e');
+    console.log(arr2);//自动展开  ['a','b','c','d','e']
+    let arr3 = ['c','d'];
+    arr3[Symbol.isConcatSpreadable] = false;//不展开
+    let arr4 = ['a','b'].concat(arr3,'e');
+    console.log(arr4);//['a','b',['c','d'],'e']
+    // 必须写成实例的属性
+    class A1 extends Array{
+        constructor(args){
+            suoer(args);
+            this[Symbol.isConcatSpreadable] = true;//写成这样
+        }
+    }
+    //Symbol.species属性指向当前对象的构造函数
+    class MyArray extends Array{
+        static get [Symbol.species](){return Array;}//构造函数被替换成Array
+    }
+    var a5 = new MyArray(1,2,3);
+    var mapped = a5.map(x => x*x);
+    console.log(mapped instanceof MyArray);//false
+    console.log(mapped instanceof Array);//true
+    // Symbol.match属性指向一个函数，执行str.match(myObject)时,该属性存在，会该方法的返回值
+    // String.prototype.match(regexp);  等价于regexp[Symbol.match](this);
+    class MyMatcher{
+        [Symbol.match](string){
+            return 'hello world'.indexOf(string);
+        }
+    }
+    console.log('l'.match(new MyMatcher()));//2
+    // Symbol.replace属性指向一个方法，对象被String.prototype.replace方法调用时，返回该方法的返回值
+    // String.prototype.replace(searchValue, replaceValue); //等同于
+    // searchValue[Symbol.replace](this, replaceValue);
+    const x = {};
+    x[Symbol.replace] = (...s) => console.log(s);//["hello","world"]  第二个是替换后的值
+    'hello'.replace(x,'world');
+    // Symbol.search属性指向一个方法，当对象被String.prototype.search方法调用时会返回该方法的返回值
+    class MySearch{
+        constructor(value){
+            this.value = value;
+        }
+        [Symbol.search](string){
+            return string.indexOf(this.value);
+        }
+    }
+    console.log('foobar'.search(new MySearch('foo')));//0
+    // Symbol.split属性指向 String.prototype.split调用时返回该方法的返回值
+    class MySplitter{
+        constructor(value){
+            this.value = value;
+        }
+        [Symbol.split](string){
+            var index = string.indexOf(this.value);
+            if(index === -1){
+                return string;
+            }
+            return [
+              string.substr(0,index),
+              string.substr(index+this.value.length)
+            ];
+        }
+    }
+    console.log('foobar'.split(new MySplitter('foo')));//["","bar"]
+    // Symbol.iterator属性指向该对象的默认遍历器方法
+    // Symbol.toPrimitive指向一个方法，对象转为原始类型的值会调用这个方法，返回对象对应的原始类型值
+    let obj5 = {
+        [Symbol.toPrimitive](hint){//根据类型进行转化选择
+            switch (hint){
+                case 'number':
+                    return '123';
+                case 'string':
+                    return 'str';
+                case 'default':
+                    return 'default';
+                default:
+                    throw new Error();
+            }
+        }
     };
-    console.log(f1.sayHi());
+    console.log(2*obj5);//246
+    console.log(3+obj5);//"3default"
+    console.log(obj5 == "default");//true
+    console.log(String(obj5));//str
+    // Symbol.toStringTag在对象上调用Object.prototype.toString时这个属性存在，就出现在toString返回值字符串中，表示对象的类型
+    console.log( ({[Symbol.toStringTag]:"foo"}.toString()) );//[object foo]
+    // Symbol.unscopables属性指定了with关键字那些属性会被with环境排除
+    console.log( Array.prototype[Symbol.unscopables] );
+    /*copyWithin        :        true
+    entries        :        true
+    fill        :        true
+    find        :        true
+    findIndex        :        true
+    includes        :        true
+    keys        :        true
+    values  :        true*/
+
 </script>
 </html>

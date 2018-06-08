@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>构造函数&原型对象</title>
+</head>
+<body>
+
+</body>
+<script>
+    //构造函数  使用new调用   构造函数名以大写字母开头，普通函数小写字母开头
+    //使用new调用构造函数(1)创建一个新对象；(2)将构造函数作用域赋给新对象（使this指向该新对象）；(3)执行构造函数代码；(4)返回新对象
+    //分别为 F 对象   instanceof    区分类型 不都是Object对象
+    function Fun(name,age,sex){
+        this.name = name;
+        this.age = age;
+        this.sex = sex;
+        this.sayName = sayName;
+    }
+    //不共用函数   等到用到时再调用，减少内存
+    function sayName(){
+        console.log(this.name);
+    }
+    let f1 = new Fun("qiao","12",0);
+    let f2 = new Fun("joe","22",1);
+    console.log(f1);
+    console.log(f2);
+    //原型对象  所有创造的函数对象所有原型对象指向都是一个  通过对构造函数原型对象添加属性和方法实现对象间的数据共享
+    //当我们需要读取对象的某个属性时，都会执行一次搜索。首先在该对象中查找该属性，若找到，返回该属性值；
+    //否则，到[[prototype]]指向的原型对象中继续查找。  先找自身，再找prototype中查找   如果同名属性，自身的属性值会覆盖原型
+    //对象中的属性值
+    //原型对象字面量也是一个对象Object 我们需要重新指向F  constructor: F  指向F构造函数
+    //构造函数使对象有自己的数据，使数据不共享   原型对象数据共享
+
+
+    //错误问题：因为f1 f2对象已经创建，原型对象上没有  sayHi方法  not a function
+    Fun.prototype = {
+        constructor : Fun,
+        high : 174,
+        sayHi : function(){
+            console.log(this.name);
+        }
+    };
+    // f1.sayHi();//qiao
+    // console.log(f1.high);//174
+    // f2.sayHi();//joe
+    // console.log(f1.high);//174
+    let f3 = new Fun("Joe",22,1);
+    //有  因为添加了原型对象上的属性
+    console.log(f3.name);
+    f3.sayHi();
+</script>
+</html>
