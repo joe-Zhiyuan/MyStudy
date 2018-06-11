@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ES6-10-Set&Map数据结构</title>
+    <style>
+
+    </style>
+</head>
+<body>
+    <div></div>
+    <div></div>
+    <div></div>
+</body>
+<script type="text/javascript">
+    //Set
+    //基本用法  成员都是唯一，没有重复  5 和 “5”不是一个  NaN和NaN相等
+    const s = new Set();
+    [2,3,45,14,1,2,54,16].forEach(x => s.add(x));
+    console.log(s);//[2,3,45,14,1,54,16]
+    const s1 = new Set([2,4,51,1]);
+    console.log(s1);
+    console.log(s1.size);//4
+    function divs (){
+        return [...document.querySelectorAll("div")];
+    }
+    const s2 = new Set(divs());
+    console.log(s2);//3  set(3){div div div}
+    divs().forEach(div => s2.add(div));
+    console.log(s2.size);//3
+    //去除数组重复  类似与 === 精确相等运算符  主要区别NaN等于自身
+    // [...new Set(array)]
+
+    //Set实例的属性和方法
+    // Set.prototype.constructor:构造函数，默认Set函数
+    // Set.prototype.size:返回Set实例的成员总数
+    //操作方法
+    //add(value) 添加某个值，返回Set本身
+    s1.add(99);
+    s1.add(99);
+    console.log(s1);//{2, 4, 51, 1, 99}
+    s1.delete(2);
+    console.log(s1);//{4, 51, 1, 99}
+    console.log(s1.has(2));//false
+    s1.clear();
+    console.log(s1);//{}
+    //将Set转化为数组
+    const items = new Set([1,2,3,4]);
+    const array = Array.from(items);
+    console.log(array);//[1,2,3,4]
+    //去重
+    function dedupe(array){
+        return Array.from(new Set(array));
+    }
+    console.log(dedupe([1,1,2,3]));//[1,2,3]
+    //遍历操作
+    // keys()返回键名的遍历器
+    //values()返回键值的遍历器   Set结构没有键名，只有键值，keys()和values()都是一样
+    //entries()返回键值对的遍历器  默认返回键值对
+    let s3 = new Set(["red","green","blue"]);
+    for(let item of s3.keys()){
+        console.log(item);//red green blue
+    }
+    for(let item of s3.values()){
+        console.log(item);//red green blue
+    }
+    for(let item of s3.entries()){
+        console.log(item);//["red":"red"] ["green":"green"] ["blue":"blue"]
+    }
+    // set解构默认可以遍历，默认生成函数是它的values()方法
+    console.log(Set.prototype[Symbol.iterator] === Set.prototype.values);//true  相等 是同一个函数
+    // 意味着可以直接使用for...of...遍历
+    for(let item of s3){
+        console.log(item);//red green blue
+    }
+    //forEach()  对每个成员执行操作，没有返回值  forEach参数是一个处理函数(进行数据处理)，参数依次是键值，键名，集合
+    let s4 = new Set([1,2,3]);
+    s4.forEach((value, key) => console.log(value*2));//2 4 6
+    //用遍历实现  并集  交集  差集
+    let a = new Set([1,2,3]);
+    let b = new Set([2,3,4]);
+    //并集
+    let union = new Set([...a,...b]);
+    console.log(union);//{1,2,3,4}
+    //交集
+    let intersect = new Set([...a].filter(x => b.has(x)));
+    console.log(intersect);//{2,3}
+    //差集
+    let difference = new Set([...a].filter(x => !b.has(x)));
+    console.log(difference);//{1}  a的差集
+    //遍历处理同步到原来的数组  1.映射一个新的结构 2.利用Array.from方法
+    //1
+    let set1 = new Set([1,2,3]);
+    set1 = new Set([...set1].map(val => val * 2));
+    console.log(set1);//{2,4,6}
+    //2
+    set1 = new Set(Array.from(set1, val => val * 2));
+    console.log(set1);//{4,8,16}
+
+    // weakSet  成员只能是对象，不能是其他类型的值
+    const ws = new WeakSet();
+    const a1 = [[1,2],[2,3],"qe"];
+    ws.add(a1);
+    console.log(ws);//{Array(2)}  是a数组的成员，不是a数组本身，数组成员只能是对象
+    //同上  add()  delete()  has()  没有clear()  没有size属性  不能forEach
+    console.log(ws.has([2,3]));//false  ??
+    console.log(ws);
+    //保证foo实例方法只能在foo的实例上调用
+    const foo = new WeakSet();
+    class foo{
+        constructor(){
+            foos.add(this);
+        }
+        method(){
+            if(!foos.has(this)){
+                throw new TypeError("Foo.prototype.method 只能在Foo实例上调用！")
+            }
+        }
+    }
+
+    //Map
+</script>
+</html>
