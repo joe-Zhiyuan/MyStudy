@@ -106,8 +106,8 @@
     console.log(ws.has([2,3]));//false  ??
     console.log(ws);
     //保证foo实例方法只能在foo的实例上调用
-    const foo = new WeakSet();
-    class foo{
+    const foo3 = new WeakSet();
+    class foo2 {
         constructor(){
             foos.add(this);
         }

@@ -131,6 +131,26 @@ width=device-width,initial-scale=1.0">
 <script src="../js/jquery-3.3.1.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function(){
+		//首页搜索效果
+    $("#searchBtn").on("click", function(e){
+        $("#searchInput").animate({width:"150px"},250);
+        $("#search").css("border","1px solid #ccc");
+        $("#search").animate({width:"190px"},250);
+        var btnTime=setTimeout(function(){
+            console.log(document.getElementById("searchBtn").type);
+            searchBtn.type="submit";
+        },500);
+        $(document).one("click", function(){
+            $("#searchInput").animate({width:"0"},200);
+            $("#search").animate({width:"34px"},200);
+            searchBtn.type="button";
+            $("#search").css("border","1px solid #fff");
+        });
+        e.stopPropagation();
+    });
+    $("#searchInput").on("click", function(e){
+        e.stopPropagation();
+    });
         //导航条响应式方法  headerBtn:宽度小于时按钮的id  myNav:导航条的id  thisLiHeight:第一季Li
         // 的高度
         function navTab(headerBtn, myNav, thisLiHeight) {
