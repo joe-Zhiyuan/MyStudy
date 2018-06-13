@@ -1,0 +1,4 @@
+解决火狐，谷歌等浏览器 button获得焦点时  有边框，有虚线的问题
+/*去除选中有蓝色边框*/
+:focus {outline:none;} /*for IE*/
+::-moz-focus-inner {border-color: transparent;} /*for mozilla*/
