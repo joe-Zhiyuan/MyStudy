@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>点击弹出遮罩</title>
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,
+    width=device-width,initial-scale=1.0">
+    <style>
+        *{
+            margin:0;
+            padding:0;
+        }
+        li{
+            list-style: none;
+        }
+        ul{
+            width:100%;
+            height:500px;
+            overflow: hidden;
+            background: cornflowerblue;
+        }
+        li{
+            float: left;
+            width:10%;
+            height:500px;
+            -webkit-transition: width 0.3s ease;
+            -moz-transition: width 0.3s ease;
+            -o-transition: width 0.3s ease;
+            transition: width 0.3s ease;
+        }
+        li:first-child{
+            width:60%;
+        }
+        li:first-child .ImgTop{
+            display: none;
+        }
+        li>a{
+            position: relative;
+            display: block;
+            width:100%;
+        }
+        .ImgTop{
+            position: absolute;
+            width:100%;
+            height:100%;
+            bottom:0;
+            background: rgba(0,0,0,.4);
+        }
+        li:hover .ImgTop{
+            display: none;
+        }
+        ul:hover li:not(:hover){
+            width:10%;
+        }
+        ul:hover li:not(:hover) .ImgTop{
+            display: block;
+        }
+        li:hover{
+            width:60%;
+        }
+
+        /*遮罩*/
+        .hide{
+            position: fixed;
+            width:100%;
+            height:100%;
+            left:100%;
+            bottom:0;
+            background: rgba(0,0,0,.3);
+            z-index: 999;
+        }
+        .Left{
+            float: left;
+            width:10%;
+            height:100%;
+        }
+        .Left>button{
+            width:50%;
+            height:10%;
+            margin-top:40%;
+        }
+        .Right{
+            float: right;
+            width:90%;
+            height:100%;
+            background: #fff;
+            overflow-y: scroll;
+            text-align: center;
+        }
+        .products{
+            width:100%;
+        }
+        .products>div{
+            float: left;
+            width:33%;
+        }
+        .products>div>img{
+            width:100%;
+        }
+    </style>
+</head>
+<body>
+    <ul>
+        <li><a href="">
+            <img src="../images/1.jpg" alt="L1"/>
+            <div class="ImgTop">
+                <h3>龙王的工作</h3>
+            </div>
+        </a></li>
+        <li><a href="">
+            <img src="../images/1.jpg" alt="L2"/>
+            <div class="ImgTop">
+                <h3>龙王的工作</h3>
+            </div>
+        </a></li>
+        <li><a href="">
+            <img src="../images/1.jpg" alt="L3"/>
+            <div class="ImgTop">
+                <h3>龙王的工作</h3>
+            </div>
+        </a></li>
+        <li><a href="">
+            <img src="../images/1.jpg" alt="L4"/>
+            <div class="ImgTop">
+                <h3>龙王的工作</h3>
+            </div>
+        </a></li>
+        <li><a href="">
+            <img src="../images/1.jpg" alt="L5"/>
+            <div class="ImgTop">
+                <h3>龙王的工作</h3>
+            </div>
+        </a></li>
+    </ul>
+    <div class="products">
+        <div>
+            <img src="../images/1.jpg" alt="product"/>
+        </div>
+        <div>
+            <img src="../images/1.jpg" alt="product"/>
+        </div>
+        <div>
+            <img src="../images/1.jpg" alt="product"/>
+        </div>
+    </div>
+    <div class="hide" id="hide">
+        <div class="Left fl">
+            <button id="close">
+                关闭
+            </button>
+        </div>
+        <div class="Right fr">
+            <img src="../images/1.jpg" alt="1"/>
+            <img src="../images/1.jpg" alt="1"/>
+            <img src="../images/1.jpg" alt="1"/>
+        </div>
+    </div>
+</body>
+<script src="../js/jquery-3.3.1.min.js"></script>
+<script>
+    window.onload = function(){
+        $("#close").on("click",function(){
+            $("#hide").stop().animate({"left":"100%"},500);
+            $("html").css("overflow-y","scroll");
+        });
+        var products = $(".products").eq(0).children("div");
+       console.log(products);
+        products.on("click",function(){
+            $("#hide").stop().animate({"left":"0"},500);
+            $("html").css("overflow-y","hidden");
+        })
+    }
+</script>
+</html>

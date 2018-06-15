@@ -1,0 +1,6 @@
+使用JQ时，不是一个方法  $(...) not is a function
+
+这是因为不是一个Jq对象  使用了  $("#ddd")[0]  把它转化为了DOM对象  可以使用innerHTML方法  无法使用.html()方法  无法
+使用.children()....
+
+要使用JQ方法  $("#ddd).eq(0)  获取第一个对象  可以使用 .children()

@@ -118,6 +118,83 @@
         }
     }
 
-    //Map
+    //Map   类似于对象，也是键值对集合 键的范围不限于字符串（对象，数值）都可做键  值----值
+    // Object对象本质是键值对的组合（Hash结构）只能用字符串做值   字符串----值
+    const m = new Map();
+    m.set("a",123);
+    console.log(m.get("a"));//123
+    console.log(m.has("a"));//true
+    console.log(m.delete("a"));//true
+    console.log(m.has("a"));//false
+    //接受数组
+    const map = new Map([
+        ["name","joe"],
+        ["age","13"]
+    ]);// 等同于  items.forEach( ([key,value]) => map.set(key,value) );
+    console.log(map);//{"name" => "jo1e", "age" => "13"}
+    //对同一个值赋值，后一个值会覆盖前一个值
+    m.set("a",321);
+    console.log(m.get("a"));//321
+    //未知的键返回undefined
+    console.log(m.get(12313));//undefined
+    //["a"] 是两个值   k1=["a"] k2=["a"]是两个值  内存地址不一样  解决了同名属性冲撞问题（clash）-0 === 0  NaN === NaN
+    map.set(["a"],555);
+    console.log(map.get(["a"]));//undefined
+
+    //Map属性和方法
+    //size属性    返回Map结构成员总数
+    console.log(map.size);//3
+    //set(key,value)    设置key值所对应的键值，返回整个Map结构  key有值，键值更新，否则新生该建
+    console.log(m.set("a","123"));//{"a"=>"123"}
+    // 可以使用链式写法
+    map.set(1,"a").set(2,"b").set(3,"c");
+    console.log(map);//{1 => "a", 2 => "b",3 => "c"}
+    // get(key)     读取key对应键值，找不到key返回undefined
+    console.log(map.get(1));//a
+    console.log(map.get(4));//undefined
+    // has(key)     返回一个布尔值  某个键是否在Map数据结构中
+    console.log(map.has(1));//true
+    console.log(map.has(4));//false
+    // delete(key)     删除某个键 返回true  删除失败返回false
+    console.log(map.delete(1));//true
+    console.log(map.delete(["a"]));//true
+    console.log(map.delete("age"));//true
+    console.log(map.delete("name"));//true
+    console.log(map.delete(4));//true
+    console.log(map.has(1));//false
+    // clear()      清除所有成员 没有返回值
+    m.clear();
+    console.log(m);//map(0){}
+
+    //遍历方法      遍历顺序是插入顺序
+    // keys()返回键名的遍历器
+    // values()返回键值的遍历器
+    // entries()返回所有成员的遍历器
+    // forEach()返回Map所有成员
+    for(let key of map.keys()){
+        console.log(key);//["a"]  2  3
+    }
+    for(let value of map.values()){
+        console.log(value);//555  b   c
+    }
+    for(let item of map.entries()){
+        console.log(item);//[["a"],555]  [2,"b"]  [3,"c"]
+    }
+    //Map结构转为数组结构   扩展运算符(...)   结合map()方法返回一个所有值的集合  filter()过滤方法  可以过滤和筛选
+    console.log([...map]);//[ [["a"],555]  ,[2,"b"] , [3,"c"] ]
+    // forEach()  实现遍历   接收第二个参数，用于绑定this
+    map.forEach(function(valus,key,map){
+        console.log("key: %s,value: %s",key,value);
+    });
+    const reporter = {
+        report:function(valus,key) {
+            console.log("key: %s,value: %s", key, value);
+        }
+    };
+    map.forEach(function(value,key,map){
+        this.report(key,value);
+    },reporter);//把this绑定到reporter对象上，调用report方法
+
+    //Map与其他数据结构的互相转换
 </script>
 </html>
