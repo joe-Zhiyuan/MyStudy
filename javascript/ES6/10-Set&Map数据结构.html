@@ -183,11 +183,11 @@
     //Map结构转为数组结构   扩展运算符(...)   结合map()方法返回一个所有值的集合  filter()过滤方法  可以过滤和筛选
     console.log([...map]);//[ [["a"],555]  ,[2,"b"] , [3,"c"] ]
     // forEach()  实现遍历   接收第二个参数，用于绑定this
-    map.forEach(function(valus,key,map){
+    map.forEach(function(value,key,map){
         console.log("key: %s,value: %s",key,value);
     });
     const reporter = {
-        report:function(valus,key) {
+        report:function(value,key) {
             console.log("key: %s,value: %s", key, value);
         }
     };
@@ -196,5 +196,11 @@
     },reporter);//把this绑定到reporter对象上，调用report方法
 
     //Map与其他数据结构的互相转换
+    function fun(){
+        let c = 0;
+        c++;
+        c = c + 2;
+    }
+    fun();
 </script>
 </html>
