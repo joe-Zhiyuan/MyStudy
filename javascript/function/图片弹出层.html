@@ -7,16 +7,31 @@
         .layer-photos-demo{
             width:100%;
         }
-        .layer-photos-demo>img{
+        .layer-photos-demo>.imgBox{
+            position: relative;
             width:32%;
             margin-right:1%;
+        }
+        .layer-photos-demo>.imgBox>div{
+            position: absolute;
+            width:100%;
+            height:100%;
+            bottom:0;
+            background: rgba(0,0,0,.4);
+        }
+        .layer-photos-demo>.imgBox>img{
+            width:100%;
+            vertical-align: middle;
         }
     </style>
 </head>
 <body>
 <button id="test1">弹出1</button>
 <div id="layer-photos-demo" class="layer-photos-demo">
-    <img layer-src="../images/1.jpg" src="../images/1.jpg" alt="图片1">
+    <div class="imgBox">
+        <img layer-src="../images/1.jpg" src="../images/1.jpg" alt="图片1">
+        <div></div>
+    </div>
     <img layer-src="../images/1.jpg" src="../images/1.jpg" alt="图片2">
     <img layer-src="../images/1.jpg" src="../images/1.jpg" alt="图片3">
 </div>
@@ -28,8 +43,13 @@
         layer.msg('hello');
     });
     layer.photos({
-        photos: '#layer-photos-demo'
+        photos: '#layer-photos-demo',
+        zindex:4
         ,anim: 0 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+    });
+    //点击div 相当于点击了img
+    $(".imgBox div").on("click",function(){
+        $(".imgBox img").click();
     });
 </script>
 </html>

@@ -11,7 +11,10 @@
     <div></div>
     <div></div>
     <div></div>
+    <button id="logo">点击增加值</button>
+    <button id="logo1">点击显示现在值</button>
 </body>
+<script src="../js/jquery-3.3.1.min.js"></script>
 <script type="text/javascript">
     //Set
     //基本用法  成员都是唯一，没有重复  5 和 “5”不是一个  NaN和NaN相等
@@ -196,11 +199,93 @@
     },reporter);//把this绑定到reporter对象上，调用report方法
 
     //Map与其他数据结构的互相转换
-    function fun(){
-        let c = 0;
-        c++;
-        c = c + 2;
+    // 转为数组  使用扩展运算符 (...)
+    const myMap = new Map().set(true,7)
+        .set({foo:3},["abc"]);
+    console.log([...myMap]);//[ [true,7],[{foo:3},["abc"]] ]
+    // 数组转为Map   传入Map构造函数
+    const myMap1 = new Map([
+        [true,7],[{foo:3},["abc"]]
+    ]);
+    console.log(myMap1);
+    // Map转为对象      Map的所有键都是字符串，则可以转为对象
+    function strMapToObj(strMap){
+        let obj = Object.create(null);
+        for(let [k,v] of strMap){
+            obj[k] = v;
+        }
+        return obj;
     }
-    fun();
+    const myMap2 = new Map().set('yes',true)
+        .set('no',false);
+    let myMap3 =  strMapToObj(myMap2);
+    console.log(myMap3);  //{yes:true,no:false}
+    // 对象转为Map
+    function objToStrMap(obj){
+        let strMap = new Map();
+        for(let k of Object.keys(obj)){
+            strMap.set(k,obj[k]);
+        }
+        return strMap;
+    }
+    objToStrMap({yes:true,no:false});//{"yes" => true,"no" => false}
+    // Map转为JSON    如果Map键名都是字符串，转为对象JSON   Map键名有非字符串，转为数组JSON
+    // 对象JSON
+    function strMapToJSON(strMap){
+        return JSON.stringify(strMapToObj(strMap));//使用Map转对象方法
+    }
+    let myMap4 = new Map().set('yes',true)
+        .set('no',false);
+    let myMap5 = strMapToJSON(myMap4);
+    console.log(myMap5); //'{"yes":true,"no":false}'  字符串
+    // 数组JSON
+    function mapToArrayJSON(map){
+        return JSON.stringify([...map]);//扩展运算符Map转为数组
+    }
+    let myMap6 = new Map().set(true,7)
+        .set({foo:3},["abc"]);
+    let myMap7 = mapToArrayJSON(myMap6);
+    console.log(myMap7);//"[[true,7],[{"foo":3},["abc"]]]" 字符串
+    // JSON转为Map
+    //与上相反
+    function jsonToStrMap(jsonStr){
+        return objToStrMap(JSON.parse(jsonStr));
+    }
+    jsonToStrMap('{"yes":true,"no":false}');
+    //与上相反
+    function jsonToMap(jsonStr){
+        return new Map(JSON.parse(jsonStr));
+    }
+    let myMap8 = jsonToMap(`[[true,7],[{"foo":3},["abc"]]]`);// ` ` 波浪号键添加字符串
+    console.log(myMap8);
+
+    // weakMap   用于生成键值对的集合   只接收对象做键名(null)除外   WeakMap键名所指向对象不计入垃圾回收机制
+    const wm1 = new WeakMap();
+    const key = {foo:1};
+    wm1.set(key,2);
+    console.log(wm1.get(key));//2
+    //语法  没有遍历操作   无法清空  只有4个方法  get(),set(),has(),delete()
+    console.log(wm1.forEach);//undefined
+    console.log(wm1.size);//undefined
+    console.log(wm1.clear);//undefined
+    //实例   以DOM节点作为键名的场景
+    let myElement = document.getElementById("logo");
+    let myWeakMap = new WeakMap();
+    myWeakMap.set(myElement,{timesClicked:0});
+    myElement.addEventListener("click",function(){
+        let logoData = myWeakMap.get(myElement);
+        logoData.timesClicked++;
+    },false);
+        // 显示点击数
+    let logoBtn = document.getElementById("logo1");
+    logoBtn.addEventListener("click",function(){
+        let logoD = myWeakMap.get(myElement);
+        console.log(logoD.timesClicked);
+    },false);
+    // const listener = new WeakMap();
+    // listener.set(element1,handler1);
+    // listener.set(element2,handler2);
+    // element1.addEventListener("click",listener.get(element1),false);
+    // element2.addEventListener("click",listener.get(element2),false);
 </script>
 </html>

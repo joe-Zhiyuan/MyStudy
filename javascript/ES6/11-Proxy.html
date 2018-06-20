@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ES6-11-Proxy</title>
+</head>
+<body>
+
+</body>
+<script type="text/javascript">
+    // 概述 代理器  代理某些操作   对外界的访问进行过滤和改写
+    //对空对象进行一层拦截，重新定义属性的读取(get)和设置(set)  读取设置了拦截行为的对象obj的属性
+    var obj = new Proxy({},{
+        get :function(target,key,receiver){
+            console.log(`getting ${key}!`);
+            return Reflect.get(target,key,receiver);
+        },
+        set :function(target,key,value,receiver){
+            console.log(`setting ${key}!`);
+            return Reflect.set(target,key,value,receiver);
+        }
+    });
+    obj.count = 1;
+    console.log(++obj.count);//2   getting count!  setting count!
+</script>
+</html>
