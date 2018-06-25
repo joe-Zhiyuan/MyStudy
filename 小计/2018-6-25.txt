@@ -1,0 +1,3 @@
+form传单使用时
+	textarea标签使用时的label的对齐问题
+		在textarea的样式中添加 vertical-align:top;

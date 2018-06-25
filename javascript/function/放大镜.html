@@ -69,9 +69,8 @@
 //offsetLeft 子元素想当父元素的左位移
 // offsetTop 子元素想当父元素的上位移
 // offsetWidth 盒子本身的宽高 不包括滚动条
-// event.clientX 鼠标的X，Y轴相对与整个页面，而非子元素
+// event.clientX 鼠标的X，Y轴相对与整个页面，而非子元素   pageX,pageY相对于页面，页面滚动不变
 
-//有问题，图片滑轮遮挡时不准
         window.onload=function(){
            var box=document.getElementById('box');
            var inner=box.getElementsByTagName('div')[0];
@@ -81,14 +80,13 @@
            box.onmouseover=function(){
                inner.style.display="block";
                big.style.display="block";
-           }
+           };
 
            box.onmousemove=function(event){
                event = event|| window.event;
 
-               var left=event.clientX-box.offsetLeft-inner.offsetWidth/2;
-               var top=event.clientY-box.offsetTop-inner.offsetHeight/2;
-
+               var left=event.pageX-box.offsetLeft-inner.offsetWidth/2;
+               var top=event.pageY-box.offsetTop-inner.offsetHeight/2;
                if(left<=0){
                    left=0;
                }else if(left>=box.offsetWidth-inner.offsetWidth){
@@ -99,7 +97,6 @@
                }else if(top>=box.offsetHeight-inner.offsetHeight){
                    top=box.offsetHeight-inner.offsetHeight;
                }
-               console.log(box.offsetTop-document.body.scrollTop);
                inner.style.left=left+"px";
                inner.style.top=top+"px";
 
@@ -148,6 +145,8 @@
             height:533px;
             border:1px solid #ccc;
             position: relative;
+            margin-top:200px;
+            margin-left:200px;
         }
         .box img{
             width:100%;
@@ -173,6 +172,8 @@
             top:20px;
             overflow: hidden;
             display:none;
+            margin-top:200px;
+            margin-left:200px;
         }
         .big img{
             position: absolute;
