@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>ES6-11-Proxy</title>
+    <style>
+    </style>
 </head>
 <body>
 
@@ -22,5 +24,34 @@
     });
     obj.count = 1;
     console.log(++obj.count);//2   getting count!  setting count!
+    //拦截属性  拦截目标get访问请求  返回35   如果target={} handler={}等于访问target
+    var proxy = new Proxy({},{
+        get: function(target,property){
+            return 35;
+        }
+    });
+    console.log(proxy.time);//35
+    console.log(proxy.name);//35
+    let target = {},
+        handler = {};
+    var proxy1 = new Proxy(target,handler);
+    proxy1.a = "b";
+    console.log(target.a);//"b"
+    // 将Proxy对象设置到object.proxy属性上，从而在Object上调用
+    let object = {proxy:new Proxy(target, handler) };
+    // Proxy实例可以作为其他对象的原型对象   同一个拦截器可以设置多个操作
+    let proxy2 = new Proxy({},{
+        get: function(target,property){
+            return 35;
+        },
+        apply: function(target, thisBinding, args){
+            return args[0];
+        }
+    });
+    let obj1 = Object.create(proxy2);
+    console.log(obj1.name);//35
+
+    //Proxy实例的方法
+    // get()
 </script>
 </html>
