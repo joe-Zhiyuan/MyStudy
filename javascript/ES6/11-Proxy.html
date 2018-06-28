@@ -52,6 +52,45 @@
     console.log(obj1.name);//35
 
     //Proxy实例的方法
-    // get()
+    // get() 拦截某个属性读取操作 可以继承
+    var person = {
+        name: "张三"
+    };
+    var proxy3 = new Proxy(person, {
+        get:function(target, property){
+            if(property in target){
+                return target[property];
+            }else{
+                throw new ReferenceError("Property\""+property+"\" does not exist.");
+            }
+        }
+    });
+    console.log(person.name);//"张三"
+    console.log(person.age);//undefined   不存在属性，返回undefined
+    let proto = new Proxy({}, {
+        get(target, propertyKey, receiver){
+            console.log("GET"+propertyKey);
+            return target[propertyKey];
+        }
+    });
+    let obj2 = Object.create(proto);
+    obj2.xxx;//GET xxx
+    // get()实现数组读取负数索引
+    function createArray(...elements){
+        let handler = {
+            get(target, propKey, receiver){
+                let index = Number(propKey);
+                if(index<0){
+                    propKey = String(target.length + index);
+                }
+                return Reflect.get(target, propKey, receiver);
+            }
+        };
+        let target = [];
+        target.push(...elements);
+        return new Proxy(target, handler);
+    }
+    let arr = createArray("a","b","c");
+    console.log(arr[-1]);//"c"
 </script>
 </html>
