@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>日历</title>
+    <style>
+        .Date{
+            width:auto;
+            margin-top:15px;
+        }
+        .Date>select{
+            width:80px;
+            height:24px;
+            line-height:24px;
+            font-size:16px;
+            color:#fff;
+            border:1px solid #fff;
+            background: #72bddc;
+            text-indent: 5px;
+            text-align: center;
+        }
+        .Date>select:first-child{
+            width:100px;
+        }
+        .Date>select>option{
+            color:#4a4a4a;
+            font-size:16px;
+            line-height:24px;
+            text-indent: 20px;
+            background: #fff;
+        }
+    </style>
+</head>
+<body>
+<form action="" method="post" class="Date" name="form">
+    <select id="dateYear" title="年" name="dateYear">
+        <!--<option value="year">年</option>-->
+    </select>
+    <select id="dateMonth" title="月" name="dateMonth">
+        <!--<option value="month">月</option>-->
+    </select>
+    <select id="dateDay" title="日" name="dateDay">
+        <!--<option value="day">日</option>-->
+    </select>
+</form>
+</body>
+<script>
+    var date = new Date();
+    var selectYear = document.getElementById("dateYear");
+    var selectMonth = document.getElementById("dateMonth");
+    var selectDay = document.getElementById("dateDay");
+    dateYear = date.getFullYear();
+    dateMonth = date.getMonth()+1;
+    dateDay = date.getDay()+1;
+    console.log(dateYear,dateMonth,dateDay);
+    //日期生成函数 year：年数
+    function createDate(year) {
+        // 生成前10年
+        for (var i = dateYear; i >= dateYear - year; i--) {
+            var option = new Option;
+            option.setAttribute("value", i);
+            if (dateYear === i) {
+                option.setAttribute("selected", "selected");
+            }
+            option.innerHTML = i + "年";
+            selectYear.append(option);
+        }
+        // 生成月份
+        for (var n = 1; n <= 12; n++) {
+            var optionMonth = new Option;
+            optionMonth.setAttribute("value", n);
+            if (dateMonth === n) {
+                optionMonth.setAttribute("selected", "selected");
+            }
+            optionMonth.innerHTML = n + "月";
+            selectMonth.append(optionMonth);
+        }
+        // 生成日期
+        for (var m = 1; m <= 28; m++) {
+            var optionDay = new Option;
+            optionDay.setAttribute("value", m);
+            if (dateDay === m) {
+                optionDay.setAttribute("selected", "selected");
+            }
+            optionDay.innerHTML = m + "日";
+            selectDay.append(optionDay);
+        }
+    }
+    createDate(10);
+    // 保存天数
+    var days;
+    //年份点击 绑定函数
+    selectYear.onclick = function(){
+        //默认1月
+        selectMonth.options[0].selected = true;
+        //默认1号
+        selectDay.options[0].selected = true;
+    };
+    console.log(selectYear.value);
+    //月份点击 绑定函数
+    selectMonth.onclick = function(){
+        //天数显示默认 1号
+        selectDay.options[0].selected = true;
+        //计算天数显示范围
+        //如果是二月
+        if(parseInt(selectMonth.value) === 2){
+            //判断是否是闰年
+            if( (parseInt(selectYear.value) % 4 === 0 && parseInt(selectYear.value) % 100 !== 0)|| (parseInt(selectYear).value % 400 === 0) ){
+                days = 29;
+            }else {
+                days = 28;
+            }
+        }else if(parseInt(selectMonth.value) === 4 || parseInt(selectMonth.value) === 6 || parseInt(selectMonth.value) === 9 ||
+            parseInt(selectMonth.value) === 11){//判断小月
+            days = 30;
+        }else{
+            days = 31;
+        }
+        console.log(days);
+        //增加或删除天数  是28天删除29，30，31
+        if(days === 28){
+            //必须倒叙，不然新增一个[28]
+            selectDay.options.remove(30);
+            selectDay.options.remove(29);
+            selectDay.options.remove(28);
+        }
+        //如果29天
+        if(days === 29){
+            selectDay.options.remove(30);
+            selectDay.options.remove(29);
+            //如果29天不存在 添加
+            if(!selectDay.options[28]){
+                selectDay.add(new Option("29日","29"),null);
+            }
+        }
+        //如果30天
+        if(days === 30){
+            selectDay.options.remove(30);
+            if(!selectDay.options[28]){
+                selectDay.add(new Option("29日","29"),null);
+            }
+            if(!selectDay.options[29]){
+                selectDay.add(new Option("30日","30"),null);
+            }
+        }
+        //如果是31天
+        if(days === 31){
+            if(!selectDay.options[28]){
+                selectDay.add(new Option("29日","29"),null);
+            }
+            if(!selectDay.options[29]){
+                selectDay.add(new Option("30日","30"),null);
+            }
+            if(!selectDay.options[30]){
+                selectDay.add(new Option("31日","31"),null);
+            }
+        }
+    };
+    selectDay.onclick = function(){
+        console.log(selectDay.options.selectedIndex);
+    }
+
+</script>
+</html>
