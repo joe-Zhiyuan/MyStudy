@@ -132,6 +132,54 @@
     var proxy4 = new Proxy(target2, handler1);
     // console.log(proxy4._prop);//不能读写属性get to _prop
     // apply() 拦截函数调用,call和apply操作
+    var twice = {
+        apply(target, ctx, args){
+            return Reflect.apply(...arguments)*2;
+        }
+    };
+    function sum (left, right){
+        return left+right;
+    };
+    var proxy5 = new Proxy(sum, twice);
+    console.log(proxy5(1,2));//6
+    // has() 拦截判断对象是否有某个属性
+    let stu1 = {name:"张三",score:59};
+    let stu2 = {name:"李四",score:99};
+    let handler2 = {
+        has(target, prop){
+            if(prop === "score" && target[prop] < 60){
+                console.log(`${target.name} 不及格`);
+                return false;
+            }
+            return prop in target;
+        }
+    }
+    let oproxy1 = new Proxy(stu1, handler2);
+    let oproxy2 = new Proxy(stu2, handler2);
+    console.log("score" in oproxy1);//张三不及格 false
+    console.log("score" in oproxy2);//true
+    // construct()用于拦截new 命令
+    // deleteProperty()用于拦截delete操作，如果抛出错误或返回false，当前属性就无法delete删除
+    // defineProperty()拦截Object.defineProperty操作
+    // getOwnPropertyDescriptor()拦截Object.getOwnPropertyDescriptor()返回一个属性描述对象或undefined
+    // getPrototypeOf()拦截获取对象的原型
+    // isExtensible()拦截Object.isExtensible操作
+    //ownKeys() 拦截对象自身属性的读取操作
+    // preventExtensions()拦截Object.preventExtensions()必须返回一个布尔值，否则自动转为布尔值
+    // setPrototypeOf()拦截Object.setPrototypeOf()
+    // Proxy.revocable()返回一个可取消的Proxy实例
 
+    // this
+    const target3 = {
+        m :function(){
+            console.log(this === proxy6);
+        }
+    };
+    const handler3 = {};
+    const proxy6 = new Proxy(target3, handler);
+    target3.m();//false
+    proxy6.m();//true
+
+    // Reflect
 </script>
 </html>
