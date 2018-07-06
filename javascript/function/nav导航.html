@@ -6,83 +6,157 @@
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,
 width=device-width,initial-scale=1.0">
     <style>
-        html,body,ul,li{
-            margin:0;
-            padding:0;
+        /*公用样式*/
+        /* CSS Document */
+        body,ul,ol,li,p,h1,h2,h3,h4,h5,h6,form,fieldset,table,td,img,div,dl,dt,dd,input{
+            margin:0;padding:0;}
+        body{
+            font-size:14px;
+            font-family: "微软雅黑";
+            /*行高*/
+            line-height: 26px;
+            color:#4a4a4a;
         }
-        .clear:after{
-            content:"\0020";
-            display:block;
-            height:0;
+        html{ /*下次用 解决100%宽度两边留白问题*/
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+        *, *:before, *:after {
+            box-sizing: inherit;
+        }
+        img{border:none;vertical-align: middle;}
+        li{list-style:none;}
+        button{outline:none;border:0;}
+        input,select,textarea{outline:none;border: none;background: none;}
+        textarea{resize:none;}
+        a{text-decoration:none;color: #665565;}
+        .fl{float:left;}
+        .fr{float:right;}
+        .clearFix:after {
+            content: "\0020";
+            display: block;
+            height: 0;
             clear: both;
         }
-        .clear{
-            zoom:1;
+        .clearFix{
+            zoom: 1;
         }
-        header{
+        .maxWidth{
             width:100%;
-            max-width:1200px;
+            max-width:1000px;
             margin:0 auto;
+            padding:0 10px;
         }
-        #nav{
-            float: left;
+        /*bootstrap样式修改*/
+        /*去除a标签 焦点、经过变色下化线问题*/
+        a:hover,a:focus{
+            /*从父元素继承颜色*/
+            color:inherit;
+            text-decoration: inherit;
         }
-        #nav>li{
-            float: left;
-            text-decoration: none;
-            list-style: none;
+        /*去除谷歌浏览器自动填充的背景与颜色*/
+        input:-webkit-autofill{
+            -webkit-box-shadow:0 0 0 1000px #cc0000 inset;
+            -webkit-text-fill-color:#fff;
         }
-        #nav>li>a{
+        /*去除选中有蓝色边框*/
+        :focus {outline:none;} /*for IE*/
+        ::-moz-focus-inner {border-color: transparent;} /*for mozilla*/
+        /*修改input默认颜色*/
+        :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+            color: #fff; opacity:1;
+        }
+        ::-moz-placeholder { /* Mozilla Firefox 19+ */
+            color: #fff;opacity:1;
+        }
+        input:-ms-input-placeholder{
+            color: #fff;opacity:1;
+        }
+        input::-webkit-input-placeholder{
+            color: #fff;opacity:1;
+        }
+
+        /*index*/
+        html{
+            background: #d9dada;
+        }
+        .clear{
+            background:#29d0e1;
+        }
+        .headerDown>a{
             display: block;
-            height:80px;
-            margin:0 30px;
-            line-height:80px;
-            text-decoration: none;
-            color:#333;
+            width:150px;
+            height:50px;
+            line-height:50px;
+            text-align: center;
         }
-        #navBtn{
-            display: none;
-            float: right;
-            width:40px;
-            height:30px;
-            margin-top:25px;
-            cursor: pointer;
-            border-radius: 3px;
-            margin-right:20px;
-            border:1px solid #e6e6e6;
-        }
-        #navBtn>span{
-            display: block;
-            width:25px;
-            height:2px;
-            margin:6px 7px;
-            background: #29d0e1;
-        }
-        section{
+        .headerDown>a>img{
             width:100%;
-            height:300px;
-            background: #ff4499;
+            vertical-align:middle;
         }
-        .logo{
-            display: block;
+        .headerDown>ul{
+            margin-left:30px;
+        }
+        .headerDown>ul>li{
             float: left;
-            height:80px;
-            line-height:80px;
+            width:120px;
         }
-        .logo>img{
-            vertical-align: middle;
-            height:60px;
+        .headerDown>ul>li>a{
+            display: block;
+            width:120px;
+            height:50px;
+            color:#7a7a7a;
+            font-size:14px;
+            font-weight: bold;
+            text-align: center;
+            line-height:50px;
         }
-        @media screen and (min-width:768px) {
+        .headerDown>ul>li>a[class="on"],.headerDown>ul>li:hover >a{
+            color:#fff;
+        }
+        .headerDown>ul>li>ul{
+            display: none;
+            width:100%;
+        }
+        .headerDown>ul>li>ul>li{
+            width:100%;
+        }
+        .headerDown>ul>li>ul>li>a{
+            display: block;
+            width:100%;
+            height:30px;
+            line-height:30px;
+        }
+        .headerBtn{
+            width:36px;
+            height:36px;
+            cursor: pointer;
+            margin-top:7px;
+            border-radius: 3px;
+            border:1px solid #999;
+        }
+        .headerBtn>span{
+            display: block;
+            width:14px;
+            height:3px;
+            margin-top:3px;
+            margin-left:10px;
+            background: #999;
+        }
+        .headerBtn>span:first-child{
+            margin-top:10px;
+        }
+        @media screen and (min-width:850px) {
             #nav{
                 display: block!important;
             }
         }
-        @media screen and (max-width:767px) {
+        @media screen and (max-width:850px) {
             #nav{
                 display: none;
                 width:100%;
-                background: #d9dada;
+                margin-left:0;
             }
             #nav>li{
                 width:100%;
@@ -91,31 +165,36 @@ width=device-width,initial-scale=1.0">
                 width:100%;
                 height:35px;
                 line-height:35px;
-                text-indent: 20px;
                 margin:0;
-            }
-            #navBtn{
-                display: block!important;
             }
         }
     </style>
 </head>
 <body>
 <header class="clear">
-    <a href="" class="logo">
-        <img src="../images/logo.png" alt="logo"/>
-    </a>
-    <div id="navBtn">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
+    <div class="headerDown maxWidth clearFix">
+        <a href="去重.html" class="fl">
+            <img src="../images/logo.png" alt="home"/>
+        </a>
+        <div class="headerBtn fr" id="headerBtn">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <ul id="nav" class="fl clearFix">
+            <li><a class="on" href="放大镜.html">关于湛京</a>
+                <ul>
+                    <li><a href="去重.html">产品中心</a></li>
+                    <li><a href="背景破裂效果.html">新闻与媒体</a></li>
+                    <li><a href="图片弹出层.html">应用与案例</a></li>
+                </ul>
+            </li>
+            <li><a href="去重.html">产品中心</a></li>
+            <li><a href="背景破裂效果.html">新闻与媒体</a></li>
+            <li><a href="图片弹出层.html">应用与案例</a></li>
+            <li><a href="去重.html">联系我们</a></li>
+        </ul>
     </div>
-    <ul id="nav" class="clear">
-        <li><a href="去重.html">去重</a></li>
-        <li><a href="放大镜.html">放大镜</a></li>
-        <li><a href="图片弹出层.html">图片弹出层</a></li>
-        <li><a href="背景破裂效果.html">背景破裂效果</a></li>
-    </ul>
 </header>
 <section>
 
@@ -153,156 +232,173 @@ width=device-width,initial-scale=1.0">
     });
         //导航条响应式方法  headerBtn:宽度小于时按钮的id  myNav:导航条的id  thisLiHeight:第一季Li
         // 的高度
-        function navTab(headerBtn, myNav, thisLiHeight) {
-            // 设置默认值
-            var thisLiHeight = thisLiHeight || 35;
-            var myNav = $(myNav),
-                headerBtn = $(headerBtn),
-                myNavHeight,
-                //如果二级菜单打开状态，导致高度不对问题
-                oldHeight;
-            //计算导航条高度
-            var lis = myNav.children("li");
-            // 获取第一次nav的高度
-            myNavHeight = lis.length * thisLiHeight;
-            //隐藏导航条方法
-            function thisHide() {
-                myNav.hide()
-            }
-            //首页手机端点击显示导航列表
-            headerBtn.click(function () {
-                //获取导航条的display显示属性
-                var navDis = myNav.css("display");
-                //根据值判断点击显示隐藏
-                if (navDis === "none") {
-                    //判断oldHeight上一次隐藏时高度，如果第一次则计算高度，不是第一次使用上一次纪录的高度
-                    if(oldHeight > 0){
-                        //设置高度为0以显示动画
-                        myNav.css("height", "0px");
-                        myNav.show();
-                        // 如果上一次隐藏的高度小于开始时高度，等于开始时高度
-                        if(oldHeight < myNavHeight){
-                            oldHeight = myNavHeight;
-                        }
-                        //防止动画重复执行引发的问题 .stop()
-                        myNav.stop().animate({"height": oldHeight + "px"}, 300);
-                    }else{
-                        //设置高度为0以显示动画
-                        myNav.css("height", "0px");
-                        myNav.show();
-                        myNav.stop().animate({"height": myNavHeight + "px"}, 300);
-                    }
-                } else if (navDis === "block") {
-                    oldHeight = myNav.height();
-                    //绑定完成动画时函数，以隐藏导航条
-                    myNav.stop().animate({"height": "0px"}, 250, thisHide);
+        function navTab(btnID,NavID){
+            $(btnID).on("click",function(event){
+                $(NavID).slideToggle();
+            });
+        }
+        navTab("#headerBtn","#nav");
+        function childUl(ulID,method){
+            // li标签下没有a标签
+            $(ulID).children("li").children("a").on("click",function(event){
+                event = event || window.event;
+                if($(this).parent("li").children("ul").length === 1){
+                    event.preventDefault();
+                    $(this).parent("li").children("ul").slideToggle();
                 }
             });
         }
-        navTab("#navBtn","#nav");
+        childUl("#nav","click");
+        // function navTab(headerBtn, myNav, thisLiHeight) {
+        //     // 设置默认值
+        //     var thisLiHeight = thisLiHeight || 35;
+        //     var myNav = $(myNav),
+        //         headerBtn = $(headerBtn),
+        //         myNavHeight,
+        //         //如果二级菜单打开状态，导致高度不对问题
+        //         oldHeight;
+        //     //计算导航条高度
+        //     var lis = myNav.children("li");
+        //     // 获取第一次nav的高度
+        //     myNavHeight = lis.length * thisLiHeight;
+        //     //隐藏导航条方法
+        //     function thisHide() {
+        //         myNav.hide()
+        //     }
+        //     //首页手机端点击显示导航列表
+        //     headerBtn.click(function () {
+        //         //获取导航条的display显示属性
+        //         var navDis = myNav.css("display");
+        //         //根据值判断点击显示隐藏
+        //         if (navDis === "none") {
+        //             //判断oldHeight上一次隐藏时高度，如果第一次则计算高度，不是第一次使用上一次纪录的高度
+        //             if(oldHeight > 0){
+        //                 //设置高度为0以显示动画
+        //                 myNav.css("height", "0px");
+        //                 myNav.show();
+        //                 // 如果上一次隐藏的高度小于开始时高度，等于开始时高度
+        //                 if(oldHeight < myNavHeight){
+        //                     oldHeight = myNavHeight;
+        //                 }
+        //                 //防止动画重复执行引发的问题 .stop()
+        //                 myNav.stop().animate({"height": oldHeight + "px"}, 300);
+        //             }else{
+        //                 //设置高度为0以显示动画
+        //                 myNav.css("height", "0px");
+        //                 myNav.show();
+        //                 myNav.stop().animate({"height": myNavHeight + "px"}, 300);
+        //             }
+        //         } else if (navDis === "block") {
+        //             oldHeight = myNav.height();
+        //             //绑定完成动画时函数，以隐藏导航条
+        //             myNav.stop().animate({"height": "0px"}, 250, thisHide);
+        //         }
+        //     });
+        // }
+        // navTab("#navBtn","#mynav");
 
         // 二级分类显示隐藏方法 tilClass:有二级菜单的一级li的class/id number:执行mouseover 1/click 2 /3专用于有二级菜单
         //sonLiHeight:每个子li的高 sonUlBoxHeight:子ul的padding/margin/border   /4 专用于首页导航有二级菜单
-        function childUl(tilClass,number,sonLiHeight,sonUlBoxHeight){
-            var sonLiHeight = sonLiHeight || 30;
-            var sonUlBoxHeight = sonUlBoxHeight || 0;
-            // 导航二级分类
-            // 获取有二级ul的li标签
-            var navLi = $(tilClass),i,len;
-            var flag = true;
-            // var event = event || window.event;
-            //遍历li标签下的a标签阻止跳转 使展开二级菜单
-            var aHrefs = navLi.children("a");
-
-            //遍历li标签在鼠标事件添加效果
-            if(number === 1){
-                for(i = 0,len = navLi.length;i<len;i++){
-                    navLi[i].onmouseenter = function(event){
-                        //event=event||window.event 加在这里
-                        event = event|| window.event;
-                        var thisUl = $(event.target).children("ul");
-                        var thisLi = thisUl.children("li");
-                        var thisUlWidth = thisLi.length*sonLiHeight + sonUlBoxHeight;
-                        thisUl.css("display","block");
-                        //解决重复大量执行动画造成崩溃 .stop()
-                        thisUl.stop().animate({height:thisUlWidth+"px"},300);
-                    };
-                    navLi[i].onmouseleave = function(){
-                        var thisUl = $(this).children("ul");
-                        thisUl.stop().animate({"height":"0px"},250,function(){
-                            thisUl.css("display","none");
-                        });
-                    };
-                }
-            }else if(number === 2){//点击弹出
-                //遍历li标签下的a标签阻止跳转 使展开二级菜单
-                for(var z=0;z<aHrefs.length;z++){
-                    aHrefs[z].onclick = function(event){
-                        event = event|| window.event;
-                        event.preventDefault();
-                    }
-                }
-                for (i = 0, len = navLi.length; i < len; i++) {
-                    navLi[i].onclick = function (event) {
-                        //event=event||window.event 加在这里
-                        event = event || window.event;
-                        //点击a标签不跳转
-                        // event.preventDefault();
-                        if (flag) {
-                            var thisUl = $(event.target).parent().children("ul");
-                            if(thisUl.height() === 0){
-                                var thisLi = thisUl.children("li");
-                                var thisUlWidth = thisLi.length * sonLiHeight + sonUlBoxHeight;
-                                thisUl.css("display", "block");
-                                //解决重复大量执行动画造成崩溃 .stop()
-                                thisUl.stop().animate({height: thisUlWidth + "px"}, 200);
-                            }
-                            flag = false;
-                        } else {
-                            thisUl = $(event.target).parent().children("ul");
-                            thisUl.stop().animate({"height": "0px"}, 250, function () {
-                                thisUl.css("display", "none");
-                            });
-                            flag = true;
-                        }
-                    };
-                }
-            }else if(number === 3){
-                //遍历li标签下的a标签阻止跳转 使展开二级菜单
-                for(var z=0;z<aHrefs.length;z++){
-                    aHrefs[z].onclick = function(event){
-                        event = event|| window.event;
-                        event.preventDefault();
-                    }
-                }
-                for (i = 0, len = navLi.length; i < len; i++) {//点击弹出  三级菜单
-                    navLi[i].onclick = function (event) {
-                        //event=event||window.event 加在这里
-                        event = event || window.event;
-                        //点击a标签不跳转
-                        // this.preventDefault();
-                        var headerHigh = $(event.target).parent().parent().height(),
-                            thisUl = $(event.target).parent().children("ul"),
-                            thisLi = thisUl.children("li"),
-                            thisUlWidth = thisLi.length * sonLiHeight + sonUlBoxHeight;
-                        if (flag) {
-                            thisUl.css("display", "block");
-                            //解决重复大量执行动画造成崩溃 .stop()
-                            thisUl.stop().animate({height: thisUlWidth + "px"}, 200);
-                            $(event.target).parent().parent().stop().animate({"height":headerHigh+thisUlWidth+"px"},200);
-                            flag = false;
-                        } else {
-                            thisUl = $(event.target).parent().children("ul");
-                            thisUl.stop().animate({"height": "0px"}, 250, function () {
-                                thisUl.css("display", "none");
-                            });
-                            $(event.target).parent().parent().stop().animate({"height":headerHigh-thisUlWidth+"px"},250);
-                            flag = true;
-                        }
-                    };
-                }
-            }
-        }
+    //     function childUl(tilClass,number,sonLiHeight,sonUlBoxHeight){
+    //         var sonLiHeight = sonLiHeight || 30;
+    //         var sonUlBoxHeight = sonUlBoxHeight || 0;
+    //         // 导航二级分类
+    //         // 获取有二级ul的li标签
+    //         var navLi = $(tilClass),i,len;
+    //         var flag = true;
+    //         // var event = event || window.event;
+    //         //遍历li标签下的a标签阻止跳转 使展开二级菜单
+    //         var aHrefs = navLi.children("a");
+    //
+    //         //遍历li标签在鼠标事件添加效果
+    //         if(number === 1){
+    //             for(i = 0,len = navLi.length;i<len;i++){
+    //                 navLi[i].onmouseenter = function(event){
+    //                     //event=event||window.event 加在这里
+    //                     event = event|| window.event;
+    //                     var thisUl = $(event.target).children("ul");
+    //                     var thisLi = thisUl.children("li");
+    //                     var thisUlWidth = thisLi.length*sonLiHeight + sonUlBoxHeight;
+    //                     thisUl.css("display","block");
+    //                     //解决重复大量执行动画造成崩溃 .stop()
+    //                     thisUl.stop().animate({height:thisUlWidth+"px"},300);
+    //                 };
+    //                 navLi[i].onmouseleave = function(){
+    //                     var thisUl = $(this).children("ul");
+    //                     thisUl.stop().animate({"height":"0px"},250,function(){
+    //                         thisUl.css("display","none");
+    //                     });
+    //                 };
+    //             }
+    //         }else if(number === 2){//点击弹出
+    //             //遍历li标签下的a标签阻止跳转 使展开二级菜单
+    //             for(var z=0;z<aHrefs.length;z++){
+    //                 aHrefs[z].onclick = function(event){
+    //                     event = event|| window.event;
+    //                     event.preventDefault();
+    //                 }
+    //             }
+    //             for (i = 0, len = navLi.length; i < len; i++) {
+    //                 navLi[i].onclick = function (event) {
+    //                     //event=event||window.event 加在这里
+    //                     event = event || window.event;
+    //                     //点击a标签不跳转
+    //                     // event.preventDefault();
+    //                     if (flag) {
+    //                         var thisUl = $(event.target).parent().children("ul");
+    //                         if(thisUl.height() === 0){
+    //                             var thisLi = thisUl.children("li");
+    //                             var thisUlWidth = thisLi.length * sonLiHeight + sonUlBoxHeight;
+    //                             thisUl.css("display", "block");
+    //                             //解决重复大量执行动画造成崩溃 .stop()
+    //                             thisUl.stop().animate({height: thisUlWidth + "px"}, 200);
+    //                         }
+    //                         flag = false;
+    //                     } else {
+    //                         thisUl = $(event.target).parent().children("ul");
+    //                         thisUl.stop().animate({"height": "0px"}, 250, function () {
+    //                             thisUl.css("display", "none");
+    //                         });
+    //                         flag = true;
+    //                     }
+    //                 };
+    //             }
+    //         }else if(number === 3){
+    //             //遍历li标签下的a标签阻止跳转 使展开二级菜单
+    //             for(var z=0;z<aHrefs.length;z++){
+    //                 aHrefs[z].onclick = function(event){
+    //                     event = event|| window.event;
+    //                     event.preventDefault();
+    //                 }
+    //             }
+    //             for (i = 0, len = navLi.length; i < len; i++) {//点击弹出  三级菜单
+    //                 navLi[i].onclick = function (event) {
+    //                     //event=event||window.event 加在这里
+    //                     event = event || window.event;
+    //                     //点击a标签不跳转
+    //                     // this.preventDefault();
+    //                     var headerHigh = $(event.target).parent().parent().height(),
+    //                         thisUl = $(event.target).parent().children("ul"),
+    //                         thisLi = thisUl.children("li"),
+    //                         thisUlWidth = thisLi.length * sonLiHeight + sonUlBoxHeight;
+    //                     if (flag) {
+    //                         thisUl.css("display", "block");
+    //                         //解决重复大量执行动画造成崩溃 .stop()
+    //                         thisUl.stop().animate({height: thisUlWidth + "px"}, 200);
+    //                         $(event.target).parent().parent().stop().animate({"height":headerHigh+thisUlWidth+"px"},200);
+    //                         flag = false;
+    //                     } else {
+    //                         thisUl = $(event.target).parent().children("ul");
+    //                         thisUl.stop().animate({"height": "0px"}, 250, function () {
+    //                             thisUl.css("display", "none");
+    //                         });
+    //                         $(event.target).parent().parent().stop().animate({"height":headerHigh-thisUlWidth+"px"},250);
+    //                         flag = true;
+    //                     }
+    //                 };
+    //             }
+    //         }
+    //     }
     });
 </script>
 <script>
