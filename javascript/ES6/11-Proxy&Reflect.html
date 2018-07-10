@@ -181,5 +181,99 @@
     proxy6.m();//true
 
     // Reflect
+    // 1.将一些属于内部的方法，放到Reflect对象上
+    // 2.修改一些Object方法返回结果
+    // 3.让Object操作都变成函数行为
+    // 4.Reflect对象方法与Proxy对象方法一一对应
+    //静态方法
+    // Reflect.get(target,name,receiver) 查找返回target对象的name属性，没有返回undefined
+    var myObject = {
+        foo:1,
+        bar:2,
+        get baz(){
+          return this.foo + this.bar;
+        },
+        set foo1(value){
+            return this.foo = value;
+        }
+    };
+    console.log(Reflect.get(myObject,"foo"));//1
+    console.log(Reflect.get(myObject,"bar"));//2
+    // 如果布置了读取函数(getter)则绑定receiver
+    var myReceiverObject = {
+      foo:4,
+      bar:4
+    };
+    console.log(Reflect.get(myObject,"baz",myReceiverObject));//8
+
+    // Reflect.set(target,name,value,receiver)设置target对象name属性等于value
+    console.log(Reflect.get(myObject,"foo"));//1
+    Reflect.set(myObject,"foo",2);
+    console.log(Reflect.get(myObject,"foo"));//2
+    // 设置了赋值函数，则赋值函数的this绑定receiver   reflect.set()会触发Proxy.defineProperty拦截
+    Reflect.set(myObject,"foo1",7,myReceiverObject);
+    console.log(Reflect.get(myReceiverObject,"foo"));//7
+
+    // Reflect.has(obj,name)对应name in obj的in运算符
+    console.log(Reflect.has(myObject,"foo"));//true
+
+    // Reflect.deleteProperty(obj,name)等同于delete obj[name]删除对象的属性
+    console.log(Reflect.deleteProperty(myObject,"foo"));//true 成功  失败 false
+
+    // Relect.construct(target,args)等同于new target(...args)提供一种不使用new调用构造函数的方法
+
+    // Reflect.getPrototypeOf(obj)用于读取对象的_proto_属性对应Object.getPrototypeOf()
+    // const myObj = new FancyThing();
+    // console.log(Reflect.getPrototypeOf(myObj) === FancyThing.prototype);
+
+    //Reflect.setPrototypeOf(obj,newProto)用于设置对象的_proto_属性，返回第一个参数对象，对
+    // 应Object.setPrototypeOf(obj,newProto)
+    //Reflect.setPrototypeOf(myObj,OtherThing.ptototype);
+
+    // Reflect.apply(func,thisArg,args)用于绑定this对象执行给定函数等同于
+    // Function.prototype.apply.cell(func,thisArg,args)
+    const ages = [11,24,15,16,75];
+    const youngest = Reflect.apply(Math.min,Math,ages);
+    const oldest = Reflect.apply(Math.max,Math,ages);
+    const type = Reflect.apply(Object.prototype.toString,youngest,[]);
+
+    // Reflect.defineProperty()用来为对象定义属性
+    function MyDate(){
+
+    }
+    Reflect.defineProperty(MyDate,"now",{
+        value:()=>Date.now()
+    })
+    console.log(MyDate.now());//1531241535186  date
+
+    // Reflect.getOwnPropertyDescriptor(target,propertyKey)获取指定属性的描述对象
+
+    // Reflect.isExtensible(target)返回布尔值表示是否可扩展等同于Object.isExtensible()
+    const myObject1 = {};
+    console.log(Reflect.isExtensible(myObject1));//true
+
+    // Reflect.preventExtensions(target)使一个对象变不可扩展等同于Object.preventExtensions()
+    console.log(Reflect.preventExtensions(myObject1));//true  在ES5之下报错
+
+    // Reflect.ownKeys(target)返回对象所有属性等同于Object.getOwnPropertyNames()与
+    // Object.getOwnPropertySymbols()
+    console.log(Reflect.ownKeys(myObject));//["bar","baz","foo1"]
+
+    // 实例，观察者模式  一旦对象有变化，函数自动执行
+    const queuedObservers = new Set();
+    const observe = fn => queuedObservers.add(fn);
+    const observable = obj => new Proxy(obj, {set});
+    function set(target, key, value, receiver){
+        const result = Reflect.set(target, key, value, receiver);
+        queuedObservers.forEach(observer => observer());
+        return result;
+    }
+    const personPeople = observable({
+        name:"张三",
+        age:20
+    });
+    function print(){
+        console.log(`${person.name},${person.age}`);
+    }
 </script>
 </html>
