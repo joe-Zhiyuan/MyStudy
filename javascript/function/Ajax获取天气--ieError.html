@@ -48,72 +48,127 @@
 
 </body>
 <script src="../js/jquery-3.3.1.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-ajaxtransport-xdomainrequest/1.0.3/jquery.xdomainrequest.min.js"></script>
 <script>
     window.onload=function(){
         // 天气
-        var xhr = new XMLHttpRequest();
-        xhr.open("get","https://bird.ioliu.cn/weather?city=宁波",true);
-        //在异步请求下，检测xhr的请求/响应过程的活动 响应操作
-        xhr.onreadystatechange=function(){
-            if(xhr.readyState === 4){
-                if((xhr.status>=200&&xhr.status<300)||xhr.status===304){
-                    var Data = JSON.parse(xhr.responseText);
-                    //返回是否正确
-                    if(Data.msg === "ok"){
-                        // 天气图标
-                        $("#weatherPrev").attr("src","../images/"+Data.result.daily[0].day.weather+".png");
-                        $("#weatherNext").attr("src","../images/"+Data.result.daily[0].night.weather+".png");
-                        // 天气度数变化
-                        $("#temperature").html(Data.result.templow+"&#126;"+Data.result.temphigh+"&#8451;");
-                        // 日期  分割字符串
-                        var Date = Data.result.date.split("-");
-                        $("#year").html(Date[0]);
-                        $("#mouth").html(Date[1]);
-                        $("#day").html(Date[2]);
-                    }else{
-                        console.log("获取天气失败，数据传输错误");
-                    }
-                }else{
-                    console.log("接口错误:"+xhr.status);
-                }
-            }
-        };
-        xhr.send(null);
+        // var xhr = new XMLHttpRequest();
+        // // xhr.open("get","https://bird.ioliu.cn/weather?city=宁波",true);
+        // xhr.open("get","../data/json.json",true);
+        // //在异步请求下，检测xhr的请求/响应过程的活动 响应操作
+        // xhr.onreadystatechange=function(){
+        //     if(xhr.readyState === 4){
+        //         if((xhr.status>=200&&xhr.status<300)||xhr.status===304){
+        //             var Data = JSON.parse(xhr.responseText);
+        //             console.log(Data.result[0].authors[0]);
+        //             //返回是否正确
+        //             if(Data.msg === "ok"){
+        //                 // 天气图标
+        //                 $("#weatherPrev").attr("src","../images/"+Data.result.daily[0].day.weather+".png");
+        //                 $("#weatherNext").attr("src","../images/"+Data.result.daily[0].night.weather+".png");
+        //                 // 天气度数变化
+        //                 $("#temperature").html(Data.result.templow+"&#126;"+Data.result.temphigh+"&#8451;");
+        //                 // 日期  分割字符串
+        //                 var Date = Data.result.date.split("-");
+        //                 $("#year").html(Date[0]);
+        //                 $("#mouth").html(Date[1]);
+        //                 $("#day").html(Date[2]);
+        //             }else{
+        //                 console.log("获取天气失败，数据传输错误");
+        //             }
+        //         }else{
+        //             console.log("接口错误:"+xhr.status);
+        //         }
+        //     }
+        // };
+        // xhr.send(null);
 
+//     //chrome firefox edge 都可以 ie不行
 //     function getMessage(jsonp) {
 //         console.log("message:" + jsonp);
 //     }
 //     $.ajax({
+//         crossDomain: true,
 // //			url:"http://localhost:8081/rest/itemcat/list?callback=getMessage",
-// //         url:"https://bird.ioliu.cn/weather?city=宁波",
-//         url:"https://free-api.heweather.com/s6/weather/forecast?location=宁波&key=11c5d282743d48d9b9cee869c5d882b6",
+//         url:"https://bird.ioliu.cn/weather?city=宁波",
+// //         url:"https://free-api.heweather.com/s6/weather/forecast?location=宁波&key=11c5d282743d48d9b9cee869c5d882b6",
 //         type:"get",
-//         dataType:"json",
-//         // jsonp:"callback", //这里定义了callback的参数名称，以便服务获取callback的函数名即getMessage
-//         // jsonpCallback:"getMessage", //这里定义了jsonp的回调函数
+//         dataType:"jsonp",
+//         jsonp:"callback", //这里定义了callback的参数名称，以便服务获取callback的函数名即getMessage
+//         jsonpCallback:"getMessage", //这里定义了jsonp的回调函数
 //         success:function(data){
-//             // data = JSON.parse(data);
 //             console.log(data);
-//             // //返回是否正确
-//             // if(data.msg === "ok"){
-//             //     // 天气图标
-//             //     $("#weatherPrev").attr("src","images/"+data.result.daily[0].day.weather+".png");
-//             //     $("#weatherNext").attr("src","images/"+data.result.daily[0].night.weather+".png");
-//             //     // 天气度数变化
-//             //     $("#temperature").html(data.result.templow+"&#126;"+data.result.temphigh+"&#8451;");
-//             //     // 日期  分割字符串
-//             //     var Date = data.result.date.split("-");
-//             //     $("#year").html(Date[0]);
-//             //     $("#mouth").html(Date[1]);
-//             //     $("#day").html(Date[2]);
-//             // }else{
-//             //     console.log("获取天气失败，数据传输错误");
-//             // }
+//             data = JSON.parse(data);
+//             console.log(data);
+//             //返回是否正确
+//             if(data.msg === "ok"){
+//                 // 天气图标
+//                 $("#weatherPrev").attr("src","../images/"+data.result.daily[0].day.weather+".png");
+//                 $("#weatherNext").attr("src","../images/"+data.result.daily[0].night.weather+".png");
+//                 // 天气度数变化
+//                 $("#temperature").html(data.result.templow+"&#126;"+data.result.temphigh+"&#8451;");
+//                 // 日期  分割字符串
+//                 var Date = data.result.date.split("-");
+//                 $("#year").html(Date[0]);
+//                 $("#mouth").html(Date[1]);
+//                 $("#day").html(Date[2]);
+//             }else{
+//                 console.log("获取天气失败，数据传输错误");
+//             }
 //         },
 //         error:function(){
 //             alert("发生异常");
 //         }
 //     });
+
+        //第一个参数你的跨域地址，第二个是回调函数
+        crossDomainAjax('https://bird.ioliu.cn/weather?city=宁波', function (data) {
+            // success logic
+            console.log(data);
+        });
+
+        function crossDomainAjax (url, successCallback) {
+            // 在IE8和IE9上使用的跨域访问方式
+            if ('XDomainRequest' in window && window.XDomainRequest !== null) {
+                var xdr = new XDomainRequest(); // Use Microsoft XDR
+                xdr.open('get', url);
+                xdr.onload = function () {
+                    var dom  = new ActiveXObject('Microsoft.XMLDOM'),
+                        JSON = $.parseJSON(xdr.responseText);
+                    dom.async = false;
+                    if (JSON == null || typeof (JSON) == 'undefined') {
+                        JSON = $.parseJSON(data.firstChild.textContent);
+                    }
+                    successCallback(JSON); // internal function
+                };
+
+                xdr.onerror = function() {
+                    _result = false;
+                };
+
+                xdr.send();
+            }
+
+            // IE7及其以前版本不支持跨域访问
+            else if (navigator.userAgent.indexOf('MSIE') != -1 &&
+                parseInt(navigator.userAgent.match(/MSIE ([\d.]+)/)[1], 10) < 8) {
+                return false;
+            }
+
+            // 以下代码你可以用来处理正常的jQuery JSONP请求
+            else {
+                $.ajax({
+                    url: url,
+                    cache: false,
+                    dataType: 'json',
+                    type: 'GET',
+                    async: false, // must be set to false
+                    success: function (data, success) {
+                        successCallback(data);
+                    }
+                });
+            }
+        }
     }
 </script>
 </html>
