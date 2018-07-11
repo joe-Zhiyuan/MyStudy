@@ -7,4 +7,86 @@
 <body>
 
 </body>
+<script type="text/javascript">
+    // Promise  异步编程的一种解决方案
+    // 1.对象的状态不受外界影响  3种状态 Pending(进行中) Fulfilled(已成功)Rejected(已失败) 只有结果可以改变状态
+    // 2.一旦状态改变就不会再变  从pending到Fulfilled 和 pending到Rejected不会再变  称为已定型()Resolved
+
+    // 基本用法
+    var promise = new Promise(function(resolve, reject){
+        // 操作成功
+        if(true){
+            resolve(value);
+        }else{
+            reject(error);
+        }
+    });
+    //then方法  两个回调函数作为参数 第一个是成功时调用 第二个失败时调用可选  接受Promise对象传出的值作为参数 可以使用链式写法
+    promise.then(function(value){
+
+    },function(error){
+
+    });
+    function timeout(ms){
+        return new Promise(((resolve, reject) => {
+            setTimeout(resolve, ms, "done");
+        }));
+    }
+    timeout(100).then((value) => {
+        console.log(value);
+    });
+    // 异步加载图片
+    function loadImageAsync(url){
+        return new Promise(function (resolve, reject) {
+            var image = new Image();
+            image.onload = function(){
+                //成功把图片加载到body后面
+                resolve(document.getElementsByTagName("body")[0].appendChild(image));
+            };
+            image.onerror = function(){
+                reject(new Error("异步加载图片出错："+ url ));
+            };
+            image.src = url;
+        });
+    }
+    loadImageAsync("../images/1.jpg");
+    // 实现AJAX
+    var getJSON = function(url){
+        var promise2 = new Promise(function(resolve, reject){
+            var client = new XMLHttpRequest();
+            client.open("GET",url);
+            client.onreadystatechange = handler;
+            client.responseText = "json";
+            client.setRequestHeader("Accept","application/json");
+            client.send();
+
+            function handler(){
+                if(this.readyState !== 4){
+                    return;
+                }
+                if(this.status === 200){
+                    resolve(this.response);
+                }else{
+                    reject(new Error(this.statusText));
+                }
+            };
+        });
+        return promise2;
+    };
+    getJSON("../data/json.json").then(function(json){
+        console.log("contents:" + json);//成功打印返回json
+    },function(error){
+        console.log("出错：" + error);
+    });
+    //嵌套回调函数
+    var p1 = new Promise(function(resolve, reject){
+        setTimeout(() => reject(new Error("fail")),3000);
+    });
+    var p2 = new Promise(function(resolve, reject){
+        setTimeout(() => resolve(p1),1000);
+    });
+    p2.then(result => cosnole.log(result)).catch(error => console.log(error));//error fail
+
+
+</script>
 </html>
