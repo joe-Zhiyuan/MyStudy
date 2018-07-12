@@ -21,7 +21,8 @@
             reject(error);
         }
     });
-    //then方法  两个回调函数作为参数 第一个是成功时调用 第二个失败时调用可选  接受Promise对象传出的值作为参数 可以使用链式写法
+    //then方法  两个回调函数作为参数 第一个是成功时调用 第二个失败时调用可选  接受Promise对象传出的值作为参数
+    // 可以使用链式写法
     promise.then(function(value){
 
     },function(error){
@@ -87,6 +88,82 @@
     });
     p2.then(result => cosnole.log(result)).catch(error => console.log(error));//error fail
 
+    // Promise.prototype.cache()等同于.then(null,rejection)用于指定发生错误的回调函数   Promise有"冒泡"性质，
+    // 错误会一直向后传递，都会被catch()捕获，一般不再then()方法中定义rejected（错误的）回调函数（因为promise
+    // 在resolve之后再抛出错误并不会被捕获，等于没有抛出，应为promise状态已经改变为成功（fulfilled）不会再改变）
+    // 应该使用catch(方法)
+    getJSON("../data/json.json").then(function(posts){
+
+    }).catch(function(error){
+       //处理getJSON和前一个回调函数运行发生的错误
+        console.log("发生错误：",error);
+    });
+    var promise3 = new Promise(function(resolve, reject){
+        throw new Error("test");
+    });
+    promise3.catch(function(error){
+        console.log(error);
+    });//Error:  test
+    //bad
+    promise.then(function(data){
+        //success
+        },function(error){
+        //error
+    });
+    //good
+    promise.then(function(data){
+        //success
+    }).catch(function(error){
+        //error
+    });
+    // catch()也能抛出错误，由另一个catch()捕获
+    var someAsyncThing = function(){
+        return new Promise(function(resolve, reject){
+           resolve(x + 2);
+        });
+    };
+    someAsyncThing().then(function(){
+        return someOtherAsyncThing()
+    }).catch(function(error){
+        console.log("oh no",error);
+        y + 2;
+    }).catch(function(error){
+        console.log("carry on",error);
+    });
+    // oh no x is not defined
+    // carry on y is not defined  第二个catch方法捕获第一个catch的错误
+
+    // Promise.all()用于将多个Promise实例包装成一个新的Promise实例
+    //只要p1,p2全部状态为Fulfilled p的状态才为Fulfiled(成功的)  返回的值成为一个数组
+    //只要p1,p2有一个状态不为Fulfilled p的状态就为Rejected(失败的)  返回第一个Rejected的值
+    var p11 = Promise.all([p1,p2]);
+    // const databasePromise = connectDatabase();   只有都成功才能触发pickTopRecommentations函数
+    // const booksPromise = databasePromise.then(findAllBooks);
+    // const userPromise = databasePromise.then(getCurrentUser);
+    // Promise.all([booksPromise, userPromise]).then(([books, user]) => pickTopRecommentations(books, user));
+    const p3 = new Promise((resolve, reject) => {
+        resolve("hello");
+    }) .then(result => result);
+    const p4 = new Promise((resolve, reject) => {
+        throw Error("报错了");
+    }).then(result => result);
+    Promise.all([p3, p4])
+        .then(result => console.log(result))
+        .catch(e => console.log(e));//报错了
+
+    // Promise.race()将多个Promise实例包装成一个新的Promise实例
+    //如果有一个Promise实例率先改变状态，那么p也会跟着改变，率先改变的Promise实例返回值传递给p的回调函数
+    var p12 = Promise.race([p1, p2, p3])
+    // const p6 = Promise.race([
+    //    fecth("/resource-that-may-take-a-while"),
+    //    new Promise(function (resolve, reject) {
+    //        setTimeout(() => reject(new Error("request timeout")), 5000)
+    //    })
+    // ]);
+    // p6.then(reporter => console.log(response));
+    // p6.catch(error => console.log(error));
+
+    // Promise.resolve()将现有对象转为Promise对象
 
 </script>
 </html>

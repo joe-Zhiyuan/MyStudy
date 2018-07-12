@@ -1,0 +1,10 @@
+jQuery兼容性
+
+jQuery2.0以上就不支持IE8了，所以要支持IE8就要以下代码：
+
+<script type="text/javascript" src="<%=path%>/js/jquery-3.1.1.min.js"></script>
+<!--[if IE 8]>
+<script type="text/javascript" src="<%=path%>/js/jquery-1.9.1.min.js"></script>
+<![endif]-->
+
+如果是IE8就下面覆盖上面的引用
