@@ -32,7 +32,7 @@
     </style>
 </head>
 <body>
-<form action="" method="post" class="Date" name="form">
+<form action="" method="post" class="Date" name="form" id="data">
     <select id="dateYear" title="年" name="dateYear">
         <!--<option value="year">年</option>-->
     </select>
@@ -44,14 +44,20 @@
     </select>
 </form>
 </body>
+<script src="../js/jquery-3.3.1.min.js"></script>
+<script src="../js/jquery-form.js"></script>
 <script>
     var date = new Date();
+    console.log(date);
     var selectYear = document.getElementById("dateYear");
     var selectMonth = document.getElementById("dateMonth");
     var selectDay = document.getElementById("dateDay");
-    dateYear = date.getFullYear();
-    dateMonth = date.getMonth()+1;
-    dateDay = date.getDay()+1;
+    var dateYear = date.getFullYear();
+    //0--11
+    var dateMonth = date.getMonth()+1;
+    var dateDay = date.getDate();
+    //获取日期在一周的某一天 0--6
+    // var dateDay = date.getDay();
     console.log(dateYear,dateMonth,dateDay);
     //日期生成函数 year：年数
     function createDate(year) {
@@ -59,7 +65,7 @@
         for (var i = dateYear; i >= dateYear - year; i--) {
             var option = new Option;
             option.setAttribute("value", i);
-            if (dateYear === i) {
+            if (dateYear == i) {
                 option.setAttribute("selected", "selected");
             }
             option.innerHTML = i + "年";
@@ -69,7 +75,7 @@
         for (var n = 1; n <= 12; n++) {
             var optionMonth = new Option;
             optionMonth.setAttribute("value", n);
-            if (dateMonth === n) {
+            if (dateMonth == n) {
                 optionMonth.setAttribute("selected", "selected");
             }
             optionMonth.innerHTML = n + "月";
@@ -79,7 +85,7 @@
         for (var m = 1; m <= 28; m++) {
             var optionDay = new Option;
             optionDay.setAttribute("value", m);
-            if (dateDay === m) {
+            if (dateDay == m) {
                 optionDay.setAttribute("selected", "selected");
             }
             optionDay.innerHTML = m + "日";
@@ -118,47 +124,67 @@
         }
         console.log(days);
         //增加或删除天数  是28天删除29，30，31
-        if(days === 28){
+        if(days == 28){
             //必须倒叙，不然新增一个[28]
             selectDay.options.remove(30);
             selectDay.options.remove(29);
             selectDay.options.remove(28);
         }
         //如果29天
-        if(days === 29){
+        if(days == 29){
             selectDay.options.remove(30);
             selectDay.options.remove(29);
             //如果29天不存在 添加
             if(!selectDay.options[28]){
-                selectDay.add(new Option("29日","29"),null);
+                selectDay.add(new Option("29日",29),null);
             }
         }
         //如果30天
-        if(days === 30){
+        if(days == 30){
             selectDay.options.remove(30);
             if(!selectDay.options[28]){
-                selectDay.add(new Option("29日","29"),null);
+                selectDay.add(new Option("29日",29),null);
             }
             if(!selectDay.options[29]){
-                selectDay.add(new Option("30日","30"),null);
+                selectDay.add(new Option("30日",30),null);
             }
         }
         //如果是31天
-        if(days === 31){
+        if(days == 31){
             if(!selectDay.options[28]){
-                selectDay.add(new Option("29日","29"),null);
+                selectDay.add(new Option("29日",29),null);
             }
             if(!selectDay.options[29]){
-                selectDay.add(new Option("30日","30"),null);
+                selectDay.add(new Option("30日",30),null);
             }
             if(!selectDay.options[30]){
-                selectDay.add(new Option("31日","31"),null);
+                selectDay.add(new Option("31日",31),null);
             }
         }
     };
-    selectDay.onclick = function(){
-        console.log(selectDay.options.selectedIndex);
+    //日期点击事件  上传日期
+    function sub(e){
+        e = e || window.event;
+        e.preventDefault(); // prevent native submit
+        $("#data").ajaxSubmit(function(message){
+            //表单成功处理  message为返回内容
+            console.log("表单提交成功！");
+        });
+        return false;
     }
+    var beforeY = $("#dateYear").selected().val();
+    var beforeM = $("#dateMonth").selected().val();
+    var beforeD = $("#dateDay").selected().val();
+    $("#dateDay").on("click",function(){
+        //日 月 年 不与多选选择菜单一致 就上传日期
+        if($("#dateDay").selected().val() !== beforeD || $("#dateYear").selected().val() !== beforeY
+            || $("#dateMonth").selected().val() !== beforeM){
+            $("#data").on("submit", sub());
+            beforeY = $("#dateYear").selected().val();
+            beforeM = $("#dateMonth").selected().val();
+            beforeD = $("#dateDay").selected().val();
+        }
+    });
 
 </script>
 </html>
