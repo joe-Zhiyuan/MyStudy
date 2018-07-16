@@ -53,7 +53,7 @@
     loadImageAsync("../images/1.jpg");
     // 实现AJAX
     var getJSON = function(url){
-        var promise2 = new Promise(function(resolve, reject){
+        var promise3 = new Promise(function(resolve, reject){
             var client = new XMLHttpRequest();
             client.open("GET",url);
             client.onreadystatechange = handler;
@@ -72,7 +72,7 @@
                 }
             };
         });
-        return promise2;
+        return promise3;
     };
     getJSON("../data/json.json").then(function(json){
         console.log("contents:" + json);//成功打印返回json
@@ -164,6 +164,84 @@
     // p6.catch(error => console.log(error));
 
     // Promise.resolve()将现有对象转为Promise对象
+    // 参数是一个Promise实例  返回这个实例
+    // 参数是一个thenable对象  指具有then方法的对象  转为Promise对象，立即执行thenable对象的then方法
+    let thenable = {
+        then:function(resolve, reject){
+            resolve(42);
+        }
+    };
+    let p7 = Promise.resolve(thenable);
+    p7.then(function(value){
+        console.log(value);
+    });//42
+    // 参数不是thenable对象或者不是对象 返回一个新的Promise对象 状态为Resolved
+    var p8 = Promise.resolve("hi");
+    p8.then(function(s){
+        console.log(s);
+    });//hi
+    // 不带参数，直接得到一个Peomise对象
+    var p9 = Promise.resolve();
+    p9.then(function(value){
+        //...
+    });
 
+    // Promise.reject() 返回一个新的Promise实例状态为rejected 回调函数立即执行
+    var p10 = Promise.reject("出错了");
+    //var p10 = new Promise((resolve, reject) => reject("出错了"));
+    p10.then(null, function(s){
+        console.log(s);
+    });
+
+    // 附加方法
+    // done()抛出任何可能的错误
+    //someAsyncThing().then().then().done();
+    Promise.prototype.done = function(onFulfilled, onRejected){
+       this.then(onFulfilled, onRejected)
+           .catch(function(reason) {
+            //抛出全局错误
+               setTimeout(() => {throw reason},0);
+           }
+       )
+    };
+    // finally()   指定不管Promise状态如何都要执行的操作
+    //使用finally方法关掉服务器
+    // server.listen(0)
+    //     .then(function(){
+    //         // run test
+    //     })
+    //     .finally(server.stop);
+    Promise.prototype.finally = function(callback){
+      let p = this.constructor;
+      return this.then(
+          value => p.resolve(callback()).then(() => value),
+          reason => p.resolve(callback()).then(() => {throw  reason})
+      );
+    };
+
+    // 应用
+    // 加载图片 一旦加载完成Promise状态发生变化
+    const preloadImage = function(path){
+        return new Promise(function(resolve, reject){
+            var imaage = new Image();
+            image.onload = resolve;
+            imaage.onerror = reject;
+            imaage.src = path;
+        });
+    };
+
+    // Promise.try() 不区分是同步函数还是异步函数，同步同步执行，异步异步执行
+    // 第一种方法
+    const f = () => console.log("now");
+    (async () => f())();//如果是异步立即执行async函数
+    // (async () => f())().then();
+    console.log("next");// now  next
+    // 第二种方法 使用new Promise()
+    (
+        () => new Promise(
+            resolve => resolve(f())
+        )
+    )();
+    console.log("next");//now next
 </script>
 </html>
