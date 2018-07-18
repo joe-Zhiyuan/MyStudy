@@ -234,17 +234,17 @@ width=device-width,initial-scale=1.0">
         // 的高度
         function navTab(btnID,NavID){
             $(btnID).on("click",function(event){
-                $(NavID).slideToggle();
+                $(NavID).stop().slideToggle();
             });
         }
         navTab("#headerBtn","#nav");
         function childUl(ulID,method){
             // li标签下没有a标签
-            $(ulID).children("li").children("a").on("click",function(event){
+            $(ulID).children("li").children("a").on(method,function(event){
                 event = event || window.event;
                 if($(this).parent("li").children("ul").length === 1){
                     event.preventDefault();
-                    $(this).parent("li").children("ul").slideToggle();
+                    $(this).parent("li").children("ul").stop().slideToggle();
                 }
             });
         }

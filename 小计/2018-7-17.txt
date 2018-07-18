@@ -1,0 +1,41 @@
+html
+	<li>
+	    <a href="productsd.html">
+                <div class="proBox">
+                    <div></div>
+                    <img src="images/product1.png" alt="product"/>
+                </div>
+                <p>Automatic for Wire&Wire Rope</p>
+            </a>
+	</li>
+css
+/*生成正方形*/
+.proContent>li>a>.proBox{
+    position: relative;
+    width:100%;
+    height:0;
+    padding-bottom:100%;
+    text-align: center;
+    border:1px solid #e5e5e5;
+    overflow: hidden;
+    z-index: 1;
+}
+/*利用绝对定位居中*/
+.proContent>li>a>.proBox>img{
+    position: absolute;
+    max-width: 100%;
+    left:50%;
+    top:50%;
+    transform: translate(-50%,-50%);
+    -webkit-transition: transform .3s ease;
+    -moz-transition: transform .3s ease;
+    -o-transition: transform .3s ease;
+    transition: transform .3s ease;
+}
+.proContent>li>a:hover >.proBox>img{
+    -webkit-transform: translate(-50%,-50%) scale(1.2);
+    -moz-transform: translate(-50%,-50%) scale(1.2);
+    -ms-transform: translate(-50%,-50%) scale(1.2);
+    -o-transform: translate(-50%,-50%) scale(1.2);
+    transform: translate(-50%,-50%) scale(1.2);
+}
