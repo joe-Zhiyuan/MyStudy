@@ -32,4 +32,20 @@
     }
 
     // 默认itrator接口
+    const obj = {
+        [Symbol.iterator]:function(){
+            return {
+                next: function(){
+                    return {
+                        value:1,
+                        done:true
+                    }
+                }
+            };
+        }
+    };//可遍历的
+    //为一个对象添加Iterator接口
+    let obj2 = {
+
+    };
 </script>
