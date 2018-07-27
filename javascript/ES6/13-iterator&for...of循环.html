@@ -5,7 +5,7 @@
     <title>ES6-13-iterator&for...of循环</title>
 </head>
 <body>
-
+<div></div>
 </body>
 </html>
 <script>
@@ -46,6 +46,206 @@
     };//可遍历的
     //为一个对象添加Iterator接口
     let obj2 = {
+        data:["hello","world"],
+        [Symbol.iterator](){
+            const self = this;
+            let index = 0;
+            return {
+                next() {
+                    if(index < self.data.length){
 
+                        return {
+                            value: self.data[index++],
+                            done: false
+                        };
+                    } else{
+                        return { value: undefined, done: true };
+                    }
+                }
+            };
+        }
     };
+    // 数组对象直接调用Symbol.iterator 部署itertor接口   p普通对象部署并无效果  a:"a"...c:"c"
+    let iterable = {
+        0:"a",
+        1:"b",
+        2:"c",
+        length:3,
+        [Symbol.iterator]:Array.prototype[Symbol.iterator]
+    };
+    for(let item of iterable){
+        console.log(item);//"a" "b" "c"
+    }
+
+    //调用iterator接口的场合
+    // 解构赋值 默认调用
+    let set = new Set().add("a").add("b");
+    let [x,y] = set;
+    console.log(x,y);//"a"  "b"
+    // 扩展运算符(...)
+    var str = "hello";
+    console.log([...str]);//["h","e","l","l","o"]
+    let arr = ["b","c"];
+    console.log(["a",...arr,"c"]);//["a","b","c","d"]
+    //yield*    后面跟的是一个可遍历结构   遇到变量暂停 执行nex()方法才可继续执行  *表示多个属性
+    let generator = function* (){
+        yield  1;
+        yield * [2,3,4];
+        yield  5;
+    };
+    var iterator2 = generator();
+    console.log(iterator2.next());//{value: 1,done:false}  done：是否为空
+    console.log(iterator2.next());
+    console.log(iterator2.next());
+    console.log(iterator2.next());
+    console.log(iterator2.next());//{value: 5,done:false}
+    console.log(iterator2.next());//{value: undefined,done:true}
+    //其他
+    // for...of
+    // Array.from()
+    // Map() set() WeakMap() WeakSet()
+    // Promise.all()
+    // Promise.race()
+
+    //字符串的iterator接口  是一个类似数组对象 具有原生的iterator接口
+    var something = "hi";
+    console.log(typeof something[Symbol.iterator]);//function
+    var iterator3 = something[Symbol.iterator]();
+    console.log(iterator3.next());//{value:"h",done:false}
+    console.log(iterator3.next());//{value:"i",done:false}
+    console.log(iterator3.next());//{value:undefined,done:true}
+    // 修改原生Symbol.iterator方法覆盖达到修改遍历器的目的
+    var str2 = new String("hi");//["h","i"]     String()返回变为字符串的值
+    console.log([...str2]);
+    str2[Symbol.iterator] = function(){
+        return {
+            next: function(){
+                if(this._first){
+                    this._first = false;
+                    return {value:"bye",done:false};
+                }else{
+                    return {done:true};
+                }
+            },
+            _first:true
+        };
+    };
+    console.log([...str2]);//["bye"]
+    console.log(str2);//"hi"
+
+    // iterator接口与Generator函数  不用部署代码  用yield命令给出每一步的返回值即可
+    let obj5 = {
+        *[Symbol.iterator](){
+            yield "hello";
+            yield "world";
+        }
+    };
+    for(let x of obj5){
+        console.log(x);//"hello"    "world"
+    }
+
+    // 遍历器对象 return()   for...of循环提前推出，就会调用return()方法 throw()
+    // function readLinesSync(file){
+    //     return {
+    //         next(){
+    //             return {done:true};
+    //         },
+    //         return (){
+    //             file.close();
+    //             return {done:true};
+    //         },
+    //     };
+    // }
+    // // 让文件提前返回触发return()方法
+    // for(let line of readLinesSync(fileName)){
+    //     console.log(line);
+    //     break;
+    // }
+
+    // for...of循环  只要有Symbol.iterator接口都可以使用for...of循环
+    // 数组  for...of获取键值
+    const arr2 = ["red","green","blue"];
+    for(let x of arr2){//获取键名  arr2.keys() 索引  arr2.entries()
+        console.log(x);//red green blue
+    }
+    // Set和Map结构    遍历的顺序是按照成员添加进数据结构的顺序    Set返回一个值Map返回一个数组
+    var engines = new Set(["a","b"]);
+    for(let s of engines){
+        console.log(s);//"a" "b"
+    }
+    var map = new Map();
+    map.set("name","joe");
+    map.set("age",23);
+    map.set("sex",1);
+    for(var [name,value] of map){
+        console.log(name+":"+value);//name:joe  age:23  sex:1
+    }
+
+    // 计算生成数据结构
+    // entries()返回一个遍历器对象   Set键名与键值相同  "a":"a"
+    //keys()返回所有键名
+    //values()返回所有键值
+
+    // 类似数组对象   DOM 字符串 DOM NodeList对象 arguments
+    //字符串
+    let str5 = "hi";
+    for(let x of str5){
+        console.log(x);//"h" "i"
+    }
+    // DOM NodeList对象
+    let divs = document.querySelectorAll("div");
+    for(let d of divs){
+        console.log(d);//<div></div>
+    }
+    // arguments对象
+    function printArgs(){
+        for(let x of arguments){
+            console.log(x);
+        }
+    }
+    printArgs("a","b");//"a" "b"
+    // 转换为数组
+    let arrayLike = {length:2,0:"a",1:"b"};
+    // for(let a of arrayLike){
+    //     console.log(a);//error:arrayLike is not iterable
+    // }
+    for(let a of Array.from(arrayLike)){
+        console.log(a);//"a"  "b"
+    }
+
+    // 对象   普通对象必须部署iterator接口才能使用
+    let obj7 = {
+        edition:6,
+        committee:"TC39",
+        standard:"ECMA-262"
+    };
+    for(let o in obj7){//for...in
+        console.log(o);//edition  committee  standard
+    }
+    // 使用Object.keys生成数组，然后遍历数组
+    for(var key of Object.keys(obj7)){
+        console.log(key+":"+obj7[key]);//edition:6 committee:"TC39" standard:"ECMA-262"
+    }
+    // 使用Generator
+    function* entries(obj){
+        for(let key of Object.keys(obj)){
+            yield [key, obj[key]];
+        }
+    }
+    for(let [key,value] of entries(obj7)){
+        console.log(key,"--",value);//edition--6 committee--TC39 standard--ECMA-262
+    }
+
+    // 遍历方法
+    // 可以和for...in一样简写，没有for...in的缺点
+    // 可以使用break  continue和return
+    // 提供所有数据结构统一的操作接口
+    var arr4 = [1,2,3,4,5];
+    for(var n of arr4){
+        if(n > 4){
+            break;//n大于4的时候跳出
+        }
+        console.log(n);
+    }
+
 </script>
