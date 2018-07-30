@@ -25,6 +25,9 @@
         font-size: 18px;
         color:#333;
     }
+    #cont .on{
+        color:red;
+    }
 </style>
 <body>
 <ul id="RightMenu">
@@ -33,6 +36,13 @@
     <li>复制</li>
     <li>粘贴</li>
     <li>搜索</li>
+</ul>
+<ul id="cont">
+    <li class="on">1</li>
+    <li>2</li>
+    <li>3</li>
+    <li>4</li>
+    <li>5</li>
 </ul>
 <script>
     var newTag=document.createElement('ul');
@@ -134,7 +144,21 @@
             rightMenu.style.display="none";
         }
     }
-
+    // 选项卡操作
+    window.onload = function(){
+        var liBtns = document.getElementById("RightMenu").getElementsByTagName("li");
+        var conts = document.getElementById("cont").getElementsByTagName("li");
+        var len = liBtns.length;
+        for(var i = 0; i < len; i++){
+            liBtns[i].index = i;
+            liBtns[i].onclick = function(){
+                for(var j = 0; j < len; j++){
+                    conts[j].className = "";
+                }
+                conts[this.index].className = "on";
+            }
+        }
+    }
 </script>
 
 </body>

@@ -399,6 +399,27 @@ width=device-width,initial-scale=1.0">
     //             }
     //         }
     //     }
+
+        // 套餐导航 li on
+        var liList = $("#nav>li");
+        var currentLink = document.location.href;
+        var linkss = $("#nav>li>a");
+        for(var i = 0; i < liList.length; i++) {
+            if(currentLink.indexOf(linkss.eq(i).attr("href")) != -1) {
+                $(liList[i]).addClass("on");
+            }
+        }
+        var thisTwo = ["productsd.php","equipmentsd.php","newsd.php"];
+        if(currentLink.indexOf(thisTwo[0]) !== -1){
+            var thisA = liList[2];
+            thisA.className = "on";
+        }else if(currentLink.indexOf(thisTwo[1]) !== -1){
+            var thisA = liList[3];
+            thisA.className = "on";
+        }else if(currentLink.indexOf(thisTwo[2]) !== -1){
+            var thisA = liList[4];
+            thisA.className = "on";
+        }
     });
 </script>
 <script>
