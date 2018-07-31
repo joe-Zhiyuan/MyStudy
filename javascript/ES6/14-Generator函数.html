@@ -25,6 +25,21 @@
     console.log(hw.next());//{value: undefined, done: true}
 
     // yield表达式
+    // Generator函数对象只有调用next()方法才能遍历下一个内部状态
+    // 一种可以暂停执行的函数，yield语句是暂停标志
+    function * gen(){
+        console.log("执行了");//不会立即执行  暂缓执行函数
+    }
+    gen();//不会立即执行
+    gen().next();//执行了
+    // yield只能用在Generator函数里面，用在其他地方都会报错    如果在另一个表达式 必须放在圆括号里面
+    // yield表达式作为函数参数或放在赋值表达式右边，可以不加括号
+    function * demo(){
+        // console.loog("hello" + yield);//error
+        console.log("hello" + (yield));
+    }
+
+    // 与iterator接口关系
     
 </script>
 </html>
