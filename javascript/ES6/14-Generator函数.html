@@ -40,6 +40,170 @@
     }
 
     // 与iterator接口关系
+    var myIterator = {};
+    myIterator[Symbol.iterator] = function* (){
+        yield 1;
+        yield 2;
+        yield 3;
+        return 4;
+    };
+    console.log([...myIterator]);//[1,2,3]
+    function* gen(){
+
+    }
+    var g = gen();
+    console.log(g[Symbol.iterator]() === g);//true
+
+    // next方法的参数    一个参数 当作上一条yield语句的返回值
+    function* f(){
+        for(let i = 0;true; i++){
+            var reset = yield i;
+            if(reset){
+                i = -1;
+            }
+        }
+    }
+    var g = f();
+    console.log(g.next());//{value: 0, done: false}
+    console.log(g.next());//{value: 1, done: false}
+    console.log(g.next(true));//{value: 0, done: false}  false  {value: 2, done: false}
+    // 可以在Generator函数开始运行后继续向函数体内部注入值
+    function* foo(x){
+        var y = 2 * (yield(x + 1));
+        var z = yield (y / 3);
+        return (x + y + z);
+    }
+    var a = foo(5);
+    console.log(a.next());//{value: 6, done: false}
+    console.log(a.next());//{value: NaN, done: false}
+    console.log(a.next());//{value: NaN, done: true}
+    var b = foo(5);
+    console.log(b.next());//{value: 6, done: false}   a = 6    yield暂停 表达式的值
+    console.log(b.next(12));//{value: 8, done: false} 上一个表达式 12  y = 24   12*2
+    console.log(b.next(13));//{value: 42, done: true} 上一个表达式 13  z = 13
+
+    // for...of循环   自动遍历Generator函数生成的Iterator对象 不需要调用next()方法
+    function* foo1(){
+        yield 1;
+        yield 2;
+        yield 3;
+        return 4;
+    }
+    for(let f of foo1()){
+        console.log(f);//1 2 3
+    }
+    // 实现裴波那契数列
+    function* fibonacci(){
+        let [prev, curr] = [0,1];
+        for(;;){
+            [prev, curr] = [curr, prev + curr];
+            yield  curr;
+        }
+    }
+    for(let n of fibonacci()){
+        if(n > 1000) break;
+        console.log(n);//1 2 3 5 8 ...987
+    }
+    // 利用for...of循环可以遍历任意对象(Object)的方法  通过Generator函数为它添加接口
+    function* objectEntries(obj){
+        let propKeys = Reflect.ownKeys(obj);
+        for(let propkey of propKeys){
+            yield [propkey, obj[propkey]];
+        }
+    }
+    let jane = {first:"start", last:"end"};
+    for(let [key, value] of objectEntries(jane)){
+        console.log(`${key}:${value}`);//first:start  last:end
+    }
+    // 另一种写法
+    function* objectEntries1(){
+        let propKeys = Object.keys(this);
+        for(let propKey of propKeys){
+            yield [propKey, this[propKey]];
+        }
+    }
+    let jane1 = {first:"start", last:"end"};
+    jane1[Symbol.iterator] = objectEntries1;
+    for(let [key, value] of jane1){
+        console.log(`${key}:${value}`);//first:start  last:end
+    }
+    // 扩展运算符(...)解构赋值和Array.from都可以调用遍历器接口  将Generator函数返回的Iterator对象作为参数
+    console.log([...foo1()]);//1 2 3
+    console.log(Array.from(foo1()));//1 2 3
+    let [x, y, z] = foo1();
+    console.log(x, y, z);//1 2 3
+
+    // Generator.prototype.throw()可以在函数体外抛出错误 在Generator函数体内捕获  接受一个参数 catch语句接收,建议抛出Error实例
+    var g1 = function* (){
+        try{
+            yield;
+        }catch(e){
+            console.log("内部捕获：", e);
+        }
+    };
+    var i = g1();
+    i.next();
+    try{
+        i.throw("a");
+        i.throw("b");
+    }catch (e){
+        console.log("外部捕获：",e);
+    }//内部捕获：a  外部捕获：b
+    // 内部没有部署try...catch()代码块就会被外部catch代码块捕获
+    // 如果内部部署了try...catch代码块那么遍历器的throw方法抛出的错误不影响下一次遍历。否则遍历中止
+    // 如果捕获了错误会自动执行next() 附带执行yield表达式
+    var gen2 = function* gen2(){
+        try{
+            yield console.log("hello");
+        }catch(e){
+            console.log("出错了！");//自动执行下一步
+        }
+        yield console.log("world");
+        yield console.log("!");
+    }
+    var g2 = gen2();
+    g2.next();//hello
+    g2.throw();//error Uncaught undefined  无法执行下一步
+    try{
+        throw new Error;
+    }catch (e){
+        g2.next();// ! throw抛出错误不会影响到遍历器状态 正常完成操作
+    }
+    // Generator函数内部抛出错误，函数体外部也可以捕获
+    function* gen3(){
+        var x = yield 3;
+        var y = x.toUpperCase();
+        yield y;
+    }
+    var it = gen3();
+    console.log(it.next());//{value: 3, done: false}
+    try{
+        it.next(42);
+    }catch (err){
+        console.log(err);//x.toUpperCase is not a function   捕获到错误
+    }
+
+    // Generator.prototype.return() 返回给定的值，终结Generator函数遍历
+    function* gen4(){
+        yield 1;
+        try{
+            yield 4;
+        }finally{
+            yield 5;
+        }
+        yield 2;
+        yield 3;
+    }
+    var g4 = gen4();
+    console.log(g4.next());//{value: 1, done: false}
+    console.log(g4.next());//{value: 4, done: false}
+    console.log(g4.return("foo"));//{value: 5, done: false}
+    console.log(g4.next());//{value: "foo", done: true}  return()不提供参数  返回值value: undefined
+    // 如果有try...finally代码块会在finally执行完再执行
+    console.log(g4.next());//{value: undefined, done: true}
+
+    // yield*表达式
+    // 在Generator函数内部调用另一个Generator函数默认没有效果
     
 </script>
 </html>
