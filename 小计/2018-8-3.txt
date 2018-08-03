@@ -1,0 +1,16 @@
+在script scr='s.js?v=20150205'
+
+或者css 中的link rel="stylesheet"href="css/style.min.css?v=5.2.1"
+
+通过问号来控制版本，当你有更新的时候修改版本号，这样能让浏览器重新加载不缓存上一次的文件
+
+更新版本  避免修改后浏览器使用缓存文件导致修改不成功
+
+纯CSS创建一个三角形
+
+width: 0;
+height: 0;
+border-top: 40px solid transparent;
+border-left: 40px solid transparent;
+border-right: 40px solid transparent;
+border-bottom: 40px solid #ff0000;
