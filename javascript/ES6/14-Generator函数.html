@@ -406,6 +406,112 @@
 
     // 应用
     // 异步操作的同步化表达
+    // function* loadUI(){
+    //     showLoadingScreen();//显示
+    //     yield loadUIDataAsynchronously();
+    //     hideLoadingScreen();//隐藏
+    // }
+    // var loader = loadUI();
+    // //加载UI
+    // loader.next();
+    // //卸载UI
+    // loader.next();
+    //通过Generator函数逐行读取文本文件
+    function* numbers(){
+        let file = new FileReader("numbers.txt");
+        try{
+            while(!file.eof){
+                yield parseInt(file.readLine(),10);
+            }
+        }finally {
+            file.close();//关闭窗口
+        }
+    }
+
+    //控制流管理
+    //多步操作
+    //回调函数
+    // step1(function(value1){
+    //     step2(function(value2){
+    //         step3(function(value3){
+    //             //something
+    //         });
+    //     });
+    // });
+    // //Promise
+    // Promise.resolve(step1)
+    //     .then(step2)
+    //     .then(step3)
+    //     .then(step4)
+    //     .then(function(value4){
+    //         //do something
+    //     },function(error){
+    //         //error
+    //     })
+    //     .done();
+    // //Generator
+    // function* longRunningTask(value){
+    //     try{
+    //         var value2 = yield step1(value1);
+    //         var value3 = yield step2(value2);
+    //         var value4 = yield step3(value3);
+    //         var value5 = yield step4(value4);
+    //         //something
+    //     }catch(e){
+    //         //error
+    //     }
+    // }//次序执行所有步骤
+    // scheduler(longRunningTask(initialValue));
+    // function scheduler(task){
+    //     var taskObj = task.next(task.value);
+    //     //Generator函数未结束就继续调用
+    //     if(!taskObj.done){
+    //         task.value = taskObj.value;
+    //         scheduler(task);//递归
+    //     }
+    // }
+    // //利用for...of
+    // let steps = [step1Func,step2Func,step3Func];
+    // function* iterateSteps(steps){
+    //     for(var i = 0; i < steps.length; i++){
+    //         var step = steps[i];
+    //         yield step();
+    //     }
+    // }
+
+    //部署iterator接口 利用Generator函数在任意对象上部署
+    function* iterEntries(obj){
+        let keys = Object.keys(obj);
+        for(let i = 0; i < keys.length; i++){
+            let key = keys[i];
+            yield [key, obj[key]];
+        }
+    }
+    let myObj = {foo:3,bar:7};
+    for(let [key,value] of iterEntries(myObj)){
+        console.log(key, value);// foo 3  bar 7
+    }
+    //作为数据结构 Generator函数可以返回一系列值，可以对任意表达式提供类似数组的接口
+    // function* dostuff(){
+    //     yield fs.readFile.bind(null, "hello.txt");
+    //     yield fs.readFile.bind(null, "world.txt");
+    //     yield fs.readFile.bind(null, "and.txt");
+    // }
+    // //可以使用for...of
+    // for(task of dostuff()){
+    //     //task ...
+    // }
+    // //ES5
+    // function doStuff(){
+    //     return [
+    //         fs.readFile.bind(null, "hello.txt"),
+    //         fs.readFile.bind(null, "world.txt"),
+    //         fs.readFile.bind(null, "and.txt")
+    //     ];
+    // }
+
+
+    //Generator函数的异步应用
 
 </script>
 </html>
