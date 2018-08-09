@@ -512,6 +512,47 @@
 
 
     //Generator函数的异步应用
+    // 异步
+    // 1.回调函数   第二段单独写在一个函数里
+    // 2.事件监听
+    // 3.发布/订阅
+    // 4.Promise对象  改成链式调用 then()
+
+    // Generator函数  协程
+    function* gen8(x){
+        try {
+            var y1 = yield x + 2;
+        }catch (e){
+            console.log("出错了");
+        }
+        return y1;
+    }
+    var g1 = gen8(1);
+    //console.log(g1.next());//{value: 3, done: false}
+    //console.log(g1.next());//{value: undefined, done: true}
+    // 错误处理
+    console.log(g1.next());//{value: 2, done: false}
+    console.log(g1.next(2));//{value: 2, done: false}
+    // g1.throw("error");// Uncaught error
+
+    // 异步封装
+    // var fetch = require("node-fetch");
+    // function* gen10(){
+    //     var url = "http://api.github.com/users/github";
+    //     var result = yield fetch(url);
+    //     console.log(result.bio);
+    // }
+    // // 执行方法
+    // var g2 = gen10();
+    // var result = g2.next();
+    // result.value.then(function(data){
+    //     result.data.json();
+    // }).then(function(data){
+    //     g2.next(data);
+    // });
+
+    // Thunk函数  是自动执行Generator函数的一种方法
+    // 参数求值策略
 
 </script>
 </html>
