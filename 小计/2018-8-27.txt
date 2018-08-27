@@ -1,0 +1,7 @@
+select标签里文字居中：
+
+	加css:
+
+		-moz-text-align-last:center;
+
+		text-align-last:center;
