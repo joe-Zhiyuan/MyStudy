@@ -553,6 +553,84 @@
 
     // Thunk函数  是自动执行Generator函数的一种方法
     // 参数求值策略
+    var x = 1;
+    function fun(m){
+        return m * 2;
+    }
+    fun(x + 5);
+    // 1.传值调用:在进入函数体前计算x+5的值，再将值传入fun()函数 fun(6)  //有性能损失
+    // 2.传名调用:直接将x+5传入函数体，在调用时在计算值 fun(x+5)
+    // Thunk含义  将参数传入一个临时的函数中，再将这个函数传入函数体，这个临时函数就叫Thunk函数
+    var thunk = function(){
+        return x + 5;
+    };
+    function fun2(thunk){
+        return thunk() * 2;
+    }
+    // javascript中的thunk函数  将多参函数换位单参函数
+    // fs.readFile(fileName,callback);//多参数
+    // var Thunk = function(fileName){
+    //     return function(callback){
+    //         return fs.readFile(fileName, callback);
+    //     };
+    // };
+    // var readFileThunk = Thunk(fileName);
+    // readFileThunk(callback);
+    // function fun1(a, cb){
+    //     cb(a);
+    // }
+    // const ft = thunk(f);
+    // ft(1)(console.log); //1
+    // thunk函数应用   用于Generator函数的自动流程管理
+    // function fun3(fn){
+    //     var gen = fn();
+    //     function next(err, data){
+    //         var result = gen.next(data);
+    //         if(result.done) return;
+    //         result.value(next);
+    //     }
+    //     next();
+    // }
+    // function* g(){
+    //
+    // }
+    // run(g);
+
+    // co模块 用于Generator函数自动执行
+    var gen6 = function* (){
+        var f1 = yield readFile(1);
+        var f2 = yield readFile(2);
+        console.log(f1.toString());
+        console.log(f2.toString());
+    }
+    var co = require("co");
+    co(gen6);//可以加回调函数
+    co(gen6).then(function(){
+        console.log("Generator函数执行完成");
+    });
+
+    // 实例：数据读取
+    const co = require("co");
+    const fs = require("fs");
+    const stream = fs.createReadStream("../1.txt");
+    let valjeanCount = 0;
+    co(function* (){
+       while(true){
+           const res = yield Promise.race([
+               new Promise(resolve => stream.once("data", resolve)),
+               new Promise(resolve => stream.once("end", resolve)),
+               new Promise((resolve, reject) => stream.once("error", reject))
+           ]);
+           if(!res){
+               break;
+           }
+           stream.removeAllListeners("data");
+           stream.removeAllListeners("end");
+           stream.removeAllListeners("error");
+           valjeanCount += (res.toString().match(/valjean/ig) || []).length;
+       }
+       console.log("count:",valjeanCount);
+    });
 
 </script>
 </html>
