@@ -8,6 +8,70 @@
 
 </body>
 <script>
+// async函数 使异步操作更方便
+//     var asyncReadFile = async function(){
+//         var f1 = await readFile("1.txt");
+//         var f2 = await readFile("2.txt");
+//         console.log(f1.toString());
+//         console.log(f2.toString());
+//     }
+//     1.自带执行器 与普通函数一模一样
+//     2.更好的语义 async表示函数里有异步操作 await表示紧跟后面的表达式需等待结果
+//     3.更广的适用性    await命令后面可以说Promise对象和原始数据类型
+//     4.返回值是Promise   可以用then方法指定下一步操作
 
+    // 用法   函数执行时，遇到await就会先返回 等异步操作完成再执行函数体后面的语句
+    // async function getStockPriceByName(name){
+    //     var symbol = await getStockSymbol(name);
+    //     var stockPrice = await getStockPrice(symbol);
+    //     return stockPrice;
+    // }
+    // getStockPriceByName("goog").then(function(result){
+    //     console.log(result);
+    // });
+
+    function timeout(ms){
+        return new Promise((resolve) => {
+            setTimeout(resolve, ms);
+        });
+    }
+    async  function asyncPrint(value, ms){
+        await timeout(ms);
+        console.log(value);
+    }
+    asyncPrint("hello world",500);//500ms后输出 hello world
+    // async的多种使用形式
+    // 函数声明
+    async function foo(){}
+    // 函数表达式
+    const foo1 = async function(){}
+    // 对象的方法
+    let obj = { async foo2(){} };
+    obj.foo2().then();
+    // class的方法
+    class Storage{
+        constructor(){
+            this.cachePromise = caches.open("avatars");
+        }
+        async getAvatar(name){
+            const cache = await this.cachePromise;
+            return cache.match(`/avatars/${name}.jpg`);
+        }
+    }
+    const storage = new Storage();
+    storage.getAvatar("jake").then();
+
+    // 语法
+    // 返回Promise对象  return的值会变成then方法回调函数的参数  如果内部出错会被reject回调函数接收
+    async function f(){
+        throw new Error("出错");
+        return "hello";
+    }
+    f().then(v => {
+        console.log(v);//hello
+    },
+    e => {
+        console.log(e);//error
+    });
 </script>
 </html>
