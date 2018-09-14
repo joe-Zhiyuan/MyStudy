@@ -1,0 +1,294 @@
+/*公用样式*/
+@charset "utf-8";
+/* CSS Document */
+body, ul, ol, li, p, h1, h2, h3, h4, h5, h6, form, fieldset, table, td, img, div, dl, dt, dd, input {
+    margin: 0;
+    padding: 0;
+}
+body {
+    font-size: 16px;
+    font-family: "微软雅黑","Microsoft YaHei";
+    /*行高*/
+    line-height: 26px;
+    color: #666666;
+}
+html { /*下次用 解决100%宽度两边留白问题*/
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+img {
+    border: none;
+    vertical-align: middle;
+}
+li {
+    list-style: none;
+}
+button {
+    outline: none;
+    border: 0;
+}
+input, select, textarea {
+    outline: none;
+    border: none;
+    background: none;
+}
+textarea {
+    resize: none;
+}
+a {
+    text-decoration: none;
+    color: #665565;
+}
+.fl {float: left;}
+.fr {float: right;}
+.clearFix:after {
+    content: "\0020";
+    display: block;
+    height: 0;
+    clear: both;
+}
+.clearFix {zoom: 1;}
+.maxWidth {
+    width: 100%;
+    max-width: 1420px;
+    margin:0 auto;
+}
+.w1100{
+    width: 100%;
+    max-width: 1100px;
+    margin:0 auto;
+    padding: 0 10px;
+}
+/*bootstrap样式修改*/
+/*去除a标签 焦点、经过变色下化线问题*/
+a:hover, a:focus {
+    /*从父元素继承颜色*/
+    color: inherit;
+    text-decoration: inherit;
+}
+/*去除谷歌浏览器自动填充的背景与颜色*/
+input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px #fff inset;
+    -webkit-text-fill-color: #666666;
+}
+/*去除选中有蓝色边框*/
+:focus {
+    outline: none;
+}
+/*for IE*/
+::-moz-focus-inner {
+    border-color: transparent;
+}
+/*for mozilla*/
+/*修改input默认颜色*/
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color: #ccc;
+    opacity: 1;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color: #ccc;
+    opacity: 1;
+}
+input:-ms-input-placeholder {
+    color: #ccc;
+    opacity: 1;
+}
+input::-webkit-input-placeholder {
+    color: #ccc;
+    opacity: 1;
+}
+.centerTop{
+    position: relative;
+    height:88px;
+    z-index: 1;
+}
+.centerTop>a{
+    position: relative;
+    display: block;
+    width:90px;
+    height:30px;
+    line-height:30px;
+    text-align: center;
+    text-indent: 25px;
+    background:url("../../images/car.png") no-repeat 10px center;
+    background-color: #f4f4f4;
+    margin-top:29px;
+    z-index: 3;
+}
+.centerTop>a:first-child{
+    text-indent: 0;
+    background-image: none;
+}
+#CarNumber{
+    position: absolute;
+    width:20px;
+    height:20px;
+    border-radius:50%;
+    font-size:10px;
+    line-height:20px;
+    text-align: center;
+    text-indent: 0;
+    color:#fff;
+    background: #da251d;
+    top:-10px;
+    right:-10px;
+    z-index: 5;
+}
+.cars{
+    width:100%;
+}
+.cars>li{
+    position: relative;
+    width:100%;
+    height:190px;
+    padding-top:20px;
+    border-bottom:1px solid #ccc;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.carBox{
+    position: absolute;
+    width:190px;
+    height:150px;
+    line-height:150px;
+    border:1px solid #ccc;
+    text-align: center;
+    top:20px;
+    left:0;
+    overflow: hidden;
+}
+.carBox>img{
+    max-width:100%;
+    max-height:100%;
+    vertical-align: middle;
+    -webkit-transition: transform 0.4s ease;
+    -moz-transition: transform 0.4s ease;
+    -o-transition: transform 0.4s ease;
+    transition: transform 0.4s ease;
+}
+.cars>li:hover >.carBox>img{
+    -webkit-transform: scale(1.2);
+    -moz-transform: scale(1.2);
+    -ms-transform: scale(1.2);
+    -o-transform: scale(1.2);
+    transform: scale(1.2);
+}
+.carCont{
+    width:100%;
+    height:170px;
+    padding-left:240px;
+}
+.carDetails{
+    width:50%;
+}
+.carDetails>h3{
+    font-size:18px;
+    color:#666;
+    margin-top:20px;
+}
+.carDetails>div{
+    width:100%;
+    height:44px;
+    color:#666;
+    line-height:22px;
+    font-size:14px;
+    margin-top:10px;
+    overflow: hidden;
+}
+.carCont>p{
+    width:25%;
+    height:170px;
+    line-height:150px;
+    font-size:20px;
+    color:#da251d;
+}
+.carCont>button{
+    width:110px;
+    height:30px;
+    cursor: pointer;
+    margin-top:60px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background: url("../../images/close.png") no-repeat left center;
+}
+.productsCont{
+    width:100%;
+}
+.productsCont>li{
+    float: left;
+    width:30%;
+    margin-right:5%;
+    margin-top:20px;
+}
+.productsCont>li:nth-child(3n){
+    margin-right:0;
+}
+.productsCont>li>a{
+    display: block;
+    width:100%;
+}
+.productsBox{
+    position: relative;
+    width:100%;
+    padding-bottom:80%;
+    overflow: hidden;
+    z-index:1;
+}
+.productsBox>img{
+    position: absolute;
+    max-width: 100%;
+    max-height: 100%;
+    top:50%;
+    left:50%;
+    -webkit-transform: translate(-50%,-50%);
+    -moz-transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+    -o-transform: translate(-50%,-50%);
+    transform: translate(-50%,-50%);
+    z-index:3;
+}
+.productsCont>li>a>h3{
+    width:100%;
+    font-size: 20px;
+    color:#666;
+    margin:10px 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space:nowrap;
+}
+.productsCont>li>a:hover >h3{
+    color: #01a2ea;
+}
+.productsCont>li>a>div{
+    width:100%;
+    height:44px;
+    line-height:22px;
+    font-size:12px;
+    overflow: hidden;
+}
+.productDown{
+    width:100%;
+    height:30px;
+    line-height:30px;
+    margin-top:25px;
+}
+.productDown>p,.productTopRight>div>p{
+    font-size:24px;
+    line-height:30px;
+    color:#da251d;
+    text-align: left;
+}
+.carBtn,.carBtn1{
+    width:80px;
+    height:30px;
+    cursor: pointer;
+    background: url("../../images/car1.png") no-repeat center center;
+    background-color: #da251d;
+}
