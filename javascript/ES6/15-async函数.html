@@ -108,5 +108,218 @@
     f6().then(v => console.log(v));//123
 
     // 错误处理
+    // await后面的异步操作出错等同于async函数返回的Promise对象被reject
+    async function f7(){
+        await new Promise((resolve, reject) => {
+            throw new Error("出错了啦！");
+        });
+    }
+    f7().then(v => console.log(v)).catch( e => console.log(e));//出错了啦
+    // 防止出错放入try...catch中
+    async function f8(){
+        try{
+            await new Promise((resolve, reject) => {
+               throw new Error("出错了啦2");
+            });
+        }catch (e){
+            console.log(e)
+        }
+        return await("hello world");
+    }
+    // 如果有多个await命令 同一放在try...catch中    使用try...catch可以多次尝试
+    // const superagent = require("superagent");
+    // const NUM_RETRIES = 3;
+    // async function test(){
+    //     let i = 0;
+    //     for(i = 0; i < NUM_RETRIESl; ++i){
+    //         try{
+    //             await superagent.get("http://www.baidu.com");
+    //             break;
+    //         }catch(err){
+    //
+    //         }
+    //     }
+    //     console.log(i);//操作成功退出循环  打印i次数
+    // }
+    // test();
+
+    // 使用注意
+    // 1.await命令后面Promise对象运行结果可能时rejected所以最好把await放在try...catch代码块中
+    // async function myFunction(){
+    //     try{
+    //         await something();
+    //     }catch (e){
+    //         console.log(e);
+    //     }
+    // }
+    //另一种写法
+    // async function myFunction(){
+    //     await  something().cache(function(e){
+    //        console.log(e);
+    //     });
+    // }
+    // 2.多个await如果不存在继发关系 最好让他们同时触发
+    // let [foo, bar] = await Promise.all([getFoo(), getBar()]);
+    //写法2
+    // let fooPromise = getFoo();
+    // let barPromise = getBar();
+    // let foo = await fooPromise;
+    // let bar = await barPromise;
+    // 3.await命令只在async函数中，在其他函数中会报错
+    // async function dbFun(db){
+    //     let docs = [{},{},{}];
+    //     //报错
+    //     docs.forEach(function(doc){
+    //         await db.post(doc);//Unexpected identifier
+    //     });
+    // }
+    //修改为async函数也会出现错误   同时执行 不是继发执行 正确写法是采用for循环
+    // function dbFun(db){
+    //     let docs = [{},{},{}];
+    //     //报错
+    //     docs.forEach(async function(doc){
+    //         await db.post(doc);//Unexpected identifier
+    //     });
+    // }
+    async function dbFun(db){
+        let docs = [{},{},{}];
+        for(let doc of docs){
+            await db.post(doc);
+        }
+    }
+    //多个请求并发执行使用 Promise.all方法  当三个方法都会成功时 下面两种方法效果相同
+    async function dbFun1(db){
+        let docs = [{},{},{}];
+        let promises = docs.map((doc) => db.post(doc));
+        let results = await Promise.all(promises);
+        console.log(results);
+    }
+    async function dbFun2(db){
+        let docs = [{},{},{}];
+        let promises = docs.map((doc) => db.post(doc));
+        let results = [];
+        for(let promise of promises){
+            results.push(await promise);
+        }
+        console.log(results);
+    }
+
+    // async函数实现原理  将Generator函数和自执行函数包装在一个函数里
+    async function fn(args){
+
+    }
+    //等同于
+    function fn1(args){
+        return spawn(function* (){
+
+        });
+    }
+    // spawn就是自执行器
+    function spawn(genF){
+        return new Promise(function(resolve, reject){
+            var gen = genF();
+            function step(nextF){
+                try{
+                    var next = nextF();
+                }catch(e){
+                    return reject(e);
+                }
+                if(next.done){
+                    return resolve(next.value);
+                }
+                Promise.resolve(next.value).then(function(c){
+                    setp(function(){ return gen.next(v);});
+                },function(e){
+                    step(function(){ return gen.throw(e);});
+                });
+            }
+            step(function() {return gen.next(undefined);});
+        });
+    }
+
+    // 其他异步处理比较
+    // promise
+    function chainAnimationsPromise(elem, animations){
+        //变量ret用来保存上一个动画
+        var ret = null;
+        //新建一个空的Promise
+        var p = Promise.resolve();
+        //使用then方法添加所有动画
+        for(var anim of animations){
+            p = p.then(function(val){
+                ret = val;
+                return anim(elem);
+            });
+        }
+        //返回一个部署错误捕捉机制是Promise
+        return p.catch(function(e){
+            //忽略错误 继续执行
+        }).then(function(){
+            return ret;
+        });
+    }
+    // Generator
+    function chainAnimationsGenerator(elem, animations){
+        return spawn(function* (){
+            var ret = null;
+            try{
+                for(var anim of animations){
+                    ret = yield anim(elem);
+                }
+            }catch(e){
+                //忽略错误 继续执行
+            }
+            return ret;
+        })
+    }
+    // async
+    async function chainAnimationsAsync(elem, animations){
+        var ret = null;
+        try{
+            for(var anim of animations){
+                ret = await anim(elem);
+            }
+        }catch(e){
+            //忽略错误 继续执行
+        }
+        return ret;
+    }
+
+    // 实例 按顺序完成异步操作
+    // promise实现
+    function logInOrder(urls){
+        //远程读取所有URL
+        const textPromises = urls.map(url => {
+            return fetch(url).then(response => response.text());
+        });
+        //按次序输出
+        textPromises.reduce((chain, textPromise) => {
+            return chain.then(() => textPromise).then(text => console.log(text));
+        },Promise.resolve());
+    }
+    // async实现  继发
+    async function logInOrderAsync(urls){
+        for(const url of urls){
+            const response = await fetch(url);
+            console.log(await reaponse.text());
+        }
+    }
+    //同时发送
+    async function logInOrderAsync1 (urls){
+        //并发读取远程URL
+        const textPromises = urls.map(async url => {
+            const response = await fetch(url);
+            return response.text();
+        });
+        //按次序输出
+        for(const textPromise of textPromises){
+            console.log(await textPromise);
+        }
+    }
+
+    // 异步遍历器  提案
+    // asyncIterator.next().then((value, done) => {
+    //
+    // });
 </script>
 </html>
