@@ -73,5 +73,40 @@
     e => {
         console.log(e);//error
     });
+
+    // await命令
+    // await命令后面会是一个Promise对象 如果不是会立即转为一个resolve的Promise对象
+    async function f2(){
+        return await 123;
+    }
+    f2().then(v => console.log(v));//123
+    // await后面如果是reject状态，会立即catch方法的回调函数接收到
+    async function f3(){
+        await Promise.reject("出错了1");
+    }
+    f3().then(v => console.log(v)).catch(e => console.log(e));//出错了
+    //只要一个await的状态变为reject那么整个async函数就会中断执行
+    async function f4(){
+        await Promise.reject("出错了2");
+        return await 1234;//不会执行
+    }
+    // 这时将第一个await放入try...catch结构里面，不管异步操作是否成功，第二个await都会执行
+    async function f5(){
+        try{
+            await Promise.reject("出错了3");
+        }catch (e){
+            console.log(e);
+        }
+        return await 12345;//会执行
+    }
+    f5().then(v => console.log(v));//123
+    //另一种方法是在Promise对象后面添加一个catch方法 处理前面出现的错误
+    async function f6(){
+        await Promise.reject("出错了4").catch(e => console.log(e));
+        return await 123456;//不会执行
+    }
+    f6().then(v => console.log(v));//123
+
+    // 错误处理
 </script>
 </html>
