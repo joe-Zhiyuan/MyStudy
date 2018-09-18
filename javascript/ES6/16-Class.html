@@ -9,7 +9,201 @@
 </body>
 </html>
 <script type="text/javascript">
-    window.onload = function(){
-
+    // 通过构造函数定义生成新对象
+    function Point(x, y){
+        this.x = x;
+        this.y = y;
+    }
+    Point.prototype.toString = function(){
+        return "(" + this.x + "," + this.y + ")";
     };
+    var p = new Point(1, 2);
+    console.log(p);
+    // 引入类Class 使其更简洁   定义了一个类 还定义了一个toString方法
+    class Point2{
+        constructor(x, y){
+            this.x = x;
+            this.y = y;
+        }
+        toString(){
+            return "(" + this.x + "," + this.y + ")";
+        }
+    }
+    // 类的数据类型就是函数 类本身指向构造函数
+    class Point3{
+
+    }
+    console.log( typeof Point3);//function  函数
+    console.log( Point3 === Point3.prototype.constructor);//true
+    // 使用时直接使用new命令
+    class Bar {
+        doStuff(){
+            console.log("Stuff");
+        }
+    }
+    var b = new Bar();
+    b.doStuff();//Stuff
+    // 类的所有方法都定义在prototype属性上
+    class Point4{
+        constructor(){
+
+        }
+        toString(){
+
+        }
+        toValue(){
+
+        }
+    }
+    // 等同于
+    Point4.prototype = {
+        constructor(){},
+        toString(){},
+        toValue(){}
+    }
+    // 在类上调用方法就是调用原型上的方法
+    class B{}
+    var b2 = new B();
+    console.log(b2.constructor === B.prototype.constructor);//true
+    // Object.assign()方法可以一次向类添加很多方法
+    Object.assign(Point2.prototype,{
+        toString(){},
+        toValue(){}
+    });
+    // prototypr对象的constructor属性指向类本身
+    console.log(Point.prototype.constructor === Point);//true
+    // 类内部定义方法不可枚举
+    console.log(Object.keys(Point4.prototype));//[]
+    console.log(Object.getOwnPropertyNames(Point4.prototype));//["constructor","toString","toValue"]
+    // 类的属性名可以用表达式
+    let methodName = "getArea";
+    class Square{
+        constructor(){
+
+        }
+        [methodName](){
+
+        }
+    }
+
+    // 严格模式
+    // 类和模块的内部默认使用严格模式
+    // constructor方法  是类的默认方法 一个类必须有constructor方法  通过new命令生成实例自动调用方法
+    // 没有显示定义(创建)那么会自动创建一个空的constructor方法
+    class Point5{
+
+    }
+    // 等同于
+    class Point6{
+        constructor(){
+
+        }
+    }
+    // constructor默认返回实例对象(即this)不过可以指定另外一个对象
+    class Foo{
+        constructor(){
+            return Object.create(null);
+        }
+    }
+    console.log(new Foo() instanceof Foo);//false
+    // 类必须new来调用  否则报错
+    // Foo();//Class constructor Foo cannot be invoked without 'new'
+    // 实例对象 类必须new来调用  实例的属性除定义在本身(即this对象)上 否则都定义在原型(即Class)上
+    class Point7{
+        constructor(x, y){
+            this.x = x;
+            this.y = y;
+        }
+        toString(){
+            return "(" + this.x + "," + this.y + ")";
+        }
+    }
+    var point7 = new Point7(4, 5);
+    console.log(point7.toString());//(4, 5)
+    console.log(point7.hasOwnProperty("x"));//true
+    console.log(point7.hasOwnProperty("toString"));//false
+    // 所有实例共享一个原型对象   可以通过_proto_属性添加为"类"方法
+    var point77 = new Point7();
+    console.log(point7._proto_ === point77._proto_);//true
+    // point7._proto_.printName = function(){ return "Joe" };
+    // point7.printName(); //false  ？？？ 不推荐使用
+
+    // class表达式
+    const myClass = class Me{
+        getClassName(){
+            return Me.name;
+        }
+    };
+    let inst = new myClass();
+    console.log( inst.getClassName());//Me
+    // Me.name;//error not defined
+    const myClass1 = class{}
+    //立即执行Class
+    let person = new class{
+        constructor(name){
+            this.name = name;
+        }
+        sayName(){
+            console.log(this.name);
+        }
+    }("Joe");
+    person.sayName();//Joe
+
+    // 不存在变量提升
+    // new Foo1();
+    // class Foo1{}//error
+    {
+        let Foo3 = class{};
+        class Bar2 extends Foo3{
+
+        }
+    }
+
+    // 私有方法  模拟实现
+    //命名上加以区别
+    class Widegt{
+        //公有方法
+        foo(baz){
+            this._baz(baz);
+        }
+        //私有方法
+        _baz(baz){
+            return this.snaf = baz;
+        }
+
+    }
+    // 将私有方法移出模块
+    class Widget1{
+        foo(baz){
+            bar.call(this, baz);
+        }
+    }
+    function bar(baz){
+        return this.snaf = baz;
+    }
+    // 利用Symbol值的唯一性将私有方法命名为一个Symbol值
+    const bar1 = Symbol("bar1");
+    const snaf = Symbol("snaf");
+    // export default class myClass4 {
+    //     //公有
+    //     foo2(baz) {
+    //         this[bar1](baz);
+    //     }
+    //
+    //     //私有
+    //     [bar1](baz) {
+    //         return this[snaf] = baz;
+    //     };
+    // }
+
+    // 私有属性  提案  前面添加  # 号   也可用来编写私有方法
+    // class Point8{
+    //     #x = 0;
+    //     constructor(){
+    //         #x;//0
+    //     }
+    //     #sun();
+    // }
+
+    // this指向
 </script>
