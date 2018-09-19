@@ -205,5 +205,180 @@
     //     #sun();
     // }
 
-    // this指向
+    // this指向   默认指向类的实例 单独使用该方法，可能会有报错
+    class Logger{
+        // 解决方法1
+        // constructor(){
+        //     this.printName = this.printName.bind(this);
+        // }
+        //解决方法2
+        constructor(){
+            this.printName = (name = "there") => {
+                this.print(`hello ${name}`);
+            };
+        }
+        printName(name = "there"){
+            this.print(`hello ${name}`);
+        }
+        print(text) {
+            console.log(text);
+        }
+    }
+    const logger = new Logger();
+    const { printName } = logger;
+    // printName();//error  Cannot read property 'print' of undefined      this指向运行环境，没有print方法 报错
+    // printName();//hello there
+    // 另一种解决方法使用Proxy  在获取方法是自动绑定this
+    function selfsh(target){
+        const cache = new WeakMap();
+        const handler = {
+            get (target, key){
+                const value = Reflect.get(target, key);
+                if(typeof value !== "function"){
+                    return value;
+                }
+                if(!cache.has(value)){
+                    cache.set(value, value.bind(target));
+                }
+                return cache.get(value);
+            }
+        };
+        const proxy = new Proxy(target, handler);
+        return proxy;
+    }
+    const logger1 = selfsh(new Logger());
+
+    // name属性   类只是在ES5中的构造函数的一层包装  函数许多特性被类继承  包括name属性
+    // name属性返回class关键字后面的类名
+    console.log(Point3.name);//Point3
+
+    // class的取值函数(getter)和存值函数(setter)  使用get和set对某个属性设置存取函数 拦截该属性存取行为
+    class myClass2{
+        constructor(){
+
+        }
+        get prop(){
+            return "getter";
+        }
+        set prop(value){
+            console.log("setter:" + value );
+        }
+    }
+    let inst2 = new myClass2();
+    inst2.prop = 123;//setter123
+    console.log(inst2.prop);//getter
+
+    // class的Generator方法    在方法之前加*号  表示该方法是一个Generator函数
+    class Foo4{
+        constructor(...args){
+            this.args = args;
+        }
+        *[Symbol.iterator](){//返回一个默认遍历器  for...of循环会自动调用这个遍历器
+            for(let arg of this.args){
+                yield arg;
+            }
+        }
+    }
+    for(let x of new Foo4("hello","world")){
+        console.log(x);//hello
+                       //world
+    }
+
+    // class的静态方法  在一个方法前面加上static关键字 表示该方法不会被实例继承 而是通过类直接调用 称为"静态方法"
+    class Foo5{
+        static classMethod(){
+            return "hello";
+        }
+    }
+    console.log(Foo5.classMethod());//hello
+    var foo5 = new Foo5();
+    // foo5.classMethod();//error  not a defined
+    //父类静态方法可以被子类继承
+    class Bar2 extends Foo5{
+        // 静态方法可以从super对象上调用
+        static classMethod(){
+            return super.classMethod() + ",too";
+        }
+    }
+    console.log(Bar2.classMethod());//hello,too
+
+    // class的静态属性和实例属性
+    //静态属性指class本身的属性  class.propname  而不是定义在this上的属性
+    class Foo6{
+
+    }
+    Foo6.prop = 1;
+    console.log(Foo6.prop);//1   读、写  类的静态属性prop  ES6明确规定class内部只有静态方法没有静态属性
+    // class的实例属性  提案？？？
+    // class myClass3{
+    //     // myProp = 42; //error  Unexpected token =
+    //     constructor(){
+    //         console.log(this.myProp);
+    //     }
+    // }
+    // class ReactCounter extends React.Component{
+    //     state = {
+    //         count:0
+    //     };
+    // }
+    // class的静态属性   在实例属性写法前面加上static关键字就可以了 新写法是显示声明 不是赋值处理 语义更好
+    // class myClass4{
+    //     static myStaticProp = 42;
+    //     constructor(){
+    //         console.log(myClass4.myStaticProp);
+    //     }
+    // }
+
+    // new.target属性  ES6引入 返回new命令所作用的函数 如果函数不是new命令调用的 new.target返回undefined 所以这个属性可以确定构造函数怎么调用的
+    // 构造函数只能new命令调用
+    function Person(name){
+        if(new.target !== undefined){
+            this.name = name;
+        }else{
+            throw new Error("必须使用new命令生成实例");
+        }
+    }
+    // 另一种写法
+    function Person1(name){
+        if(new.target === Person1){
+            this.name = name;
+        }else{
+            throw new Error("必须使用new命令生成实例");
+        }
+    }
+    var person1 = new Person("joe");//true
+    // var person11 = Person.call(person1,"joe");//error
+    // 函数内部调用new.target返回当前class
+    class Rectangle{
+        constructor(length, width){
+            console.log(new.target === Rectangle);
+            this.length = length;
+            this.width = width;
+        }
+    }
+    var obj = new Rectangle(3,4);//true
+    // 子类继承父类使用new.target会返回子类
+    class Square1 extends Rectangle{
+        constructor(length){
+            super(length,length);
+        }
+    }
+    var obj1 = new Square1(3);//false
+    // 可以写出不能独立使用 必须继承后才能使用的类
+    class shape{
+        constructor(){
+            if(new.target === shape){
+                throw new Error("不类不能实例化");
+            }
+        }
+    }
+    class Rectangle2 extends shape{
+        constructor(length, width){
+            super(console.log(length, width));
+        }
+    }
+    // var x = new shape();//error
+    var y = new Rectangle2(4, 5);//4 5
+
+    // class的继承
 </script>
