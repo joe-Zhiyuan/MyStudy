@@ -380,5 +380,213 @@
     // var x = new shape();//error
     var y = new Rectangle2(4, 5);//4 5
 
-    // class的继承
+    // class的继承 通过extends关键字继承
+    class Point8{
+        constructor(x, y){
+            this.x = x;
+            this.y = y;
+        }
+    }
+    class ColorPoint extends Point8{
+        constructor(x, y, color){
+            super(x, y);//调用父类的constructor(x, y)  必须  否则报错子类没有this
+            this.color = color;
+        }
+        toString(){
+            return this.color + " " + super.toString();
+            //调用父类toString()
+        }
+    }
+    // 子类如果没有constructor那么就会默认添加
+    // 等同于
+    // class ColorPoint extends Point6{
+    //     constructor(...args){
+    //         super(...args);
+    //     }
+    // }
+    // 子类只有调用super才有this否则会报错
+    class ColorPoint1 extends Point8{
+        constructor(x, y, color){
+            // this.color = color;  error
+            super(x, y);//调用父类的constructor(x, y)  必须  否则报错子类没有this
+            this.color = color;
+        }
+        toString(){
+            return this.color + " " + super.toString();
+            //调用父类toString()
+        }
+    }
+    let cp = new ColorPoint(21, 8, "red");
+    console.log(cp instanceof ColorPoint);//true
+    console.log(cp instanceof Point8);//true
+
+    // Object.getPrototypeOf() 从父类获取子类  判断一个类是否继承另一个类
+    console.log(Object.getPrototypeOf(ColorPoint) === Point8);//true
+
+    // super关键字  可以当函数也可做对象使用
+    // 1.作为函数调用时是父类的构造函数  ES6规定子类必须执行一次super函数   super()只能用在子类构造函数中，其他报错
+    class A{
+        p(){
+            return 2;
+        }
+    }
+    class B5 extends A{
+        constructor(){
+            super();//必须  相当于A.prototype.constructor.call(this)this指向子类
+            console.log(super.p());//2
+        }
+    }
+    // 2.作为对象在普通方法中指向父类原型对象  静态方法指向父类
+    let b4 = new B5();
+    // 通过super调用父类方法时 super会绑定子类的this
+    class A2{
+        constructor(){
+            this.x = 1;
+        }
+        print(){
+            console.log(this.x);
+        }
+    }
+    class B6 extends A2{
+        constructor(){
+            super();
+            this.x = 2;
+            super.x = 3;
+        }
+        m(){
+            super.print();
+        }
+    }
+    let b5 = new B6();
+    b5.m();//2  绑定了子类的this  通过super赋值会变为子类的属性  2==>3
+    // 如果super在静态方法中 super指向父类 而不是父类原型对象
+    class Parent{
+        static myMethod(msg){
+            console.log("static:" + msg );
+        }
+        myMethod(msg){
+            console.log("instance:" + msg);
+        }
+    }
+    class child extends Parent{
+        static myMethod(msg){
+            super.myMethod(msg);
+        }
+        myMethod(msg){
+            super.myMethod(msg);
+        }
+    }
+    child.myMethod(1);//static:1
+    var child1 = new child();
+    child1.myMethod(2);//instance:2
+    // 使用super是必须指定作为函数还是对象使用
+    class A3{}
+    class B7 extends A3{
+        constructor(){
+            super();
+            // console.log(super);  //error
+        }
+    }
+    // 由于对象总是继承其他对象  可以任意一个对象中使用super关键字
+    var obj3 = {
+        toString(){
+            return "MyObject: " + super.toString();
+        }
+    };
+    obj3.toString();
+
+    // 类的prototype属性和_proto_属性
+    // _proto_属性指向对应的构造函数的prototype属性  class有prototype属性和_proto_属性两条继承链
+    // 1.子类的_proto_属性表示构造函数的继承 总是指向父类
+    // 2.子类的prototype属性的_proto_属性表示方法的继承 总是指向父类的prototype属性
+    class A4{}
+    class B10 extends A4{}
+    console.log(B10._proto_ === A4);//false  ???
+    console.log(B10.prototype._proto_ === A4.prototype);//false    ???
+
+    // extends的继承目标   关键字后面可以跟多种类型的值
+    // 1.子类继承Object类
+    class A5 extends Object{}
+    console.log(A5._proto_ === Object);//false
+    // 2.不存在任何继承
+    class A6{}
+    // 3.子类继承null
+    class A7 extends null{}
+
+    // 实例的_proto_属性
+    var p1 = new Point8(2, 3);
+    var p2 = new ColorPoint(2, 3, "red");
+    console.log(p2._proto_ === p1._proto_);//true
+    // console.log(p2._proto_._proto_ === p1._proto_);//error  undefined
+
+    // 原生构造函数的继承
+    // Boolean() Number() Array() String() Date() Function() RegExp() Error() Object() 以前不能继承
+    //子类无法获得原生构造函数的内部属性  ES6允许继承原生构造函数定义子类
+    class myArray extends Array{
+        constructor(...args){
+            super(...args);
+        }
+    }
+    var arr = new myArray();
+    arr[0] = 12;
+    console.log(arr.length);//1
+    arr.length = 0;
+    console.log(arr[0]);//undefined
+    // ES6可以自定义原生数组函数   定义一个带版本功能的数组
+    class VersionedArray extends Array{
+        constructor(){
+            super();
+            this.history = [[]];
+        }
+        commit(){
+            this.history.push(this.slice());
+        }
+        revert(){
+            this.splice(0, this.length,
+            this.history[this.history.length - 1]);
+        }
+    }
+    var x = new VersionedArray();
+    x.push(1);
+    x.push(2);
+    console.log(x);//VersionedArray(2) [1, 2, history: Array(1)]
+    console.log(x.history);//[Array(0)]
+    x.commit();
+    console.log(x.history);//[Array(0), VersionedArray(2)]
+    x.push(3);
+    console.log(x);// [1, 2, 3, history: Array(2)]
+    console.log(x.history);// [Array(0), VersionedArray(2)]
+    x.revert();
+    console.log(x);//[VersionedArray(2), history: Array(2)]
+
+    // 继承Object子类有一个行为差异
+    class newObj extends Object{
+        constructor(){
+            super(...arguments);
+        }
+    }
+    var o = new newObj({attr:true});
+    console.log(o.attr === true);//false  不能传参  ES6规定Object会忽略参数
+
+    // Mixin模式实现  指多个类的接口"混入(mix in)"另一个类
+    function mix(...mixins){
+        class Mix{}
+        for(let mixin of mixins){
+            copyProperties(Mix, mixin);
+            copyProperties(Mix.prototype, mixin.prototype);
+        }
+        return Mix;
+    }
+    function copyProperties(target, source){
+        for(let key of Reflect.ownKeys(source)){
+            if(key !== "constructor" && key !== "prototype" && key !== "name"){
+                let desc = Object.getOwnPropertyDescriptors(source, key);
+                Object.defineProperty(target, key, desc);
+            }
+        }
+    }
+    //将多个类合成一个类 使用时如下
+    class DistributeEdit extends mix(Loggable, Serializable){
+        //...
+    }
 </script>
