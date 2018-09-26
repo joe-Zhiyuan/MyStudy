@@ -589,4 +589,14 @@
     class DistributeEdit extends mix(Loggable, Serializable){
         //...
     }
+
+    //浏览器不支持  修饰器
+    @testable
+    class myTestableClass{
+
+    }
+    function testable(target){
+        target.isTestable = true;
+    }
+    console.log(myTestableClass.isTestable);
 </script>
