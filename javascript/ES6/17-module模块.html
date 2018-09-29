@@ -8,6 +8,117 @@
 
 </body>
 </html>
-<script type="text/javascript">
+<script type="module">
+// module模块加载
+//     通过export命令显示指定输出代码，再通过import命令输入
+//     import {stat, exists, readFile } from "fs";
+//     加载3个方法，不加载其他方法 称"编译时加载"或者静态加载 ES6可以在编译时就完成模块加载  ES6模块本身无法被引用 它不是对象
+//     可以静态分析 引入宏(macro) 和类型校验
+//     1.不需要加载UMD模块格式
+//     2.不需要做成全局变量或navigator对象的属性
+//     3.不再需要对象作为命名空间(Math)对象，未来可以通过模块来提供
+
+    // ES6自动使用use strict 严格模式  不管有没有加"use strict"
+    // 1.变量必须先声明在使用
+    // 2.函数的参数不能有同名属性，否则报错
+    // 3.不能使用with语句
+    // 4.不能对只读属性赋值
+    // 5.不能使用0前缀来表示8进制数
+    // 6.不能删除不可删除属性
+    // 7.不能删除delete prop 只能删除detele globai[prop]
+    // 8.eval不会在它的外层引入变量
+    // 9.eval和arguments不能被重新赋值
+    // 10.arguments不会自动反映函数产数的变化
+    // 11.不能使用arguments.callee和arguments.caller
+    // 12.禁止this指向全局对象
+    // 13.不能使用fs.caller和fs.arguments获取函数调用的堆栈
+    // 14.增加了保留字(protected, static, interface)
+
+    // export命令  用于规定模块的对外接口 import用于输入其他模块提供的功能
+    //profile.js
+
+    // import命令  通过import可以加载模块   注意不要省略  .js   注意 注意 ！！！  import具有提升效果 提升到头部并执行
+    // 大括号表示 指定从其他模块带入的变量名  变量名必须和被导入模块的变量名一致
+    import {firstName, lastName, year} from "./js/profile.js";
+    console.log(firstName, lastName, year);//joe qiao 23
+    //重命名变量名  as 关键字   原变量名在前  新变量名在后
+    import { firstName as thisName } from "./js/profile.js";
+    console.log(thisName);//joe
+    // 由于是静态执行 不能使用表达式和变量  只有运行才能得到结果的结构
+    // import { "f" + "0" } from "./js/profile.js";//error
+    // import会执行加载的模块
+    import {foo} from "./js/profile.js";//baz
+    // import {foo} from "./js/profile.js";//error  只加载一次
+
+    // 模块的整体加载  用星号(*)来指定一个对象 所有方法都加在到这个对象上
+    import * as profile from "./js/profile.js"
+    console.log(profile.lastName);//qiao
+
+    // export default命令 默认输出 import可以为该函数随意指定名字  默认输出不需要大括号{}  必须要有默认输出才能使用
+    import sex from "./js/profile.js";
+    sex();//"man"   "BigMan"
+    // 如果一条import命令同时输入默认方法和其他接口
+    import sex1,{firstName as thisName1} from "./js/profile.js";
+    sex1();//"BigMan"
+    console.log(thisName1);//joe
+
+    // export和import的复合写法
+    export {man} from "./js/profile.js";
+    // 等同于
+    // import {man} from "./js/profile.js";
+    // export {man};
+    //接口改名
+    // export { man as man1 } from "./js/profile.js";
+    //整体输出
+    // export * from "./js/profile.js";
+    //默认接口
+    // export {default} from "./js/profile.js";
+    //具名改为默认接口
+    // export {man as default} from "./js/profile.js";
+
+    // 模块的继承  模块之间也可以继承
+    export * from "./js/profile.js";
+    export var e = 2.14159;
+    export default function(x){
+        return Math.exp(x);
+    }
+
+    // 跨模块常量  const只能在当前代码块使用  要别的页面使用  如果使用常量较多，可以专门设置 constants 目录 管理常量  最后合并到一起
+    import {A} from "./js/profile.js";
+    console.log(A);//5  const A
+
+    // import() import和export命令只能在模块的最顶层 不能在代码块中  提案  动态加载  同步加载
+    // const main = document.querySelector("main");
+    // import(`./js/${JSNAME}.js`).then(module => {//字符面变量 ES6
+    //     module.loadPageInto(main);
+    // }).catch( err => {
+    //     main.textContent = err.message;
+    // })
+    // 按需加载  可以在需要时再加载模块
+    // button.addEventListener("click",event => {
+    //     import("./js/profile.js")
+    //         .then(dialogBox => {
+    //             dialogBox.open();
+    //         })
+    //         .catch(error => {
+    //             // error
+    //         });
+    // });
+    // 条件加载
+    // if(condition){
+    //     import("./js/profile.js").then(
+    //         //...
+    //     );
+    // }else{
+    //     import("./js/profile1.js").then(
+    //         //...
+    //     );
+    // }
+    // 动态模块路径
+    // import(f())
+    //     .then(
+    //         //...
+    //     );
+    // 注意 加载成功以后 这个模块会作为一个对象的then方法的参数  可以使用对象解构赋值的语法 获取输出接口
 
 </script>
