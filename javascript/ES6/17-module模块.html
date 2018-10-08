@@ -121,4 +121,26 @@
     //     );
     // 注意 加载成功以后 这个模块会作为一个对象的then方法的参数  可以使用对象解构赋值的语法 获取输出接口
 
+    // module的加载实现
+    // 加载ES6模块时使用<script>标签 但要加入type="module"属性  通常为异步加载 整个页面渲染完再执行模块脚本  等同于defer属性
+    // 也可代开 async属性  先执行 再恢复渲染  ES6模块允许内嵌在网页中
+    // 对于外部模块
+    // 1.代码在模块作用域运行 不在全局作用域运行  模块内部顶层变量外部不可见
+    // 2.模块自动执行严格模式  use strict
+    // 3.模块中可以加载其他模块 也可export命令输出
+    // 4.在模块中顶层this返回undefined  而不是指向window
+    // 5.同一个模块只加载一次
+    // import utils from "https://example.com/js/utils.js";
+    // const x = 1;
+    // console.log(x === window.x);  //false
+    // console.log(this === undefined);  //true ???
+    // 检测当前代码是否在ES6模块中
+    // const isNotModuleScript = this !== undefined;
+
+    // node加载
+    // ES6与CommonJS不兼容 将两者分开  一个模块只有一行import或export Node就会认为改模块为ES6模块 否则为CommonJS模块
+
+    // node  ???
+
+
 </script>
