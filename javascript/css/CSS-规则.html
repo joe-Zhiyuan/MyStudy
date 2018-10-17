@@ -3,8 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <title>CSS-规则</title>
+    <style type="text/css">
+        body{
+            font-size: 16px;
+            color:#4a4a4a;
+        }
+        .firstBtn,.secondBtn{
+            /*响应   改变颜色 改变背景颜色就行*/
+            padding:.3em .8em;
+            border:1px solid rgba(0,0,0,.1);
+            background: #58a linear-gradient(hsla(0,0%,100%,.2),transparent);
+            border-radius: .2em;
+            box-shadow: 0 0.05em 0.25em rgba(0,0,0,.5);
+            color:white;
+            text-shadow: 0 -0.05em 0.05em rgba(0,0,0,.5);
+            /*依赖父级字号*/
+            font-size: 125%;
+            /*依赖于字号*/
+            line-height: 1.5;
+        }
+        .secondBtn{
+            background-color: #c00;
+        }
+        hr{
+            height:.5em;
+            /*取得文本的颜色*/
+            background: currentColor;
+        }
+        .callout{
+            position: relative;
+            width:100px;
+            height:50px;
+            border:1px solid #ccc;
+        }
+        .callout::before{
+            content:"";
+            position: absolute;
+            top:-.4em;left:1em;
+            padding:.35em;
+            /*继承父元素颜色*/
+            background: inherit;
+            border:inherit;
+            border-radius: 0;
+            border-bottom:0;
+            -webkit-transform: rotate(45deg);
+            -moz-transform: rotate(45deg);
+            -ms-transform: rotate(45deg);
+            -o-transform: rotate(45deg);
+            transform: rotate(45deg);
+        }
+    </style>
 </head>
 <body>
-
+<button class="firstBtn">Yes</button>
+<button class="secondBtn">Yes</button>
+<hr/>
+<div class="callout">
+    Yes
+</div>
 </body>
 </html>
