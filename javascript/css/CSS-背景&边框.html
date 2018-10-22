@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CSS-背景&边框</title>
+</head>
+<style type="text/css">
+    div{
+        width:300px;
+        height:250px;
+        margin:10px 0 20px 50px;
+    }
+    /*1.半透明边框*/
+    .Bg1{
+        border:10px solid hsla(0,0%,100%,.5);
+        background: #22ac38;
+        /*背景不会在边框下面  默认会侵入边框*/
+        -webkit-background-clip: padding-box;
+        -moz-background-clip: padding-box;
+        background-clip: padding-box;
+    }
+    /*2.多重边框*/
+    .Bg2{
+        background: yellowgreen;
+        /*生成边框一样投影 支持逗号分隔语法，可以创建任意数量的投影 层叠的  不会响应鼠标事件*/
+        /*-webkit-box-shadow: 0 0 0 10px #655,0 0 0 15px deeppink*/
+        /*,0 2px 5px 15px rgba(0,0,0,.6);*/
+        /*-moz-box-shadow: 0 0 0 10px #655,0 0 0 15px deeppink*/
+        /*,0 2px 5px 15px rgba(0,0,0,.6);*/
+        /*!*投影到内部 inset 每个都要加*!*/
+        /*box-shadow: 0 0 0 10px #655 inset,0 0 0 15px deeppink inset*/
+        /*,0 2px 5px 15px rgba(0,0,0,.6) inset;*/
+
+        /*使用ouline(描边)来产生边框*/
+        border:10px solid #655;
+        outline: 5px dotted #fff;/*缝边效果*/
+        /*使用outline-offset属性控制与元素的距离 可以为负值*/
+        outline-offset: -20px;
+    }
+    /*灵活的背景定位*/
+    /*允许指定对任意角的偏移量*/
+    .Bg3{
+        padding:10px;
+        /*回退方案  b不支持background-position扩展语法*/
+        background: url("../images/car.png") no-repeat bottom right #58a;
+        /*指定偏移量*/
+        /*background-position: right 30px bottom 10px;*/
+        /*与内边距一致 背景图片位置  通常默认为padding-box 改变background-origin基准   可以结合使用*/
+        -webkit-background-origin: content-box;
+        background-origin: content-box;
+        background-position: right 20px bottom 30px;
+        /*calc()函数  可以在background-position中使用 left top*/
+        /*background-position: calc(100% - 50px) calc(100% - 50px);*/
+    }
+</style>
+<body>
+<div class="Bg1"></div>
+<div class="Bg2"></div>
+<div class="Bg3"></div>
+</body>
+</html>
