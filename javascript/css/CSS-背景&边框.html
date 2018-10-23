@@ -52,10 +52,52 @@
         /*calc()函数  可以在background-position中使用 left top*/
         /*background-position: calc(100% - 50px) calc(100% - 50px);*/
     }
+    /*4.边框内圆角  用一个div实现内部圆角效果*/
+    .Bg4{
+        background: tan;
+        border-radius: .8em;
+        padding:1em;
+        /*描边的扩张值不能小于border-radius的一半*/
+        box-shadow:0 0 0 .5em #655;
+        outline:.6em solid #655;
+    }
+    /*5.条纹效果 渐变*/
+    .Bg5{
+        /*background: linear-gradient(#fb3, #58a);*/
+        /*调整渐变区域*/
+        /*background: linear-gradient(#fb3 20%, #58a 80%);!*从20%--60%*!*/
+        /*background: linear-gradient(#fb3 50%, #58a 50%);!*都为50% 条纹%*!*/
+        /*background: linear-gradient(#fb3 30%, #58a 0);!*都为50% 第二个设为0它是前一个位置值 为70%*!*/
+        background: linear-gradient(#fb3 30%,#58a 0, #58a 60%, yellowgreen 0);/*多条纹  最后为40%*/
+        /*通过background-size调整尺寸  调整为100%为30px 默认平铺 所以填满*/
+        background-size: 100% 30px;
+    }
+    /*垂直条纹 to right 默认to bottom*/
+    .Bg6{
+        background: linear-gradient(to right,#fb3 30%,#58a 0, #58a 60%, yellowgreen 0);/*多条纹  最后为40%*/
+        background-size: 30px 100%;/*颠倒值*/
+    }
+    /*斜向条纹*/
+    .Bg7{
+        /*宽度小一点 改为42  45deg倾斜*/
+        /*background: linear-gradient(45deg, #fb3 25%, #58a 0, #58a 50%, #fb3 0, #fb3 75%, #58a 0);*/
+        /*background-size: 42px 42px ;*/
+        /*无限循环重复 repeating-linear-gradient()直线渐变 repeating-radial-gradient()径向渐变  轻松改变角度*/
+        /*background: repeating-linear-gradient(60deg, #fb3, #fb3 15px, #58a 0, #58a 30px);!*总30px --15px一半*!*/
+        /*同一色 背景  白色透明条纹  浅色  叠加手法*/
+        background: #58a;
+        background-image: repeating-linear-gradient(30deg, hsla(0 ,0%,100%,.1),
+        hsla(0,0%,100%,.1) 15px,
+        transparent 0, transparent 30px);
+    }
 </style>
 <body>
 <div class="Bg1"></div>
 <div class="Bg2"></div>
 <div class="Bg3"></div>
+<div class="Bg4"></div>
+<div class="Bg5"></div>
+<div class="Bg6"></div>
+<div class="Bg7"></div>
 </body>
 </html>
