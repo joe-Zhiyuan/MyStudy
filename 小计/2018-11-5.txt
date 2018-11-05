@@ -1,0 +1,37 @@
+//多行文本截断---->响应式
+
+
+<div class="wrap">
+	<div class="text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dignissimos labore sit vel itaque delectus atque quos magnam assumenda quod architecto perspiciatis animi.
+	</div>
+</div>
+//刚才的粉色盒子和黄色盒子都可以用伪元素来代替。
+.wrap {  
+height: 40px;  
+line-height: 20px; 
+overflow: hidden;
+}
+.wrap .text {
+float: right;  
+margin-left: -5px;  
+width: 100%;  
+word-break: break-all;
+}
+.wrap::before {
+float: left;  
+width: 5px;  
+content: '';  
+height: 40px;
+}
+.wrap::after {
+float: right;  
+content: "...";  
+height: 20px;  
+line-height: 20px;/* 为三个省略号的宽度 */  
+width: 3em;/* 使盒子不占位置 */  
+margin-left: -3em;/* 移动省略号位置 */  
+position: relative;  
+left: 100%;  
+top: -20px;  
+padding-right: 5px;
+}
