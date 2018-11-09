@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HOPE官网</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,
+    minimum-scale=1.0,user-scalable=0">
+    <link rel="stylesheet" href="css/swiper.min.css"/>
+    <link rel="stylesheet" href="css/animate.css"/>
+    <link rel="stylesheet" href="css/style.css"/>
+    <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+    <!--注释兼容 是ie8载入 高于ie5低于ie9可以识别-->
+    <!--[if(gt IE 5)&(lt IE 9)]>
+    <script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+    <script src="js/html5shiv.min.js"></script>
+    <script src="js/respond.min.js"></script>
+    <script type="text/javascript" src="js/css3-mediaqueries.min.js"></script>
+    <![endif]-->
+    <script type="text/javascript" src="js/wow.min.js"></script>
+    <script type="text/javascript" src="js/swiper.jquery.min.js"></script>
+    <!-- 推荐：根据需要加载，引入基础框架 -->
+    <script src="js/jparticles.js"></script>
+    <!-- 引入粒子特效 -->
+    <script src="js/particle.js"></script>
+
+</head>
+<body>
+<!--header-->
+<form class="fr clearFix" action="" method="post" id="mobile">
+    <button type="submit" class="fr">搜索</button>
+    <input class="fr" type="text" title="Search" placeholder="Search..."/>
+</form>
+<div class="header maxWidth clearFix">
+    <div class="nav fl clearFix" id="nav">
+        <div class="close fr">
+            <span id="close">关闭</span>
+        </div>
+        <ul class="clearFix">
+            <li><a href="cases.html">案例</a>
+                <ul>
+                    <li><a href="cases.html">网站建设</a></li>
+                    <li><a href="cases.html">微站</a></li>
+                    <li><a href="cases.html">APP开发</a></li>
+                    <li><a href="cases.html">H5开发</a></li>
+                    <li><a href="cases.html">影视广告</a></li>
+                </ul>
+            </li>
+            <li><a href="items.html">服务项目</a>
+                <ul>
+                    <li><a href="webItems.html">网站建设</a></li>
+                    <li><a href="webItems.html">微信/H5开发</a></li>
+                    <li><a href="webItems.html">小程序</a></li>
+                    <li><a href="webItems.html">APP开发</a></li>
+                    <li><a href="webItems.html">SEO优化</a></li>
+                    <li><a href="webItems.html">品牌设计</a></li>
+                    <li><a href="webItems.html">o2o系统</a></li>
+                    <li><a href="webItems.html">企业邮箱</a></li>
+                    <li><a href="webItems.html">360全景</a></li>
+                </ul>
+            </li>
+            <li><a href="support.html">技术支持</a>
+                <ul>
+                    <li><a href="support.html">支持</a></li>
+                    <li><a href="problems.html">常见问题</a></li>
+                    <li><a href="download.html">下载</a></li>
+                </ul>
+            </li>
+            <li><a href="about.html">关于HOPE</a>
+                <ul>
+                    <li><a href="about.html">公司简介</a></li>
+                    <li><a href="about.html">团队介绍</a></li>
+                    <li><a href="about.html">未来愿景</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <a class="headerBtn fl" id="headerBtn">
+        <span></span>
+        <span></span>
+        <span></span>
+    </a>
+    <a class="logo fl" href="index.html">
+        <img src="images/logo.png" alt="logo"/>
+    </a>
+    <div class="headerRight fr clearFix">
+        <a class="fr" href="contact.html">联系</a>
+        <form class="search fr clearFix" action="" method="post">
+            <button type="button" class="searchBtn fr"></button>
+            <input class="searchInput fr" type="text" title="Search" placeholder="Search..."/>
+        </form>
+    </div>
+</div>
+<!--banner-->
+<div class="ny-banner items">
+    <div class="bannerTil maxWidth">
+        <a href="index.html">首页</a>&nbsp;&gt;&nbsp;<a href="items.html">服务项目</a>
+    </div>
+    <img src="images/itemBanner.jpg" alt="casesBanner"/>
+    <div id="canvas"></div>
+</div>
+<!--cont-->
+<div class="itemCont">
+    <ul class="ItemTil clearFix">
+        <li><a href="webItems.html">网站建设</a></li>
+        <li><a href="webItems.html">微信/H5开发</a></li>
+        <li><a href="webItems.html">小程序</a></li>
+        <li><a href="webItems.html">APP开发</a></li>
+        <li><a href="webItems.html">SEO优化</a></li>
+        <li><a href="webItems.html">品牌设计</a></li>
+        <li><a href="webItems.html">o2o系统</a></li>
+        <li><a href="webItems.html">企业邮箱</a></li>
+        <li><a href="webItems.html">360全景</a></li>
+    </ul>
+    <!--item-->
+    <div class="indexItemBg ItemBg">
+        <h3>服务项目</h3>
+        <ul class="clearFix">
+            <li><a href="webItems.html">
+                <h3>网站建设</h3>
+                <div class="itemD">
+                    量身定制符合企业需求的网站建设与传播解决方案
+                </div>
+                <div class="itemLink one">
+                    <img src="images/caselogo1.png" alt="item"/>
+                    <img src="images/caseleft.png"/>
+                </div>
+                <div class="itemLink two">
+                    <img src="images/caselogo1-1.png" alt="item"/>
+                    <img src="images/caseleft2.png"/>
+                </div>
+            </a></li>
+            <li><a href="webItems.html">
+                <h3>微信/H5开发</h3>
+                <div class="itemD">
+                    通过精准的内容传达达到有效推广
+                </div>
+                <div class="itemLink one">
+                    <img src="images/caselogo2.png" alt="item"/>
+                    <img src="images/caseleft.png"/>
+                </div>
+                <div class="itemLink two">
+                    <img src="images/caselogo2-1.png" alt="item"/>
+                    <img src="images/caseleft2.png"/>
+                </div>
+            </a></li>
+            <li><a href="webItems.html">
+                <h3>小程序</h3>
+                <div class="itemD">
+                    提供不同行业、不同场景小程序核心功能
+                </div>
+                <div class="itemLink one">
+                    <img src="images/caselogo3.png" alt="item"/>
+                    <img src="images/caseleft.png"/>
+                </div>
+                <div class="itemLink two">
+                    <img src="images/caselogo3-1.png" alt="item"/>
+                    <img src="images/caseleft2.png"/>
+                </div>
+            </a></li>
+            <li><a href="webItems.html">
+                <h3>SEO优化</h3>
+                <div class="itemD">
+                    利用搜索引擎的规则提高网站在有关搜索引擎内的自然排名
+                </div>
+                <div class="itemLink one">
+                    <img src="images/caselogo4.png" alt="item"/>
+                    <img src="images/caseleft.png"/>
+                </div>
+                <div class="itemLink two">
+                    <img src="images/caselogo4-1.png" alt="item"/>
+                    <img src="images/caseleft2.png"/>
+                </div>
+            </a></li>
+            <li><a href="webItems.html">
+                <h3>品牌设计</h3>
+                <div class="itemD">
+                    品牌形象策划，品牌命名，品牌口号标识设计，标识升级，VI设计，电商设计、海报设计等
+                </div>
+                <div class="itemLink one">
+                    <img src="images/caselogo5.png" alt="item"/>
+                    <img src="images/caseleft.png"/>
+                </div>
+                <div class="itemLink two">
+                    <img src="images/caselogo5-1.png" alt="item"/>
+                    <img src="images/caseleft2.png"/>
+                </div>
+            </a></li>
+            <li><a href="webItems.html">
+                <h3>o2o系统</h3>
+                <div class="itemD">
+                    个性定制全品类O2O系统，网上门店一体化营销
+                </div>
+                <div class="itemLink one">
+                    <img src="images/caselogo6.png" alt="item"/>
+                    <img src="images/caseleft.png"/>
+                </div>
+                <div class="itemLink two">
+                    <img src="images/caselogo6-1.png" alt="item"/>
+                    <img src="images/caseleft2.png"/>
+                </div>
+            </a></li>
+            <li><a href="webItems.html">
+                <h3>企业邮箱</h3>
+                <div class="itemD">
+                    支持多平台、多终端和丰富的开放接口
+                </div>
+                <div class="itemLink one">
+                    <img src="images/caselogo7.png" alt="item"/>
+                    <img src="images/caseleft.png"/>
+                </div>
+                <div class="itemLink two">
+                    <img src="images/caselogo7-1.png" alt="item"/>
+                    <img src="images/caseleft2.png"/>
+                </div>
+            </a></li>
+            <li><a href="webItems.html">
+                <h3>360全景</h3>
+                <div class="itemD">
+                    360度全景观察，而且通过交互操作，可以实现自由浏览，从而体验三维的VR视觉世界
+                </div>
+                <div class="itemLink one">
+                    <img src="images/caselogo8.png" alt="item"/>
+                    <img src="images/caseleft.png"/>
+                </div>
+                <div class="itemLink two">
+                    <img src="images/caselogo8-1.png" alt="item"/>
+                    <img src="images/caseleft2.png"/>
+                </div>
+            </a></li>
+            <li><a href="webItems.html">
+                <h3>APP应用</h3>
+                <div class="itemD">
+                    基于IOS平台与Android平台App设计开发
+                </div>
+                <div class="itemLink one">
+                    <img src="images/caselogo9.png" alt="item"/>
+                    <img src="images/caseleft.png"/>
+                </div>
+                <div class="itemLink two">
+                    <img src="images/caselogo9-1.png" alt="item"/>
+                    <img src="images/caseleft2.png"/>
+                </div>
+            </a></li>
+            <li><a href="webItems.html">
+                <h3>企业邮箱</h3>
+                <div class="itemD">
+                    支持多平台、多终端和丰富的开放接口
+                </div>
+                <div class="itemLink one">
+                    <img src="images/caselogo7.png" alt="item"/>
+                    <img src="images/caseleft.png"/>
+                </div>
+                <div class="itemLink two">
+                    <img src="images/caselogo7-1.png" alt="item"/>
+                    <img src="images/caseleft2.png"/>
+                </div>
+            </a></li>
+        </ul>
+    </div>
+    <div class="itemClass">
+        <h3>我们的服务领域</h3>
+        <ul class="clearFix">
+            <li>
+                <h3>按终端类型</h3>
+                <img src="images/item1.png" alt="item"/>
+                <ul class="clearFix">
+                    <li><a href="">PC端系统</a></li>
+                    <li><a href="">移动端系统</a></li>
+                    <li><a href="">APP开发</a></li>
+                    <li><a href="">微信开发</a></li>
+                    <li><a href="">小程序开发</a></li>
+                </ul>
+            </li>
+            <li>
+                <h3>按商业模式</h3>
+                <img src="images/item2.png" alt="item"/>
+                <ul class="clearFix">
+                    <li><a href="">电商系统开发</a></li>
+                    <li><a href="">O2O系统开发</a></li>
+                    <li><a href="">直播系统开发</a></li>
+                    <li><a href="">在线教育系统</a></li>
+                    <li><a href="">金融平台开发</a></li>
+                    <li><a href="">物联网系统开发</a></li>
+                </ul>
+            </li>
+            <li>
+                <h3>按行业领域</h3>
+                <img src="images/item3.png" alt="item"/>
+                <ul class="clearFix">
+                    <li><a href="">电商行业</a></li>
+                    <li><a href="">教育行业</a></li>
+                    <li><a href="">金融行业</a></li>
+                    <li><a href="">IT行业</a></li>
+                    <li><a href="">传统企业</a></li>
+                    <li><a href="">房地产行业</a></li>
+                    <li><a href="">政府事业单位</a></li>
+                </ul>
+            </li>
+            <li>
+                <h3>按使用场景</h3>
+                <img src="images/item4.png" alt="item"/>
+                <ul class="clearFix">
+                    <li><a href="">交易型平台</a></li>
+                    <li><a href="">供应链平台</a></li>
+                    <li><a href="">办公协作平台</a></li>
+                    <li><a href="">政务公开平台</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <!--item-swiper-->
+    <div class="processBg">
+        <h3>服务流程</h3>
+        <!--宽度小于1200px时显示流程轮播-->
+        <div id="swiper-Process">
+            <div class="swiper-container">
+                <div class="swiper-pagination"></div>
+                <div class="swiper-wrapper">
+
+                </div>
+                <div class="short-line"></div>
+                <div class="long-line"></div>
+            </div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+        </div>
+        <!--大于1200px显示图片-->
+        <img src="images/process.png" alt="process"/>
+        <a href="">立即咨询</a>
+    </div>
+  </div>
+<!--footer-->
+<div class="footer">
+    <ul class="clearFix">
+        <li>
+            <div class="contactBox">
+                <img src="images/contact1.png" alt="contact"/>
+            </div>
+            <div><p>100%第一时间响应</p></div>
+        </li>
+        <li>
+            <div class="contactBox">
+                <img src="images/contact2.png" alt="contact"/>
+            </div>
+            <div><p>不间断上门售后</p></div>
+        </li>
+        <li>
+            <div class="contactBox">
+                <img src="images/contact3.png" alt="contact"/>
+            </div>
+            <div><p>专业的设计研发团队</p></div>
+        </li>
+        <li>
+            <div class="contactBox">
+                <img src="images/contact4.png" alt="contact"/>
+            </div>
+            <div><p>联系我们<br/>电话：0574-86558655</p></div>
+        </li>
+    </ul>
+    <div class="footerTopBg">
+        <div class="footerTop maxWidth clearFix">
+            <div class="footerTopLeft fl">
+                <form action="" method="post" class="clearFix">
+                    <label class="fl" for="case">第一时间获取方案</label>
+                    <div class="fl">
+                        <input type="text" id="case" name="case" title="获取方案"/>
+                        <button type="submit">立即获取</button>
+                    </div>
+                </form>
+                <p>我们在收到您的需求后会安排业务代表第一时间致电给您，了解需求，以最快的时间出具合理的方案和合适的价格，进行下一步的合作共赢。</p>
+            </div>
+            <div class="footerTopRight fr clearFix">
+                <div class="share fr">
+                    <span>关注我们</span>
+                    <img src="images/wechat.png" alt="wechat"/>
+                    <img src="images/phone.png" alt="telephone"/>
+                </div>
+                <form action="" method="post" class="fr clearFix">
+                    <label class="fl" for="caseSearch">服务项目查询</label>
+                    <div class="fr">
+                        <input type="text" id="caseSearch" name="caseSearch" title="输入您的邮箱" placeholder="输入您的邮箱"/>
+                        <button type="submit"></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="footerLine">
+        <img src="images/joinLogo.png" alt="logo"/>
+    </div>
+    <div class="footerCenterBg">
+        <div class="footerCenter maxWidth clearFix">
+            <ul class="footerLeft fl clearFix">
+                <li><h3>案例</h3>
+                    <ul>
+                        <li><a href="cases.html">网站建设</a></li>
+                        <li><a href="cases.html">微站</a></li>
+                        <li><a href="cases.html">APP开发</a></li>
+                        <li><a href="cases.html">H5开发</a></li>
+                        <li><a href="cases.html">影视广告</a></li>
+                    </ul>
+                </li>
+                <li><h3>服务项目</h3>
+                    <ul>
+                        <li><a href="webItems.html">网站建设</a></li>
+                        <li><a href="webItems.html">微信/H5开发</a></li>
+                        <li><a href="webItems.html">小程序</a></li>
+                        <li><a href="webItems.html">APP开发</a></li>
+                        <li><a href="webItems.html">SEO优化</a></li>
+                        <li><a href="webItems.html">品牌设计</a></li>
+                        <li><a href="webItems.html">o2o系统</a></li>
+                        <li><a href="webItems.html">企业邮箱</a></li>
+                        <li><a href="webItems.html">360全景</a></li>
+                    </ul>
+                </li>
+                <li><h3>技术支持</h3>
+                    <ul>
+                        <li><a href="support.html">支持</a></li>
+                        <li><a href="problems.html">常见问题</a></li>
+                        <li><a href="download.html">下载</a></li>
+                    </ul>
+                </li>
+                <li><h3>关于HOPE</h3>
+                    <ul>
+                        <li><a href="about.html">公司简介</a></li>
+                        <li><a href="about.html">团队介绍</a></li>
+                        <li><a href="about.html">未来愿景</a></li>
+                    </ul>
+                </li>
+                <li><h3>联系</h3>
+                    <ul>
+                        <li><a href="contact.html">联系方式</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <ul class="footerRight fl">
+                <li><a href="investment.html">投资合作</a></li>
+                <li><a href="news.html">资讯</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footerDown">
+        <div class="copyRight maxWidth clearFix">
+            © 2018 Hope   浙公网安备
+        </div>
+    </div>
+</div>
+<!--right fixed-->
+<ul class="rightFixed" id="rightFixed">
+    <li>
+        <a href="">在线<br/>咨询</a>
+    </li>
+    <li>
+        <img src="images/tel.png" alt="telephone"/>
+        <strong>0574-86<br/>558655</strong>
+    </li>
+    <li>
+        <span>关注<br/>我们</span>
+        <div class="rightFixedLeft">
+            <img src=""/>
+        </div>
+    </li>
+</ul>
+<div class="top" id="top">
+    <img src="images/top.png" alt="top"/>
+    <p>TOP</p>
+</div>
+</body>
+</html>
+<script type="text/javascript" src="js/common.js"></script>
