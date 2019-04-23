@@ -1,10 +1,15 @@
 const path = require('path');
+const HTMLPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
 
 //webpack 15
 // webpack.config.js
-const VueLoaderPlugin = require('vue-loader/lib/plugin')
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
+//判断是不是开发环境
+const isDev = process.env.NODE_ENV === 'development';
 
-module.exports = {
+const config = {
+    target:'web',//前端项目
     entry: path.join(__dirname, "src/index.js"),
     output: {
         path: path.join(__dirname, "dist"),
@@ -46,9 +51,36 @@ module.exports = {
         ]
     },
     plugins: [
-        new VueLoaderPlugin()
+        new VueLoaderPlugin(),
+        new webpack.DefinePlugin({
+            'process.env':{
+                //'"development"' 添加双引号是 不加报错 process.env.NODE_ENV = development
+                NODE_ENV:isDev ? '"development"' : '"production"'
+            }
+        }),
+        new HTMLPlugin()
     ]
+};
+//获取到运行标识
+if(isDev){
+    config.devtool = '#cheap-module-eval-source-map';
+    config.devServer = {
+        port:8000,
+        host:'0.0.0.0',
+        overlay:{
+            errors:true,
+        },
+        hot:true
+        //自动打开浏览器
+        //open:true
+    }
+    config.plugins.push(
+        new webpack.HotModuleReplacementPlugin(),
+        new webpack.NoEmitOnErrorsPlugin()
+    )
 }
+module.exports = config;
+
 //webpack 14
 // module.exports = {
 //     entry:path.join(__dirname, 'src/index.js'),

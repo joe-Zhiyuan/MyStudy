@@ -1,12 +1,12 @@
 <template>
-    <div id="test">{{text}}}</div>
+    <div id="test">{{text}}</div>
 </template>
 
 <script>
     export default {
         data(){
             return{
-                text:'abc'
+                text:'abcde'
             }
         }
     }
@@ -14,6 +14,6 @@
 
 <style scoped>
 #test{
-    color:blue;
+    color:mediumvioletred;
 }
 </style>
