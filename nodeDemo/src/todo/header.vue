@@ -1,13 +1,13 @@
 <template>
-
+    
 </template>
 
 <script>
     export default {
-
+        name: ""
     }
 </script>
 
 <style scoped>
-/*scoped 样式只匹配本页面 其他页面同样样式名css不会影响元素*/
+
 </style>
