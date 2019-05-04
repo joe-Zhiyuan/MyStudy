@@ -21,7 +21,10 @@
             }
         },
         methods:{
-            deleteTodo(){}
+            deleteTodo(){
+                // $emit触发事件
+                this.$emit('del',this.todo.id);
+            }
         }
     }
 </script>

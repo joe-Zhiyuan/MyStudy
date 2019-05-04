@@ -1,6 +1,7 @@
 const path = require('path');
 const HTMLPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
+const ExtractPlugin = require('extract-text-webpack-plugin');//打包插件
 
 //webpack 15
 // webpack.config.js
@@ -104,7 +105,7 @@ if(isDev){
 }
 module.exports = config;
 
-//webpack 14
+//weback 14
 // module.exports = {
 //     entry:path.join(__dirname, 'src/index.js'),
 //     output: {
