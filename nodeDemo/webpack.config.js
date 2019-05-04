@@ -13,8 +13,8 @@ const config = {
     target:'web',//前端项目
     entry: path.join(__dirname, "src/index.js"),
     output: {
+        filename: "bundle.[hash:8].js",
         path: path.join(__dirname, "dist"),
-        filename: "bundle.js"
     },
     module: {
         rules: [
@@ -25,40 +25,6 @@ const config = {
             {
                 test: /\.jsx$/,
                 loader: "babel-loader"
-            },
-            {
-                test: /\.css$/,
-                exclude: /node_modules/,
-                use:[
-                    // 'style-loader',
-                    // 'css-loader'
-                    {
-                        loader: 'style-loader',
-                    },
-                    {
-                        loader: 'css-loader',
-                        options: {
-                            importLoaders: 1,
-                        }
-                    },
-                    {
-                        loader: 'postcss-loader'
-                    }
-                ]
-            },
-            {
-                test:/\.styl/,
-                use:[
-                    'style-loader',
-                    'css-loader',
-                    {
-                        loader:'postcss-loader',
-                        options: {
-                            sourceMap:true,
-                        }
-                    },
-                    'stylus-loader'
-                ]
             },
             {
                 test:/\.(gif|jpg|jpeg|png|svg)$/,
@@ -87,6 +53,20 @@ const config = {
 };
 //获取到运行标识
 if(isDev){
+    config.module.rules.push({ //css单独打包
+        test:/\.styl/,
+            use:[
+        'style-loader',
+        'css-loader',
+        {
+            loader:'postcss-loader',
+            options: {
+                sourceMap:true,
+            }
+        },
+        'stylus-loader'
+    ]
+    });
     config.devtool = '#cheap-module-eval-source-map';
     config.devServer = {
         port:8000,
@@ -102,7 +82,33 @@ if(isDev){
         new webpack.HotModuleReplacementPlugin(),
         new webpack.NoEmitOnErrorsPlugin()
     )
+}else{
+    config.output.filename = '[name].[chunkhash:8].js';
+    config.module.rules.push(
+        {
+            test: /\.styl/,
+            use: ExtractPlugin.extract({
+                fallback: 'style-loader',
+                use:[
+                    'css-loader',
+                    {
+                        loader:'postcss-loader',
+                        options: {
+                            sourceMap:true,
+                        }
+                    },
+                    'stylus-loader'
+                ]
+            })
+        },
+    )
+    config.plugins.push(
+        //打包出错 不适配webpack4 安装extract-text-webpack-plugin@next contenthash改为chunkhash
+        // new ExtractPlugin('styles.[contenthash  :8].css')
+        new ExtractPlugin('styles.[chunkhash:8].css')
+    )
 }
+
 module.exports = config;
 
 //weback 14

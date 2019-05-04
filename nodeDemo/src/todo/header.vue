@@ -10,16 +10,15 @@
     }
 </script>
 
-<style scoped>
+<style lang="stylus" scoped>
 /*匹配stylus插件    */
-.main-header{
-    text-align: center;
-}
-h1{
-    text-align: center;
-    font-size: 100px;
-    color:rgba(175,47,47,0.4);
-    font-weight: 100;
-    margin :20px;
-}
+.main-header
+    text-align center
+h1
+    text-align center
+    font-size 100px
+    color rgba(175,47,47,0.4)
+    font-weight 100
+    margin 20px
+
 </style>
