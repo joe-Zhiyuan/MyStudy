@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>父子组件传值</title>
+    <script src="vue.js"></script>
+</head>
+<body>
+<div id="root">
+    <input type="text" v-model="inputValue"/>
+    <button v-on:click="handleBtnClick">提交</button>
+    <ul> <!--index下标 简写v-bind :-->
+        <todo-item v-bind:content="item"
+                   :index="index"
+                   v-for="(item,index) in list"
+                   @delete="handleItemDelete">
+        </todo-item>
+    </ul>
+</div>
+<script>
+    //创建全局组件 可以换成小写 Item前面加-
+    // Vue.component("TodoItem",{
+    //     props:['content'],
+    //     template: '<li>{{this.content}}</li>'
+    // })
+    //局部组件
+    var TodoItem = {
+        props:['content','index'],
+        template: '<li @click="handleItemClick">{{this.content}}</li>',
+        methods:{//向父组件传值 向父组件传递事件 父组件监听
+            handleItemClick: function(){
+                this.$emit("delete",this.index);
+            }
+        }
+    };
+    var app = new Vue({
+        el:'#root',
+        //注册局部组件 注册到vue实例中
+        components:{
+            TodoItem:TodoItem
+        },
+        data: {
+            list:[],
+            inputValue:''
+        },
+        methods:{
+            handleBtnClick:function(){
+                this.list.push(this.inputValue);
+                this.inputValue = '';
+            },
+            //接收子组件的值
+            handleItemDelete:function(index){
+                this.list.splice(demoOne,1);
+            }
+        }
+    })
+</script>
+</body>
+</html>
