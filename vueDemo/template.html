@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>模板语法</title>
+    <script src="vue.js"></script>
+</head>
+<body>
+<div id="app">
+    <!--<div>{{name +' zhi'}}</div>-->
+    <!--<div v-text="name +' zhi'"></div>-->
+    <!--<div v-html="name +' zhi'"></div>-->
+    {{fullName}}
+    <!--方法要加()-->
+    <!--{{fullName()}}-->
+    {{age}}
+</div>
+<script>
+    // var vm = new Vue({
+    //     el:'#app',
+    //     data:{
+    //         name:"<strong>Joe</strong>"
+    //     }
+    // })
+
+    //计算属性 方法和侦听器
+    var vm = new Vue({
+        el:"#app",
+        data:{
+            firstName:"Qiao",
+            lastName:"Zhiyaun",
+            // 侦听器要加
+            fullName:"Qiao Zhiyuan",
+            age:23
+        },
+        //侦听器
+        watch:{
+            firstName:function(){
+                console.log("计算了一次");
+                return this.fullName = this.firstName + " " + this.lastName;
+            },
+            lastName:function(){
+                console.log("计算了一次");
+                return this.fullName = this.firstName + " " + this.lastName;
+            }
+        }
+        //方法
+        // methods:{
+        //     fullName:function(){
+        //         console.log("计算了一次");
+        //         return this.firstName + " " + this.lastName;
+        //     }
+        // }
+        //计算属性  会有缓存
+        // computed:{
+        //     fullName:function(){
+        //         console.log("计算了一次");
+        //         return this.firstName + " " + this.lastName;
+        //     }
+        // }
+    })
+</script>
+</body>
+</html>
