@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>vue的条件渲染</title>
+    <script src="vue.js"></script>
+</head>
+<body>
+<div id="app">
+    <!--<div v-if="show === 'a'"-->
+    <!--&gt;this is A</div>-->
+    <!--<div v-else-if="show === 'b'"-->
+    <!--&gt;this is B</div>-->
+    <!--<div v-else-->
+    <!--&gt;this is other</div>-->
+
+    <div v-if="show">
+        用户名:<input key="userName"/>
+    </div>
+    <div v-else>
+        邮箱名:<input key="mailName"/>
+    </div>
+    <div v-show="show"
+    >{{message}}</div>
+    <!--index下标  需有一个key值-->
+    <template v-for="(item,index) of list">
+        <div>
+            {{item.test}}---{{index}}
+        </div>
+        <div>{{item.test}}</div>
+    </template>
+    <div v-for="(item,key,index) of userInfo">
+        {{item}}---{{key}}---{{index}}
+    </div>
+</div>
+<script>
+    var vm = new Vue({
+        el:"#app",
+        data:{
+            // show:"a",
+            show:false,
+            message:"hello world",
+            list:[
+                {
+                    id:01,
+                    test:"hello"
+                },
+                {
+                    id:03,
+                    test:"world"
+                },
+                {
+                    id:04,
+                    test:"!!!!!"
+                }
+            ],
+            userInfo:{
+                name:"Qiao",
+                age:23,
+                address:"heFei"
+            }
+        }
+    })
+</script>
+</body>
+</html>
