@@ -15,10 +15,10 @@
     <!--&gt;this is other</div>-->
 
     <div v-if="show">
-        用户名:<input key="userName"/>
+        用户名:<input :key="userName"/>
     </div>
     <div v-else>
-        邮箱名:<input key="mailName"/>
+        邮箱名:<input :key="mailName"/>
     </div>
     <div v-show="show"
     >{{message}}</div>
