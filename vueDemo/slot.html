@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue中的插槽(slot)</title>
+    <script src="vue.js"></script>
+</head>
+<body>
+<div id="app">
+    <child content="hello">
+        <div class="header" slot="header">header</div>
+        <div class="footer" slot="footer">footer</div>
+    </child>
+    <todo>
+<!--        slot-scope接收的数据命名 用命名的变量来接收数据 必须用template包裹-->
+        <template slot-scope="props">
+            <h1>{{props.item}}</h1>
+        </template>
+    </todo>
+</div>
+<script>
+    Vue.component("child",{
+        props:["content"],  //是``  ~号`
+        template:`<div>
+            <slot name="header"></slot>
+            <div>{{content}}</div>
+            <slot name="footer"></slot>
+        </div>`
+    });
+    Vue.component("todo",{
+        data:function(){
+            return {
+                list:[1,2,3,4,5]
+            }
+        }, //传递item值给父组件 由父组件决定格式布局
+        template:`<div><ul>
+                <slot v-for="item of list"
+                        :item=item></slot>
+            </ul>
+        </div>`
+    });
+    var vm = new Vue({
+        el:"#app"
+    })
+</script>
+</body>
+</html>

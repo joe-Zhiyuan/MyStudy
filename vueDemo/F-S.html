@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>父子传值</title>
+    <script src="vue.js"></script>
+</head>
+<body>
+<div id="app">
+    <compute
+            :num="6"
+            @compute="handleCompute"
+    >
+    </compute>
+    <compute
+            :num="3"
+            @compute="handleCompute"
+    ></compute>
+    <div>{{total}}</div>
+<!--    在组件上的原生事件必须添加.native-->
+    <child @click.native="Click" content="hello world"></child>
+    <child content="Qiaozhiyuan"></child>
+    <child content="JoeZhiyuan"></child>
+</div>
+<script>
+    // Bus/总线/发布订阅模式/观察者模式 绑定Bus
+    Vue.prototype.Bus = new Vue();
+
+    var compute = {
+        // props:[
+        //     'num'
+        // ],
+        props:{
+            num:Number  //校验数字
+        },
+        data:function(){
+            return {
+                number : this.num
+            }
+        },
+        template:"<div @click='handleClick'>{{number}}</div>",
+        methods:{
+            handleClick:function(){
+                this.number = this.number + 2;
+                this.$emit("compute",2);    //子向父传递
+            }
+        }
+    };
+    Vue.component("child",{
+        data:function(){
+            return {
+                name: this.content
+            }
+        },
+        props:{
+            content:{   //对象
+                type:String,    //字符  首字母必须大写
+                required:true,  //是否必传
+                default:"default Hello",    //默认
+                validator:function(value){  //自定义校验
+                    return (value.length > 5)
+                }
+            }
+
+        },
+        template:"<div @click='handleName'>{{name}}</div>",
+        methods:{
+            handleName:function(){
+                this.Bus.$emit('change',this.name) //向外传递数据
+            }
+        },
+        mounted:function(){
+            var this_  = this;  //改变this
+           this.Bus.$on('change',function(msg){  //在Bus上监听change事件获取数据
+                this_.name = msg;
+            })
+        }
+    });
+    var vm = new Vue({
+        el:"#app",
+        data:{
+            total:9
+        },
+        components:{
+            compute:compute
+        },
+        methods:{
+            handleCompute:function(step){
+                this.total = this.total + step;
+            },
+            Click:function(){
+                console.log("click");
+            }
+        }
+    })
+</script>
+</body>
+</html>
