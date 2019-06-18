@@ -6,10 +6,67 @@
     <script src="vue.js"></script>
 </head>
 <body>
-<div id="app"></div>
+<div id="app">
+    <table>
+        <tbody>
+            <tr is="row"></tr>
+            <tr is="row"></tr>
+            <tr is="row"></tr>
+        </tbody>
+    </table>
+<!--    vue中处理dom  使用ref-->
+    <div
+            ref="hello"
+            @click="handclick"
+    >
+        Hello world
+    </div>
+    <counter
+            @change="handleComputer"
+            ref="numberOne"
+    ></counter>
+    <counter
+            @change="handleComputer"
+            ref="numberTwo"
+    ></counter>
+    <div>{{total}}</div>
+</div>
 <script>
+    Vue.component('row',{
+        data:function(){
+          return {
+              content:"Row"
+          }
+        },
+        template:'<tr><td>{{content}}</td></tr>'
+    });
+    Vue.component('counter',{
+        template:"<div @click='hoadleClickNumber'>{{number}}</div>",
+        data:function(){
+            return {
+                number:0
+            }
+        },
+        methods:{
+            hoadleClickNumber:function(){
+                this.number ++ ;
+                this.$emit("change");
+            }
+        }
+    });
     var vm = new Vue({
-        el:"#app"
+        el:"#app",
+        data:{
+            total:0
+        },
+        methods:{
+            handclick:function(){
+                console.log(this.$refs.hello.innerHTML);
+            },
+            handleComputer:function(){
+                this.total = this.$refs.numberOne.number + this.$refs.numberTwo.number;
+            }
+        }
     })
 </script>
 </body>
