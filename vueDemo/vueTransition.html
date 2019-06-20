@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>vue的css动画效果</title>
+    <link rel="stylesheet" type="text/css" href="Animate.css">
+    <script src="vue.js"></script>
+    <style>
+        /*!*v-enter v-enter-active v-leave-to v-leave-active没有name 默认的类*!*/
+        /*.fade-enter,.fade-leave-to{*/
+        /*    opacity: 0;*/
+        /*}*/
+        /*!*动画效果*!*/
+        /*@keyframes bounce-in{*/
+        /*    0%{*/
+        /*        transform:scale(0);*/
+        /*    }*/
+        /*    50%{*/
+        /*        transform:scale(1.5);*/
+        /*    }*/
+        /*    100%{*/
+        /*        transform:scale(1);*/
+        /*    }*/
+        /*}*/
+        /*.active{*/
+        /*    transition: opacity 2s;*/
+        /*    !*不加放大缩小有bug*!*/
+        /*    transform-origin: left center;*/
+        /*    animation:bounce-in 2s;*/
+        /*}*/
+        /*.leave{*/
+        /*    transition: opacity 2s;*/
+        /*    !*不加放大缩小有bug*!*/
+        /*    transform-origin: left center;*/
+        /*    animation:bounce-in 2s reverse;*/
+        /*}*/
+        /*过渡 动画结合*/
+        .fade-enter,.fade-leave-to{
+            opacity: 0;
+        }
+        .fade-enter-active,.fade-leave-active{
+            transition:opacity 2s;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+<!--    enter-active-class="active" 自定义css名字-->
+<!--    leave-active-class="leave"-->
+<!--    使用animate.css-->
+<!--    appear appear-active-class 第一次执行动画 刷新页面执行-->
+<!--    type="transition/animation"  :duration 自定义持续时间  也可用对象
+        :duration={enter:1000,leave:3000}-->
+    <transition
+            :duration="2000"
+            name="fade"
+            appear
+            enter-active-class="animated swing fade-enter-active"
+            leave-active-class="animated shake fade-leave-active"
+            appear-to-class="animated swing"
+    >
+<!--        v-show也是一样  动态组件也可以-->
+        <div v-if="show">hello</div>
+    </transition>
+    <button @click="handleClick">切换</button>
+</div>
+<script>
+    var vm = new Vue({
+        el:"#app",
+        data:{
+            show:true
+        },
+        methods:{
+            handleClick:function(){
+                this.show = !this.show;
+            }
+        }
+    })
+</script>
+</body>
+</html>

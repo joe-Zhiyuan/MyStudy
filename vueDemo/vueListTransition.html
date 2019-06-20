@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>vue中的列表过渡</title>
+    <script src="vue.js"></script>
+<!--    <style>-->
+<!--        .v-enter,.v-leave-to{-->
+<!--            opacity: 0;-->
+<!--        }-->
+<!--        .v-enter-active,.v-leave-active{-->
+<!--            transition:opacity 2s;-->
+<!--        }-->
+<!--    </style>-->
+</head>
+<body>
+<div id="app">
+<!--    :key 有： 为js表达式-->
+    <transition-group tag="strong">
+        <div v-for="item of list" :key="item.id">{{item.title}}</div>
+    </transition-group>
+    <button @click="handleClick">列表过渡</button>
+<!--    动画复用封装 fade组件-->
+    <fade :show="show">
+        <div>Hello world</div>
+    </fade>
+    <fade :show="show">
+        <h1>Hello world</h1>
+    </fade>
+    <button @click="handleClickFade">动画组件显示</button>
+</div>
+<script>
+    // 还可以把style也一起封装
+    Vue.component('fade',{
+        props:['show'],
+        template:`
+            <transition @before-enter="handleBeforeEnter"
+            @enter="handleEnter">
+                <slot v-if="show"></slot>
+            </transition>
+        `,
+        methods:{
+            handleBeforeEnter:function(el){
+                el.style.color="red";
+            },
+            handleEnter:function(el,done){
+                setTimeout(() => {
+                    el.style.color = "black";
+                    done();
+                },2000)
+            }
+        }
+    });
+
+    var count =  0;
+
+    var vm = new Vue({
+        el:"#app",
+        data:{
+            show:true,
+            list:[]
+        },
+        methods:{
+            handleClick:function(){
+                this.list.push({
+                    id: count++,
+                    title:'hello world'
+                })
+            },
+            handleClickFade:function(){
+                this.show = !this.show;
+            }
+        }
+    })
+</script>
+</body>
+</html>

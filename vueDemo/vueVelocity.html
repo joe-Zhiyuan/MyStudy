@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>vue中的JS动画和Velocity.js</title>
+    <script src="vue.js"></script>
+    <script src="velocity.min.js"></script>
+    <style>
+        .v-enter,.v-leave-to{
+            opacity:0;
+        }
+        .v-enter-active,.v-leave-active{
+            transition:opacity 2s;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+<!--        出现 @before-enter @enter 离场 leave替换-->
+        <transition
+            name="fade"
+            @before-enter="handleBefore"
+            @enter="handleEnter"
+            @after-enter="handleAfter"
+        >
+            <div v-show="show">Hello</div>
+        </transition>
+        <button @click="handleClick">切换动画效果</button>
+<!--        多个元素  动画    点击切换没有动画应为dom被复用了 不复用 添加key
+            mode模组 in-out显示元素先进来再隐藏 out-in先隐藏再进-->
+        <transition mode="out-in">
+            <div v-if="showTwo" key="hello">Hello</div>
+            <div v-else key="bye">Bye</div>
+        </transition>
+        <button @click="handleClickTwo">切换多个元素</button>
+<!--        组件的过渡   动态组件component  :is  keep-alive保存组件状态不会销毁input中内容-->
+        <transition mode="out-in">
+            <keep-alive>
+                <component :is="showOne"></component>
+            </keep-alive>
+        </transition>
+        <button @click="handleComponent">切换组件</button>
+    </div>
+    <script>
+
+        Vue.component('child',{
+            template:'<div>child<input/></div>'
+        });
+        Vue.component('child-one',{
+            template:'<div>child-one<input/></div>'
+        });
+
+        var vm = new Vue({
+            el:"#app",
+            data:{
+                show:true,
+                showTwo:true,
+                showOne:'child'
+            },
+            methods:{
+                handleClick:function(){
+                    this.show = !this.show;
+                },
+                handleClickTwo:function(){
+                    this.showTwo = !this.showTwo;
+                },
+                handleComponent:function(){
+                    this.showOne = this.showOne === "child" ? "child-one" : "child";
+                },
+                // el transition包裹的元素
+                // handleBefore:function(el){
+                //     el.style.color="red";
+                // },
+                // // done()去除动画 必须有
+                // handleEnter:function(el,done){
+                //     setTimeout(() => {
+                //         el.style.color = 'green';
+                //         done();
+                //     },2000)
+                // },
+                // handleAfter:function(el){
+                //     el.style.color = 'block';
+                // } 插件
+                handleBefore:function(el){
+                    el.style.opacity = 0;
+                },
+                handleEnter:function(el,done){
+                    Velocity(el,{
+                        opacity:1
+                    },{
+                        duration:1000,   //时间
+                        complete:done   //清除事件
+                    });
+                },
+                handleAfter:function(el){
+                    console.log('动画结束')
+                }
+            }
+        })
+    </script>
+</body>
+</html>
