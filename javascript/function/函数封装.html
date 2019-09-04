@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="cn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>函数封装</title>
+</head>
+<body>
+  <script>
+    // 自执行函数 防止修改内部函数
+    var a = (function () {
+      var _count = 0;
+      var b = (function () {
+        var c = function () {
+          console.log("c函数");
+        }
+        // 返回方法
+        return {
+          c: c
+        }
+      })()
+      return {
+        b: b
+      }
+    })()
+
+    // js闭包
+    // this指向
+    var str = 'window';
+    const obj = {
+      str: 'obj',
+      nativeFn: function(){
+        console.log(this.str, '当前词法作用域的this');
+        return function(){
+          console.log('原生函数', this.str);
+        }
+      },
+      arrowFn: function(){
+        console.log(this.str, '当前词法作用域的this');
+        return ()=>{
+          console.log('箭头函数', this.str);
+        }
+      }
+    }
+    const obj2 = {
+      str: 'obj2'
+    }
+    var nativeFn = obj.nativeFn();
+    var arrowFn = obj.arrowFn();
+    console.log('函数调用------');
+    nativeFn();
+    arrowFn();
+  </script>
+</body>
+</html>
